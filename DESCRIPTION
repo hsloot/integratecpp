@@ -15,12 +15,12 @@ License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.0
-Depends: R (>= 3.4.0)
+Depends: R (>= 3.1.0)
 LinkingTo:
     Rcpp
 Imports:
     Rcpp
-SystemRequirements: C++17
-Suggests: 
+SystemRequirements: C++11
+Suggests:
     testthat (>= 3.0.0)
 Config/testthat/edition: 3

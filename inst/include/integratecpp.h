@@ -37,7 +37,8 @@ public:
              const double epsrel);
 
   template <typename Lambda_>
-  auto operator()(Lambda_ fn, const double lower, const double upper) const;
+  result_type operator()(Lambda_ fn, const double lower,
+                         const double upper) const;
 
 private:
   const config_type cfg_{};
@@ -119,8 +120,9 @@ inline integrator::integrator(const int limit, const int lenw,
     : cfg_{limit, lenw, epsabs, epsrel} {}
 
 template <typename Lambda_>
-inline auto integrator::operator()(Lambda_ fn, const double lower,
-                                   const double upper) const {
+inline integrator::result_type
+integrator::operator()(Lambda_ fn, const double lower,
+                       const double upper) const {
   if (std::isnan(lower) || std::isnan(upper))
     throw std::invalid_argument("lower and upper must not be NaN");
 
