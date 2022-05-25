@@ -1,0 +1,13 @@
+---
+Language: Cpp
+BasedOnStyle: Google
+IncludeBlocks: Regroup
+IncludeCategories:
+  - Regex:           '<[[:alpha:]_]+>'
+    Priority:        1
+  - Regex:           '<.*>'
+    Priority:        2
+  - Regex:           '".*"'
+    Priority:        3
+IndentWidth: 4
+...

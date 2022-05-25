@@ -1,0 +1,11 @@
+^.*\.Rproj$
+^\.Rproj\.user$
+^LICENSE\.md$
+^README\.Rmd$
+^CPPLINT\.cfg$
+^\.clang_complete$
+^\.clang_format$
+^\.editorconfig$
+^\.vscode$
+^\.github$
+^CODE_OF_CONDUCT\.md$

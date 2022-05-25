@@ -1,0 +1,95 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%"
+)
+```
+
+# integratecpp
+
+<!-- badges: start -->
+<!-- badges: end -->
+
+The package `integratecpp` provides a header-only interface to `R`'s numerical integration methods.
+
+## Installation
+
+You can install the development version of integratecpp like so:
+
+``` r
+remotes::install_github("hsloot/integratecpp")
+```
+
+## Example
+
+This is a basic example which shows you how to solve a common problem: 
+We want to calculate the expectation of an exponential distribution with rate $\lambda$ by numerical integration. 
+The theoretical expectation is 
+$$
+  \int_{0}^{\infty}{ x \lambda \exp{\{ -\lambda x \}} } \mathrm{d}x 
+    = \frac{1}{\lambda} .
+$$
+
+```{Rcpp example}
+// C++
+
+// [[Rcpp::plugins(cpp17)]]
+// [[Rcpp::depends(integratecpp)]]
+
+#include <cmath>
+
+#include <Rcpp.h>
+
+#include "integratecpp.h"
+
+// [[Rcpp::export(rng=false)]]
+Rcpp::List integrate_exponential_expectation(const double lambda) {
+  integratecpp::integrator default_integrator{};
+  auto fn = [lambda](const auto x) {
+    return x * lambda * std::exp(-lambda * x);
+  };
+
+  try {
+    auto result =
+        default_integrator(fn, 0., std::numeric_limits<double>::infinity());
+    return Rcpp::List::create(Rcpp::Named("value") = result.value,
+                              Rcpp::Named("abserr") = result.abserr,
+                              Rcpp::Named("subdivisions") = result.subdivisions,
+                              Rcpp::Named("neval") = result.neval);
+
+  } catch (const integratecpp::integration_error &e) {
+    const auto result = e.result;
+    Rcpp::warning(e.what());
+    return Rcpp::List::create(Rcpp::Named("value") = result.value,
+                              Rcpp::Named("abserr") = result.abserr,
+                              Rcpp::Named("subdivisions") = result.subdivisions,
+                              Rcpp::Named("neval") = result.neval);
+  } catch (const std::exception &e) {
+    Rcpp::stop(e.what());
+  }
+}
+```
+
+
+```{r}
+## R
+
+integrate_exponential_expectation(1)
+integrate_exponential_expectation(2)
+integrate_exponential_expectation(3)
+
+integrate_exponential_expectation(-1)
+```
+
+
+## Code of Conduct
+
+Please note that the integratecpp project is released with a [Contributor Code of Conduct](https://contributor-covenant.org/version/2/0/CODE_OF_CONDUCT.html). By contributing to this project, you agree to abide by its terms.

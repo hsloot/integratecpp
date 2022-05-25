@@ -1,0 +1,26 @@
+Package: integratecpp
+Type: Package
+Title: C++ API for R integration routines
+Version: 0.1.0
+Authors@R:
+  person(given = "Henrik",
+    family = "Sloot",
+    role = c("aut", "cre"),
+    email = "henrik.sloot@gmail.com",
+    comment = c(ORCID = "0000-0001-8582-7776"))
+Description:
+  The package contains a header-only API for the numerical integration methods Rdqagi and Rdqags
+  in <R_Ext/Applic.h.
+License: MIT + file LICENSE
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.2.0
+Depends: R (>= 4.0)
+LinkingTo:
+    Rcpp
+Imports:
+    Rcpp
+SystemRequirements: C++17
+Suggests: 
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3
