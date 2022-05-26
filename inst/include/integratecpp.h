@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cmath>
+#include <limits>
 #include <stdexcept>
 #include <vector>
 
@@ -11,24 +12,40 @@ namespace integratecpp {
 
 class integrator {
 public:
-  struct result_type {
-    const double value;
-    const double abserr;
-    const int subdivisions;
-    const int neval;
+  class result_type {
+  public:
+    result_type() = default;
+    result_type(const double value, const double abserr, const int subdivisions,
+                const int neval);
+
+    double value() const noexcept { return value_; }
+    double abserr() const noexcept { return abserr_; }
+    int subdivisions() const noexcept { return subdivisions_; }
+    int neval() const noexcept { return neval_; }
+
+  private:
+    const double value_ = 0.;
+    const double abserr_ = 0.;
+    const int subdivisions_ = 0;
+    const int neval_ = 0;
   };
 
-  struct config_type {
-    config_type() = default;
+  class config_type {
+  public:
+    config_type() {}
     config_type(const int limit, const int lenw, const double epsabs,
                 const double epsrel);
 
-    const int limit = 100;
-    const int lenw = 400;
-    const double epsabs =
-        std::pow(std::numeric_limits<double>::epsilon(), 0.25);
-    const double epsrel =
-        std::pow(std::numeric_limits<double>::epsilon(), 0.25);
+    int limit() const noexcept { return limit_; }
+    int lenw() const noexcept { return lenw_; }
+    double epsabs() const noexcept { return epsabs_; }
+    double epsrel() const noexcept { return epsrel_; }
+
+  private:
+    int limit_ = 100;
+    int lenw_ = 400;
+    double epsabs_ = std::pow(std::numeric_limits<double>::epsilon(), 0.25);
+    double epsrel_ = std::pow(std::numeric_limits<double>::epsilon(), 0.25);
   };
 
   integrator() = default;
@@ -44,73 +61,107 @@ private:
   const config_type cfg_{};
 };
 
+inline integrator::result_type::result_type(const double value,
+                                            const double abserr,
+                                            const int subdivisions,
+                                            const int neval)
+    : value_{value}, abserr_{abserr}, subdivisions_{subdivisions}, neval_{
+                                                                       neval} {}
+
 inline integrator::config_type::config_type(const int limit, const int lenw,
                                             const double epsabs,
                                             const double epsrel)
-    : limit{limit}, lenw{lenw}, epsabs{epsabs}, epsrel{epsrel} {
-  if (limit <= 0)
+    : limit_{limit}, lenw_{lenw}, epsabs_{epsabs}, epsrel_{epsrel} {
+  if (limit_ <= 0)
     throw std::invalid_argument("limit > 0 required");
-  if (epsabs <= 0. &&
-      epsrel <=
+  if (epsabs_ <= 0. &&
+      epsrel_ <=
           std::max(50. * std::numeric_limits<double>::epsilon(), 0.5e-28)) {
     throw std::invalid_argument(
         "epsabs > 0 or epsrel > max(epsilon, 0.5e-28) required");
   }
-  if (!(lenw >= 4 * limit))
+  if (!(lenw_ >= 4 * limit_))
     throw std::invalid_argument("lenw >= 4 * limit required");
 }
 
-struct integration_error : public std::exception {
+class integration_error : public std::exception {
+public:
   using result_type = integrator::result_type;
 
   integration_error() = delete;
-  integration_error(const result_type &result) : result{result} {}
+  integration_error(const result_type &result) : result_{result} {}
+
   const char *what() const noexcept override {
     return "error reported by integration routine";
   }
 
-  const result_type result;
+  result_type result() const noexcept;
+
+private:
+  const result_type result_;
 };
 
-struct max_subdivision_error : public integration_error {
+inline integrator::result_type integration_error::result() const noexcept {
+  return result_;
+}
+
+class max_subdivision_error : public integration_error {
+public:
+  max_subdivision_error() = delete;
   max_subdivision_error(const result_type &result)
       : integration_error{result} {}
+
   const char *what() const noexcept override {
     return "maximum number of subdivisions reached";
   }
 };
 
-struct roundoff_error : public integration_error {
+class roundoff_error : public integration_error {
+public:
+  roundoff_error() = delete;
   roundoff_error(const result_type &result) : integration_error{result} {}
+
   const char *what() const noexcept override {
     return "roundoff error was detected";
   }
 };
 
-struct bad_integrand_error : public integration_error {
+class bad_integrand_error : public integration_error {
+public:
+  bad_integrand_error() = delete;
   bad_integrand_error(const result_type &result) : integration_error{result} {}
+
   const char *what() const noexcept override {
     return "extremely bad integrand behaviour";
   }
 };
 
-struct extrapolation_roundoff_error : public integration_error {
+class extrapolation_roundoff_error : public integration_error {
+public:
+  extrapolation_roundoff_error() = delete;
   extrapolation_roundoff_error(const result_type &result)
       : integration_error{result} {}
+
   const char *what() const noexcept override {
     return "roundoff error is detected in the extrapolation table";
   }
 };
 
-struct divergence_error : public integration_error {
+class divergence_error : public integration_error {
+public:
+  divergence_error() = delete;
   divergence_error(const result_type &result) : integration_error{result} {}
+
   const char *what() const noexcept override {
     return "the integral is probably divergent";
   }
 };
 
 struct invalid_input_error : public integration_error {
+public:
+  invalid_input_error() = delete;
   invalid_input_error(const result_type &result) : integration_error{result} {}
+
   const char *what() const noexcept override { return "the input is invalid"; }
 };
 
@@ -134,20 +185,23 @@ integrator::operator()(Lambda_ fn, const double lower,
     return;
   };
 
+  auto epsabs = cfg_.epsabs();
+  auto epsrel = cfg_.epsrel();
+  auto limit = cfg_.limit();
+  auto lenw = cfg_.lenw();
+
   auto result = 0.;
   auto abserr = 0.;
   auto ier = 0;
   auto neval = 0;
   auto last = 0;
-  auto iwork = std::vector<int>(cfg_.limit);
-  auto work = std::vector<double>(cfg_.lenw);
+  auto iwork = std::vector<int>(cfg_.limit());
+  auto work = std::vector<double>(cfg_.lenw());
 
   if (std::isfinite(lower) && std::isfinite(upper)) {
     Rdqags(fn_callback, &fn, const_cast<double *>(&lower),
-           const_cast<double *>(&upper), const_cast<double *>(&cfg_.epsabs),
-           const_cast<double *>(&cfg_.epsrel), &result, &abserr, &neval, &ier,
-           const_cast<int *>(&cfg_.limit), const_cast<int *>(&cfg_.lenw), &last,
-           iwork.data(), work.data());
+           const_cast<double *>(&upper), &epsabs, &epsrel, &result, &abserr,
+           &neval, &ier, &limit, &lenw, &last, iwork.data(), work.data());
   } else {
     auto inf = 0;
     auto bound = 0.;
@@ -161,12 +215,10 @@ integrator::operator()(Lambda_ fn, const double lower,
       inf = 2;
       bound = 0.;
     }
-    Rdqagi(fn_callback, &fn, &bound, &inf, const_cast<double *>(&cfg_.epsabs),
-           const_cast<double *>(&cfg_.epsrel), &result, &abserr, &neval, &ier,
-           const_cast<int *>(&cfg_.limit), const_cast<int *>(&cfg_.lenw), &last,
-           iwork.data(), work.data());
+    Rdqagi(fn_callback, &fn, &bound, &inf, &epsabs, &epsrel, &result, &abserr,
+           &neval, &ier, &limit, &lenw, &last, iwork.data(), work.data());
   }
-  const auto out = result_type{result, abserr, last, neval};
+  auto out = result_type{result, abserr, last, neval};
   if (ier > 0) {
     if (ier == 1)
       throw max_subdivision_error(out);

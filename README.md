@@ -26,10 +26,10 @@ rate
 by numerical integration. The theoretical expectation is
 
 ![
-  \\int\_{0}^{\\infty}{ x \\lambda \\exp{\\{ -\\lambda x \\}} } \\mathrm{d}x 
+  \\int\_{0}^{\\infty}{ x \\lambda \\exp{\\{ -\\lambda x \\}} } \\mathrm{d}x
     = \\frac{1}{\\lambda} .
-](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;%0A%20%20%5Cint_%7B0%7D%5E%7B%5Cinfty%7D%7B%20x%20%5Clambda%20%5Cexp%7B%5C%7B%20-%5Clambda%20x%20%5C%7D%7D%20%7D%20%5Cmathrm%7Bd%7Dx%20%0A%20%20%20%20%3D%20%5Cfrac%7B1%7D%7B%5Clambda%7D%20.%0A "
-  \int_{0}^{\infty}{ x \lambda \exp{\{ -\lambda x \}} } \mathrm{d}x 
+](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;%0A%20%20%5Cint_%7B0%7D%5E%7B%5Cinfty%7D%7B%20x%20%5Clambda%20%5Cexp%7B%5C%7B%20-%5Clambda%20x%20%5C%7D%7D%20%7D%20%5Cmathrm%7Bd%7Dx%0A%20%20%20%20%3D%20%5Cfrac%7B1%7D%7B%5Clambda%7D%20.%0A "
+  \int_{0}^{\infty}{ x \lambda \exp{\{ -\lambda x \}} } \mathrm{d}x
     = \frac{1}{\lambda} .
 ")
 
@@ -40,6 +40,8 @@ by numerical integration. The theoretical expectation is
 // [[Rcpp::depends(integratecpp)]]
 
 #include <cmath>
+#include <limits>
+#include <stdexcept>
 
 #include <Rcpp.h>
 
@@ -55,18 +57,18 @@ Rcpp::List integrate_exponential_expectation(const double lambda) {
   try {
     const auto result =
         default_integrator(fn, 0., std::numeric_limits<double>::infinity());
-    return Rcpp::List::create(Rcpp::Named("value") = result.value,
-                              Rcpp::Named("abserr") = result.abserr,
-                              Rcpp::Named("subdivisions") = result.subdivisions,
-                              Rcpp::Named("neval") = result.neval);
+    return Rcpp::List::create(Rcpp::Named("value") = result.value(),
+                              Rcpp::Named("abserr") = result.abserr(),
+                              Rcpp::Named("subdivisions") = result.subdivisions(),
+                              Rcpp::Named("neval") = result.neval());
 
   } catch (const integratecpp::integration_error &e) {
-    const auto result = e.result;
+    const auto result = e.result();
     Rcpp::warning(e.what());
-    return Rcpp::List::create(Rcpp::Named("value") = result.value,
-                              Rcpp::Named("abserr") = result.abserr,
-                              Rcpp::Named("subdivisions") = result.subdivisions,
-                              Rcpp::Named("neval") = result.neval);
+    return Rcpp::List::create(Rcpp::Named("value") = result.value(),
+                              Rcpp::Named("abserr") = result.abserr(),
+                              Rcpp::Named("subdivisions") = result.subdivisions(),
+                              Rcpp::Named("neval") = result.neval());
   } catch (const std::exception &e) {
     Rcpp::stop(e.what());
   }

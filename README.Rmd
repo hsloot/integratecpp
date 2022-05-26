@@ -30,11 +30,11 @@ remotes::install_github("hsloot/integratecpp")
 
 ## Example
 
-This is a basic example which shows you how to solve a common problem: 
-We want to calculate the expectation of an exponential distribution with rate $\lambda$ by numerical integration. 
-The theoretical expectation is 
+This is a basic example which shows you how to solve a common problem:
+We want to calculate the expectation of an exponential distribution with rate $\lambda$ by numerical integration.
+The theoretical expectation is
 $$
-  \int_{0}^{\infty}{ x \lambda \exp{\{ -\lambda x \}} } \mathrm{d}x 
+  \int_{0}^{\infty}{ x \lambda \exp{\{ -\lambda x \}} } \mathrm{d}x
     = \frac{1}{\lambda} .
 $$
 
@@ -45,6 +45,8 @@ $$
 // [[Rcpp::depends(integratecpp)]]
 
 #include <cmath>
+#include <limits>
+#include <stdexcept>
 
 #include <Rcpp.h>
 
@@ -60,18 +62,18 @@ Rcpp::List integrate_exponential_expectation(const double lambda) {
   try {
     const auto result =
         default_integrator(fn, 0., std::numeric_limits<double>::infinity());
-    return Rcpp::List::create(Rcpp::Named("value") = result.value,
-                              Rcpp::Named("abserr") = result.abserr,
-                              Rcpp::Named("subdivisions") = result.subdivisions,
-                              Rcpp::Named("neval") = result.neval);
+    return Rcpp::List::create(Rcpp::Named("value") = result.value(),
+                              Rcpp::Named("abserr") = result.abserr(),
+                              Rcpp::Named("subdivisions") = result.subdivisions(),
+                              Rcpp::Named("neval") = result.neval());
 
   } catch (const integratecpp::integration_error &e) {
-    const auto result = e.result;
+    const auto result = e.result();
     Rcpp::warning(e.what());
-    return Rcpp::List::create(Rcpp::Named("value") = result.value,
-                              Rcpp::Named("abserr") = result.abserr,
-                              Rcpp::Named("subdivisions") = result.subdivisions,
-                              Rcpp::Named("neval") = result.neval);
+    return Rcpp::List::create(Rcpp::Named("value") = result.value(),
+                              Rcpp::Named("abserr") = result.abserr(),
+                              Rcpp::Named("subdivisions") = result.subdivisions(),
+                              Rcpp::Named("neval") = result.neval());
   } catch (const std::exception &e) {
     Rcpp::stop(e.what());
   }

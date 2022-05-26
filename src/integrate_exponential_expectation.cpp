@@ -1,4 +1,6 @@
 #include <cmath>
+#include <limits>
+#include <stdexcept>
 
 #include <Rcpp.h>
 
@@ -14,19 +16,21 @@ Rcpp::List integrate_exponential_expectation(const double lambda) {
   try {
     const auto result =
         default_integrator(fn, 0., std::numeric_limits<double>::infinity());
-    return Rcpp::List::create(Rcpp::Named("value") = result.value,
-                              Rcpp::Named("abserr") = result.abserr,
-                              Rcpp::Named("subdivisions") = result.subdivisions,
-                              Rcpp::Named("neval") = result.neval);
+    return Rcpp::List::create(Rcpp::Named("value") = result.value(),
+                              Rcpp::Named("abserr") = result.abserr(),
+                              Rcpp::Named("subdivisions") =
+                                  result.subdivisions(),
+                              Rcpp::Named("neval") = result.neval());
 
   } catch (const integratecpp::integration_error &e) {
-    const auto result = e.result;
+    const auto result = e.result();
 
     Rcpp::warning(e.what());
-    return Rcpp::List::create(Rcpp::Named("value") = result.value,
-                              Rcpp::Named("abserr") = result.abserr,
-                              Rcpp::Named("subdivisions") = result.subdivisions,
-                              Rcpp::Named("neval") = result.neval);
+    return Rcpp::List::create(Rcpp::Named("value") = result.value(),
+                              Rcpp::Named("abserr") = result.abserr(),
+                              Rcpp::Named("subdivisions") =
+                                  result.subdivisions(),
+                              Rcpp::Named("neval") = result.neval());
   } catch (const std::exception &e) {
     Rcpp::stop(e.what());
   }
