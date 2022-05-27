@@ -14,6 +14,19 @@ class integrator {
 public:
   //! A class for the integation results
   class result_type {
+  private:
+    //! A `double` with the approximated value.
+    double value_ = 0.;
+
+    //! A `double` with the approximated absolute error.
+    double abserr_ = 0.;
+
+    //! An `int` with the no. of subdivisions.
+    int subdivisions_ = 0;
+
+    //! An `int` with the no. of neval.
+    int neval_ = 0;
+
   public:
     result_type() = default;
     /*!
@@ -27,26 +40,26 @@ public:
                 const int neval);
 
     //! Accessor to the approximated value.
-    double value() const noexcept;
+    auto value() const noexcept -> decltype(value_);
 
     //! Accessor to the approximated absolute error.
-    double abserr() const noexcept;
+    auto abserr() const noexcept -> decltype(abserr_);
 
     //! Accessor to the no. of subdivisions.
-    int subdivisions() const noexcept;
+    auto subdivisions() const noexcept -> decltype(subdivisions_);
 
     //! Accessor to the no. of neval.
-    int neval() const noexcept;
-
-  private:
-    const double value_ = 0.;
-    const double abserr_ = 0.;
-    const int subdivisions_ = 0;
-    const int neval_ = 0;
+    auto neval() const noexcept -> decltype(neval_);
   };
 
   //! A class for the integration configuration parameters
   class config_type {
+  private:
+    int limit_ = 100;
+    double epsrel_ = std::pow(std::numeric_limits<double>::epsilon(), 0.25);
+    double epsabs_ = std::pow(std::numeric_limits<double>::epsilon(), 0.25);
+    int lenw_ = 400;
+
   public:
     config_type() = default;
 
@@ -77,24 +90,22 @@ public:
                 const int lenw);
 
     //! Accessor to the max. no. of subdivisions.
-    int limit() const noexcept;
+    auto limit() const noexcept -> decltype(limit_);
 
     //! Accessor to the requested relative accuracy.
-    double epsrel() const noexcept;
+    auto epsrel() const noexcept -> decltype(epsrel_);
 
     //! Accessor to the requested absolute accuracy.
-    double epsabs() const noexcept;
+    auto epsabs() const noexcept -> decltype(epsabs_);
 
     //! Accessor to the dimensioning parameter.
-    int lenw() const noexcept;
-
-  private:
-    int limit_ = 100;
-    double epsrel_ = std::pow(std::numeric_limits<double>::epsilon(), 0.25);
-    double epsabs_ = std::pow(std::numeric_limits<double>::epsilon(), 0.25);
-    int lenw_ = 400;
+    auto lenw() const noexcept -> decltype(lenw_);
   };
 
+private:
+  const config_type cfg_{};
+
+public:
   integrator() = default;
 
   /*!
@@ -106,6 +117,8 @@ public:
   integrator(const int limit, const double epsrel);
 
   integrator(const int limit, const double epsrel, const double epsabs);
+
+  auto config() const noexcept -> decltype(cfg_);
 
   /*!
    * Full constructor
@@ -130,9 +143,6 @@ public:
   template <typename Lambda_>
   result_type operator()(Lambda_ fn, const double lower,
                          const double upper) const;
-
-private:
-  const config_type cfg_{};
 };
 
 /*!
@@ -213,7 +223,7 @@ public:
 };
 
 // -------------------------------------------------------------------------------------------------
-// Implementations
+// # Implementations
 // -------------------------------------------------------------------------------------------------
 
 template <typename Lambda_>
@@ -330,13 +340,20 @@ inline integrator::config_type::config_type(const int limit,
     throw std::invalid_argument("lenw >= 4 * limit required");
 }
 
-inline int integrator::config_type::limit() const noexcept { return limit_; }
-inline int integrator::config_type::lenw() const noexcept { return lenw_; }
-inline double integrator::config_type::epsabs() const noexcept {
+inline auto integrator::config_type::limit() const noexcept
+    -> decltype(limit_) {
+  return limit_;
+}
+inline auto integrator::config_type::epsrel() const noexcept
+    -> decltype(epsrel_) {
+  return epsrel_;
+}
+inline auto integrator::config_type::epsabs() const noexcept
+    -> decltype(epsabs_) {
   return epsabs_;
 }
-inline double integrator::config_type::epsrel() const noexcept {
-  return epsrel_;
+inline auto integrator::config_type::lenw() const noexcept -> decltype(lenw_) {
+  return lenw_;
 }
 
 inline integrator::integrator(const config_type &cfg) : cfg_{cfg} {}
@@ -348,6 +365,10 @@ inline integrator::integrator(const int limit, const double epsrel,
 inline integrator::integrator(const int limit, const double epsrel,
                               const double epsabs, const int lenw)
     : cfg_{limit, epsrel, epsabs, lenw} {}
+
+inline auto integrator::config() const noexcept -> decltype(cfg_) {
+  return cfg_;
+}
 
 inline integration_error::integration_error(const result_type &result)
     : result_{result} {}

@@ -53,24 +53,21 @@ Rcpp::List integrate_exponential_expectation(const double lambda) {
     return x * lambda * std::exp(-lambda * x);
   };
 
+  decltype(integratecpp::integrate(fn, 0., 1.)) result;
   try {
-    const auto result =
+    result =
         integratecpp::integrate(fn, 0., std::numeric_limits<double>::infinity());
-    return Rcpp::List::create(Rcpp::Named("value") = result.value(),
-                              Rcpp::Named("abserr") = result.abserr(),
-                              Rcpp::Named("subdivisions") = result.subdivisions(),
-                              Rcpp::Named("neval") = result.neval());
-
   } catch (const integratecpp::integration_error &e) {
-    const auto result = e.result();
+    result = e.result();
     Rcpp::warning(e.what());
-    return Rcpp::List::create(Rcpp::Named("value") = result.value(),
-                              Rcpp::Named("abserr") = result.abserr(),
-                              Rcpp::Named("subdivisions") = result.subdivisions(),
-                              Rcpp::Named("neval") = result.neval());
   } catch (const std::exception &e) {
     Rcpp::stop(e.what());
   }
+
+  return Rcpp::List::create(Rcpp::Named("value") = result.value(),
+                            Rcpp::Named("abserr") = result.abserr(),
+                            Rcpp::Named("subdivisions") = result.subdivisions(),
+                            Rcpp::Named("neval") = result.neval());
 }
 ```
 
