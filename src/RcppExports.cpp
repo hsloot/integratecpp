@@ -11,72 +11,62 @@ Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
 Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
-// integration_error
-std::string integration_error(Rcpp::Nullable<Rcpp::CharacterVector> what);
-RcppExport SEXP _integratecpp_integration_error(SEXP whatSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::traits::input_parameter< Rcpp::Nullable<Rcpp::CharacterVector> >::type what(whatSEXP);
-    rcpp_result_gen = Rcpp::wrap(integration_error(what));
-    return rcpp_result_gen;
-END_RCPP
-}
 // max_subdivision_error
-std::string max_subdivision_error(Rcpp::Nullable<Rcpp::CharacterVector> what);
+std::string max_subdivision_error(std::string what);
 RcppExport SEXP _integratecpp_max_subdivision_error(SEXP whatSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
-    Rcpp::traits::input_parameter< Rcpp::Nullable<Rcpp::CharacterVector> >::type what(whatSEXP);
+    Rcpp::traits::input_parameter< std::string >::type what(whatSEXP);
     rcpp_result_gen = Rcpp::wrap(max_subdivision_error(what));
     return rcpp_result_gen;
 END_RCPP
 }
 // roundoff_error
-std::string roundoff_error(Rcpp::Nullable<Rcpp::CharacterVector> what);
+std::string roundoff_error(std::string what);
 RcppExport SEXP _integratecpp_roundoff_error(SEXP whatSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
-    Rcpp::traits::input_parameter< Rcpp::Nullable<Rcpp::CharacterVector> >::type what(whatSEXP);
+    Rcpp::traits::input_parameter< std::string >::type what(whatSEXP);
     rcpp_result_gen = Rcpp::wrap(roundoff_error(what));
     return rcpp_result_gen;
 END_RCPP
 }
 // bad_integrand_error
-std::string bad_integrand_error(Rcpp::Nullable<Rcpp::CharacterVector> what);
+std::string bad_integrand_error(std::string what);
 RcppExport SEXP _integratecpp_bad_integrand_error(SEXP whatSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
-    Rcpp::traits::input_parameter< Rcpp::Nullable<Rcpp::CharacterVector> >::type what(whatSEXP);
+    Rcpp::traits::input_parameter< std::string >::type what(whatSEXP);
     rcpp_result_gen = Rcpp::wrap(bad_integrand_error(what));
     return rcpp_result_gen;
 END_RCPP
 }
 // extrapolation_roundoff_error
-std::string extrapolation_roundoff_error(Rcpp::Nullable<Rcpp::CharacterVector> what);
+std::string extrapolation_roundoff_error(std::string what);
 RcppExport SEXP _integratecpp_extrapolation_roundoff_error(SEXP whatSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
-    Rcpp::traits::input_parameter< Rcpp::Nullable<Rcpp::CharacterVector> >::type what(whatSEXP);
+    Rcpp::traits::input_parameter< std::string >::type what(whatSEXP);
     rcpp_result_gen = Rcpp::wrap(extrapolation_roundoff_error(what));
     return rcpp_result_gen;
 END_RCPP
 }
 // divergence_error
-std::string divergence_error(Rcpp::Nullable<Rcpp::CharacterVector> what);
+std::string divergence_error(std::string what);
 RcppExport SEXP _integratecpp_divergence_error(SEXP whatSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
-    Rcpp::traits::input_parameter< Rcpp::Nullable<Rcpp::CharacterVector> >::type what(whatSEXP);
+    Rcpp::traits::input_parameter< std::string >::type what(whatSEXP);
     rcpp_result_gen = Rcpp::wrap(divergence_error(what));
     return rcpp_result_gen;
 END_RCPP
 }
 // invalid_input_error
-std::string invalid_input_error(Rcpp::Nullable<Rcpp::CharacterVector> what);
+std::string invalid_input_error(std::string what);
 RcppExport SEXP _integratecpp_invalid_input_error(SEXP whatSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
-    Rcpp::traits::input_parameter< Rcpp::Nullable<Rcpp::CharacterVector> >::type what(whatSEXP);
+    Rcpp::traits::input_parameter< std::string >::type what(whatSEXP);
     rcpp_result_gen = Rcpp::wrap(invalid_input_error(what));
     return rcpp_result_gen;
 END_RCPP
@@ -98,7 +88,6 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_integratecpp_integration_error", (DL_FUNC) &_integratecpp_integration_error, 1},
     {"_integratecpp_max_subdivision_error", (DL_FUNC) &_integratecpp_max_subdivision_error, 1},
     {"_integratecpp_roundoff_error", (DL_FUNC) &_integratecpp_roundoff_error, 1},
     {"_integratecpp_bad_integrand_error", (DL_FUNC) &_integratecpp_bad_integrand_error, 1},

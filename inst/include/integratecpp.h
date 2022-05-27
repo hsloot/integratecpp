@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cmath>
+#include <cstring>
 #include <limits>
 #include <stdexcept>
 #include <string>
@@ -178,108 +179,85 @@ public:
   using result_type = integrator::result_type;
 
 private:
-  const std::string what_;
-  const result_type result_;
+  result_type result_;
 
 public:
+  explicit integration_error(const result_type &result);
+  virtual ~integration_error() noexcept;
+
   integration_error() = delete;
-  integration_error(const result_type &result);
-  integration_error(const char *what, const result_type &result);
-  integration_error(const std::string what, const result_type &result);
+  integration_error(const integration_error &other) noexcept;
+  integration_error &operator=(const integration_error &other) noexcept;
 
-  const char *what() const noexcept override;
-
-  result_type result() const noexcept;
+  virtual result_type result() const noexcept;
 };
 
-class max_subdivision_error : public integration_error {
+class max_subdivision_error : public std::runtime_error,
+                              public integration_error {
 public:
-  max_subdivision_error() = delete;
-  max_subdivision_error(const result_type &result);
+  using integration_error::integration_error;
+  using std::runtime_error::runtime_error;
+  using std::runtime_error::what;
 
-  template <typename... Args,
-            typename std::enable_if<
-                std::is_convertible<
-                    typename std::tuple_element<0, std::tuple<Args...>>::type,
-                    std::string>::value,
-                int>::type = 0>
-  explicit max_subdivision_error(Args &&... args)
-      : integration_error{std::forward<Args>(args)...} {}
+  explicit max_subdivision_error(const std::string what,
+                                 const result_type &result);
+  explicit max_subdivision_error(const char *what, const result_type &result);
 };
 
-class roundoff_error : public integration_error {
+class roundoff_error : public std::runtime_error, public integration_error {
 public:
-  roundoff_error() = delete;
-  roundoff_error(const result_type &result);
+  using integration_error::integration_error;
+  using std::runtime_error::runtime_error;
+  using std::runtime_error::what;
 
-  template <typename... Args,
-            typename std::enable_if<
-                std::is_convertible<
-                    typename std::tuple_element<0, std::tuple<Args...>>::type,
-                    std::string>::value,
-                int>::type = 0>
-  explicit roundoff_error(Args &&... args)
-      : integration_error{std::forward<Args>(args)...} {}
+  explicit roundoff_error(const char *what, const result_type &result);
+  explicit roundoff_error(const std::string what, const result_type &result);
 };
 
-class bad_integrand_error : public integration_error {
+class bad_integrand_error : public std::runtime_error,
+                            public integration_error {
 public:
-  bad_integrand_error() = delete;
-  explicit bad_integrand_error(const result_type &result);
+  using integration_error::integration_error;
+  using std::runtime_error::runtime_error;
+  using std::runtime_error::what;
 
-  template <typename... Args,
-            typename std::enable_if<
-                std::is_convertible<
-                    typename std::tuple_element<0, std::tuple<Args...>>::type,
-                    std::string>::value,
-                int>::type = 0>
-  explicit bad_integrand_error(Args &&... args)
-      : integration_error{std::forward<Args>(args)...} {}
+  explicit bad_integrand_error(const char *what, const result_type &result);
+  explicit bad_integrand_error(const std::string what,
+                               const result_type &result);
 };
 
-class extrapolation_roundoff_error : public integration_error {
+class extrapolation_roundoff_error : public std::runtime_error,
+                                     public integration_error {
 public:
-  extrapolation_roundoff_error() = delete;
-  explicit extrapolation_roundoff_error(const result_type &result);
+  using integration_error::integration_error;
+  using std::runtime_error::runtime_error;
+  using std::runtime_error::what;
 
-  template <typename... Args,
-            typename std::enable_if<
-                std::is_convertible<
-                    typename std::tuple_element<0, std::tuple<Args...>>::type,
-                    std::string>::value,
-                int>::type = 0>
-  explicit extrapolation_roundoff_error(Args &&... args)
-      : integration_error{std::forward<Args>(args)...} {}
+  explicit extrapolation_roundoff_error(const char *what,
+                                        const result_type &result);
+  explicit extrapolation_roundoff_error(const std::string what,
+                                        const result_type &result);
 };
 
-class divergence_error : public integration_error {
+class divergence_error : public std::runtime_error, public integration_error {
 public:
-  divergence_error() = delete;
-  explicit divergence_error(const result_type &result);
+  using integration_error::integration_error;
+  using std::runtime_error::runtime_error;
+  using std::runtime_error::what;
 
-  template <typename... Args,
-            typename std::enable_if<
-                std::is_convertible<
-                    typename std::tuple_element<0, std::tuple<Args...>>::type,
-                    std::string>::value,
-                int>::type = 0>
-  explicit divergence_error(Args &&... args)
-      : integration_error{std::forward<Args>(args)...} {}
+  explicit divergence_error(const char *what, const result_type &result);
+  explicit divergence_error(const std::string what, const result_type &result);
 };
 
-struct invalid_input_error : public integration_error {
+struct invalid_input_error : public std::logic_error, public integration_error {
 public:
-  invalid_input_error() = delete;
-  explicit invalid_input_error(const result_type &result);
+  using integration_error::integration_error;
+  using std::logic_error::logic_error;
+  using std::logic_error::what;
 
-  template <typename... Args,
-            typename std::enable_if<
-                std::is_convertible<
-                    typename std::tuple_element<0, std::tuple<Args...>>::type,
-                    std::string>::value,
-                int>::type = 0>
-  explicit invalid_input_error(Args &&... args)
-      : integration_error{std::forward<Args>(args)...} {}
+  explicit invalid_input_error(const char *what, const result_type &result);
+  explicit invalid_input_error(const std::string what,
+                               const result_type &result);
 };
 
 // -------------------------------------------------------------------------------------------------
@@ -337,17 +315,19 @@ integrator::operator()(Lambda_ fn, const double lower,
   auto out = result_type{result, abserr, last, neval};
   if (ier > 0) {
     if (ier == 1)
-      throw max_subdivision_error(out);
+      throw max_subdivision_error("maximum number of subdivisions reached",
+                                  out);
     if (ier == 2)
-      throw roundoff_error(out);
+      throw roundoff_error("roundoff error was detected", out);
     if (ier == 3)
-      throw bad_integrand_error(out);
+      throw bad_integrand_error("extremely bad integrand behaviour", out);
     if (ier == 4)
-      throw extrapolation_roundoff_error(out);
+      throw extrapolation_roundoff_error(
+          "roundoff error is detected in the extrapolation table", out);
     if (ier == 5)
-      throw divergence_error(out);
+      throw divergence_error("the integral is probably divergent", out);
     if (ier == 6)
-      throw invalid_input_error(out);
+      throw invalid_input_error("the input is invalid", out);
   }
 
   return out;
@@ -430,43 +410,79 @@ inline auto integrator::config() const noexcept -> decltype(cfg_) {
   return cfg_;
 }
 
+// -------------------------------------------------------------------------------------------------
+// ## Implementations of exception classes
+// -------------------------------------------------------------------------------------------------
+
 inline integration_error::integration_error(const result_type &result)
-    : integration_error{"error reported by integration routine", result} {}
+    : result_{result} {}
 
-inline integration_error::integration_error(const char *what,
-                                            const result_type &result)
-    : integration_error{std::string(what), result} {}
+inline integration_error::~integration_error() noexcept {}
 
-inline integration_error::integration_error(const std::string what,
-                                            const result_type &result)
-    : what_{what}, result_{result} {}
+inline integration_error::integration_error(
+    const integration_error &other) noexcept
+    : result_{other.result_} {
+  assert(this != &other);
+}
 
-inline const char *integration_error::what() const noexcept {
-  return what_.c_str();
+inline integration_error &
+integration_error::operator=(const integration_error &other) noexcept {
+  if (this != &other) {
+    result_ = other.result_;
+  }
+  return *this;
 }
 
 inline integrator::result_type integration_error::result() const noexcept {
   return result_;
 }
 
-inline max_subdivision_error::max_subdivision_error(const result_type &result)
-    : integration_error{"maximum number of subdivisions reached", result} {}
+inline max_subdivision_error::max_subdivision_error(const char *what,
+                                                    const result_type &result)
+    : std::runtime_error(what), integration_error(result) {}
 
-inline roundoff_error::roundoff_error(const result_type &result)
-    : integration_error{"roundoff error was detected", result} {}
+inline max_subdivision_error::max_subdivision_error(const std::string what,
+                                                    const result_type &result)
+    : std::runtime_error(what), integration_error(result) {}
 
-inline bad_integrand_error::bad_integrand_error(const result_type &result)
-    : integration_error{"extremely bad integrand behaviour", result} {}
+inline roundoff_error::roundoff_error(const char *what,
+                                      const result_type &result)
+    : std::runtime_error(what), integration_error(result) {}
+
+inline roundoff_error::roundoff_error(const std::string what,
+                                      const result_type &result)
+    : std::runtime_error(what), integration_error(result) {}
+
+inline bad_integrand_error::bad_integrand_error(const char *what,
+                                                const result_type &result)
+    : std::runtime_error(what), integration_error(result) {}
+
+inline bad_integrand_error::bad_integrand_error(const std::string what,
+                                                const result_type &result)
+    : std::runtime_error(what), integration_error(result) {}
 
 inline extrapolation_roundoff_error::extrapolation_roundoff_error(
-    const result_type &result)
-    : integration_error{"roundoff error is detected in the extrapolation table",
-                        result} {}
+    const char *what, const result_type &result)
+    : std::runtime_error(what), integration_error(result) {}
 
-inline divergence_error::divergence_error(const result_type &result)
-    : integration_error{"the integral is probably divergent", result} {}
+inline extrapolation_roundoff_error::extrapolation_roundoff_error(
+    const std::string what, const result_type &result)
+    : std::runtime_error(what), integration_error(result) {}
 
-inline invalid_input_error::invalid_input_error(const result_type &result)
-    : integration_error{"the input is invalid", result} {}
+inline divergence_error::divergence_error(const char *what,
+                                          const result_type &result)
+    : std::runtime_error(what), integration_error(result) {}
+
+inline divergence_error::divergence_error(const std::string what,
+                                          const result_type &result)
+    : std::runtime_error(what), integration_error(result) {}
+
+inline invalid_input_error::invalid_input_error(const char *what,
+                                                const result_type &result)
+    : std::logic_error(what), integration_error(result) {}
+
+inline invalid_input_error::invalid_input_error(const std::string what,
+                                                const result_type &result)
+    : std::logic_error(what), integration_error(result) {}
 
 } // namespace integratecpp
