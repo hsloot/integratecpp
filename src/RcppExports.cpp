@@ -11,19 +11,24 @@ Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
 Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
-// integrate_exponential_expectation
-Rcpp::List integrate_exponential_expectation(const double lambda);
-RcppExport SEXP _integratecpp_integrate_exponential_expectation(SEXP lambdaSEXP) {
+// Rcpp_integrate
+Rcpp::List Rcpp_integrate(Rcpp::Function fn, const double lower, const double upper, const int subdivisions, const double epsrel, const double epsabs);
+RcppExport SEXP _integratecpp_Rcpp_integrate(SEXP fnSEXP, SEXP lowerSEXP, SEXP upperSEXP, SEXP subdivisionsSEXP, SEXP epsrelSEXP, SEXP epsabsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
-    Rcpp::traits::input_parameter< const double >::type lambda(lambdaSEXP);
-    rcpp_result_gen = Rcpp::wrap(integrate_exponential_expectation(lambda));
+    Rcpp::traits::input_parameter< Rcpp::Function >::type fn(fnSEXP);
+    Rcpp::traits::input_parameter< const double >::type lower(lowerSEXP);
+    Rcpp::traits::input_parameter< const double >::type upper(upperSEXP);
+    Rcpp::traits::input_parameter< const int >::type subdivisions(subdivisionsSEXP);
+    Rcpp::traits::input_parameter< const double >::type epsrel(epsrelSEXP);
+    Rcpp::traits::input_parameter< const double >::type epsabs(epsabsSEXP);
+    rcpp_result_gen = Rcpp::wrap(Rcpp_integrate(fn, lower, upper, subdivisions, epsrel, epsabs));
     return rcpp_result_gen;
 END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_integratecpp_integrate_exponential_expectation", (DL_FUNC) &_integratecpp_integrate_exponential_expectation, 1},
+    {"_integratecpp_Rcpp_integrate", (DL_FUNC) &_integratecpp_Rcpp_integrate, 6},
     {NULL, NULL, 0}
 };
 

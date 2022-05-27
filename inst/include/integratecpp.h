@@ -49,34 +49,50 @@ public:
   class config_type {
   public:
     config_type() = default;
+
+    /*!
+     * Partial constructor
+     * \param limit   an `int` for the max. no. of subdivisions.
+     * \param epsrel  a `double` for the requested relative accuracy.
+     */
+    config_type(const int limit, const double epsrel);
+
+    /*!
+     * Partial constructor
+     * \param limit   an `int` for the max. no. of subdivisions.
+     * \param epsrel  a `double` for the requested relative accuracy.
+     * \param epsrel  a `double` for the requested absolute accuracy.
+     */
+    config_type(const int limit, const double epsrel, const double epsabs);
+
     /*!
      * Full constructor
      * \param limit   an `int` for the max. no. of subdivisions.
+     * \param epsrel  a `double` for the requested relative accuracy.
+     * \param epsabs  a `double` for the requested absolute accuracy.
      * \param lenw    an `int` with `lenw >= 4 * limit` for the dimensioning
      *                parameter.
-     * \param epsabs  a `double` for the requested absolute accuracy.
-     * \param epsrel  a `double` for the requested relative accuracy.
      */
-    config_type(const int limit, const int lenw, const double epsabs,
-                const double epsrel);
+    config_type(const int limit, const double epsrel, const double epsabs,
+                const int lenw);
 
     //! Accessor to the max. no. of subdivisions.
     int limit() const noexcept;
 
-    //! Accessor to the dimensioning parameter.
-    int lenw() const noexcept;
+    //! Accessor to the requested relative accuracy.
+    double epsrel() const noexcept;
 
     //! Accessor to the requested absolute accuracy.
     double epsabs() const noexcept;
 
-    //! Accessor to the requested relative accuracy.
-    double epsrel() const noexcept;
+    //! Accessor to the dimensioning parameter.
+    int lenw() const noexcept;
 
   private:
     int limit_ = 100;
-    int lenw_ = 400;
-    double epsabs_ = std::pow(std::numeric_limits<double>::epsilon(), 0.25);
     double epsrel_ = std::pow(std::numeric_limits<double>::epsilon(), 0.25);
+    double epsabs_ = std::pow(std::numeric_limits<double>::epsilon(), 0.25);
+    int lenw_ = 400;
   };
 
   integrator() = default;
@@ -86,6 +102,10 @@ public:
    * \param cfg  A `config_param`.
    */
   integrator(const config_type &cfg);
+
+  integrator(const int limit, const double epsrel);
+
+  integrator(const int limit, const double epsrel, const double epsabs);
 
   /*!
    * Full constructor
@@ -97,8 +117,8 @@ public:
    *
    * \exception     std::invalid_argument
    */
-  integrator(const int limit, const int lenw, const double epsabs,
-             const double epsrel);
+  integrator(const int limit, const double epsrel, const double epsabs,
+             const int lenw);
 
   /*!
    * Integrator Lambda-functor
@@ -201,7 +221,7 @@ inline integrator::result_type
 integrator::operator()(Lambda_ fn, const double lower,
                        const double upper) const {
   if (std::isnan(lower) || std::isnan(upper))
-    throw std::invalid_argument("lower and upper must not be NaN");
+    throw std::invalid_argument("a limit is NA or NaN");
 
   auto fn_callback = [](double *x, int n, void *ex) {
     auto fn_ptr = static_cast<decltype(&fn)>(ex);
@@ -286,17 +306,25 @@ inline int integrator::result_type::subdivisions() const noexcept {
 }
 inline int integrator::result_type::neval() const noexcept { return neval_; }
 
-inline integrator::config_type::config_type(const int limit, const int lenw,
-                                            const double epsabs,
+inline integrator::config_type::config_type(const int limit,
                                             const double epsrel)
-    : limit_{limit}, lenw_{lenw}, epsabs_{epsabs}, epsrel_{epsrel} {
+    : config_type{limit, epsrel, epsrel, 4 * limit} {}
+
+inline integrator::config_type::config_type(const int limit,
+                                            const double epsrel,
+                                            const double epsabs)
+    : config_type{limit, epsrel, epsabs, 4 * limit} {}
+
+inline integrator::config_type::config_type(const int limit,
+                                            const double epsrel,
+                                            const double epsabs, const int lenw)
+    : limit_{limit}, epsrel_{epsrel}, epsabs_{epsabs}, lenw_{lenw} {
   if (limit_ <= 0)
-    throw std::invalid_argument("limit > 0 required");
+    throw std::invalid_argument("invalid parameter values");
   if (epsabs_ <= 0. &&
       epsrel_ <=
           std::max(50. * std::numeric_limits<double>::epsilon(), 0.5e-28)) {
-    throw std::invalid_argument(
-        "epsabs > 0 or epsrel > max(epsilon, 0.5e-28) required");
+    throw std::invalid_argument("invalid parameter values");
   }
   if (!(lenw_ >= 4 * limit_))
     throw std::invalid_argument("lenw >= 4 * limit required");
@@ -312,9 +340,14 @@ inline double integrator::config_type::epsrel() const noexcept {
 }
 
 inline integrator::integrator(const config_type &cfg) : cfg_{cfg} {}
-inline integrator::integrator(const int limit, const int lenw,
-                              const double epsabs, const double epsrel)
-    : cfg_{limit, lenw, epsabs, epsrel} {}
+inline integrator::integrator(const int limit, const double epsrel)
+    : cfg_{limit, epsrel} {}
+inline integrator::integrator(const int limit, const double epsrel,
+                              const double epsabs)
+    : cfg_{limit, epsrel, epsabs} {}
+inline integrator::integrator(const int limit, const double epsrel,
+                              const double epsabs, const int lenw)
+    : cfg_{limit, epsrel, epsabs, lenw} {}
 
 inline integration_error::integration_error(const result_type &result)
     : result_{result} {}
