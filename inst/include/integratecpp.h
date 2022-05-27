@@ -193,72 +193,59 @@ public:
   virtual result_type result() const noexcept;
 };
 
-class max_subdivision_error : public std::runtime_error,
-                              public integration_error {
+class integration_runtime_error : public std::runtime_error,
+                                  public integration_error {
 public:
   using integration_error::integration_error;
   using std::runtime_error::runtime_error;
   using std::runtime_error::what;
 
-  explicit max_subdivision_error(const std::string what,
-                                 const result_type &result);
-  explicit max_subdivision_error(const char *what, const result_type &result);
+  explicit integration_runtime_error(const std::string what,
+                                     const result_type &result);
+  explicit integration_runtime_error(const char *what,
+                                     const result_type &result);
 };
 
-class roundoff_error : public std::runtime_error, public integration_error {
-public:
-  using integration_error::integration_error;
-  using std::runtime_error::runtime_error;
-  using std::runtime_error::what;
-
-  explicit roundoff_error(const char *what, const result_type &result);
-  explicit roundoff_error(const std::string what, const result_type &result);
-};
-
-class bad_integrand_error : public std::runtime_error,
-                            public integration_error {
-public:
-  using integration_error::integration_error;
-  using std::runtime_error::runtime_error;
-  using std::runtime_error::what;
-
-  explicit bad_integrand_error(const char *what, const result_type &result);
-  explicit bad_integrand_error(const std::string what,
-                               const result_type &result);
-};
-
-class extrapolation_roundoff_error : public std::runtime_error,
-                                     public integration_error {
-public:
-  using integration_error::integration_error;
-  using std::runtime_error::runtime_error;
-  using std::runtime_error::what;
-
-  explicit extrapolation_roundoff_error(const char *what,
-                                        const result_type &result);
-  explicit extrapolation_roundoff_error(const std::string what,
-                                        const result_type &result);
-};
-
-class divergence_error : public std::runtime_error, public integration_error {
-public:
-  using integration_error::integration_error;
-  using std::runtime_error::runtime_error;
-  using std::runtime_error::what;
-
-  explicit divergence_error(const char *what, const result_type &result);
-  explicit divergence_error(const std::string what, const result_type &result);
-};
-
-struct invalid_input_error : public std::logic_error, public integration_error {
+class integration_logic_error : public std::logic_error,
+                                public integration_error {
 public:
   using integration_error::integration_error;
   using std::logic_error::logic_error;
   using std::logic_error::what;
 
-  explicit invalid_input_error(const char *what, const result_type &result);
-  explicit invalid_input_error(const std::string what,
-                               const result_type &result);
+  explicit integration_logic_error(const std::string what,
+                                   const result_type &result);
+  explicit integration_logic_error(const char *what, const result_type &result);
+};
+
+class max_subdivision_error : public integration_runtime_error {
+public:
+  using integration_runtime_error::integration_runtime_error;
+};
+
+class roundoff_error : public integration_runtime_error {
+public:
+  using integration_runtime_error::integration_runtime_error;
+};
+
+class bad_integrand_error : public integration_runtime_error {
+public:
+  using integration_runtime_error::integration_runtime_error;
+};
+
+class extrapolation_roundoff_error : public integration_runtime_error {
+public:
+  using integration_runtime_error::integration_runtime_error;
+};
+
+class divergence_error : public integration_runtime_error {
+public:
+  using integration_runtime_error::integration_runtime_error;
+};
+
+struct invalid_input_error : public integration_logic_error {
+public:
+  using integration_logic_error::integration_logic_error;
 };
 
 // -------------------------------------------------------------------------------------------------
@@ -438,52 +425,20 @@ inline integrator::result_type integration_error::result() const noexcept {
   return result_;
 }
 
-inline max_subdivision_error::max_subdivision_error(const char *what,
-                                                    const result_type &result)
-    : std::runtime_error(what), integration_error(result) {}
-
-inline max_subdivision_error::max_subdivision_error(const std::string what,
-                                                    const result_type &result)
-    : std::runtime_error(what), integration_error(result) {}
-
-inline roundoff_error::roundoff_error(const char *what,
-                                      const result_type &result)
-    : std::runtime_error(what), integration_error(result) {}
-
-inline roundoff_error::roundoff_error(const std::string what,
-                                      const result_type &result)
-    : std::runtime_error(what), integration_error(result) {}
-
-inline bad_integrand_error::bad_integrand_error(const char *what,
-                                                const result_type &result)
-    : std::runtime_error(what), integration_error(result) {}
-
-inline bad_integrand_error::bad_integrand_error(const std::string what,
-                                                const result_type &result)
-    : std::runtime_error(what), integration_error(result) {}
-
-inline extrapolation_roundoff_error::extrapolation_roundoff_error(
+inline integration_runtime_error::integration_runtime_error(
     const char *what, const result_type &result)
     : std::runtime_error(what), integration_error(result) {}
 
-inline extrapolation_roundoff_error::extrapolation_roundoff_error(
+inline integration_runtime_error::integration_runtime_error(
     const std::string what, const result_type &result)
     : std::runtime_error(what), integration_error(result) {}
 
-inline divergence_error::divergence_error(const char *what,
-                                          const result_type &result)
-    : std::runtime_error(what), integration_error(result) {}
-
-inline divergence_error::divergence_error(const std::string what,
-                                          const result_type &result)
-    : std::runtime_error(what), integration_error(result) {}
-
-inline invalid_input_error::invalid_input_error(const char *what,
-                                                const result_type &result)
+inline integration_logic_error::integration_logic_error(
+    const char *what, const result_type &result)
     : std::logic_error(what), integration_error(result) {}
 
-inline invalid_input_error::invalid_input_error(const std::string what,
-                                                const result_type &result)
+inline integration_logic_error::integration_logic_error(
+    const std::string what, const result_type &result)
     : std::logic_error(what), integration_error(result) {}
 
 } // namespace integratecpp

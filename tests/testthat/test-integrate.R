@@ -1,5 +1,3 @@
-skip_if_not(getRversion() >= "4.1.0")
-
 remove_call <- function(x) {
     x <- x[-match(x, "call")]
 }
@@ -10,18 +8,18 @@ test_that("Default settings for exponential distribtion's expectation", {
     }
 
     expect_equal(
-        integrate(fn, 0, Inf, rate = 0.5) |> remove_call(),
-        stats::integrate(fn, 0, Inf, rate = 0.5) |> remove_call()
+        remove_call(integrate(fn, 0, Inf, rate = 0.5)),
+        remove_call(stats::integrate(fn, 0, Inf, rate = 0.5))
     )
 
     expect_equal(
-        integrate(fn, 0, Inf, rate = 1) |> remove_call(),
-        stats::integrate(fn, 0, Inf, rate = 1) |> remove_call()
+        remove_call(integrate(fn, 0, Inf, rate = 1)),
+        remove_call(stats::integrate(fn, 0, Inf, rate = 1))
     )
 
     expect_equal(
-        integrate(fn, 0, Inf, rate = 2) |> remove_call(),
-        stats::integrate(fn, 0, Inf, rate = 2) |> remove_call()
+        remove_call(integrate(fn, 0, Inf, rate = 2)),
+        remove_call(stats::integrate(fn, 0, Inf, rate = 2))
     )
 })
 
@@ -31,33 +29,29 @@ test_that("Less max. subdivisions for gamma distribution's expectation", {
     }
 
     expect_equal(
-        integrate(
+        remove_call(integrate(
             fn, 0, Inf,
             shape = 0.3, rate = 0.5,
             subdivisions = 50L
-        ) |>
-            remove_call(),
-        stats::integrate(
+        )),
+        remove_call(stats::integrate(
             fn, 0, Inf,
             shape = 0.3, rate = 0.5,
             subdivisions = 50L
-        ) |>
-            remove_call()
+        ))
     )
 
     expect_equal(
-        integrate(
+        remove_call(integrate(
             fn, 0, Inf,
             shape = 0.7, rate = 1.5,
             subdivisions = 50L
-        ) |>
-            remove_call(),
-        stats::integrate(
+        )),
+        remove_call(stats::integrate(
             fn, 0, Inf,
             shape = 0.7, rate = 1.5,
             subdivisions = 50L
-        ) |>
-            remove_call()
+        ))
     )
 })
 
@@ -67,17 +61,13 @@ test_that("More max. subdivisions for chi-square distribution's expectation", {
     }
 
     expect_equal(
-        integrate(fn, 0, Inf, df = 3, subdivisions = 200L) |>
-            remove_call(),
-        stats::integrate(fn, 0, Inf, df = 3, subdivisions = 200L) |>
-            remove_call()
+        remove_call(integrate(fn, 0, Inf, df = 3, subdivisions = 200L)),
+        remove_call(stats::integrate(fn, 0, Inf, df = 3, subdivisions = 200L))
     )
 
     expect_equal(
-        integrate(fn, 0, Inf, df = 5, ncp = 2, subdivisions = 200L) |>
-            remove_call(),
-        stats::integrate(fn, 0, Inf, df = 5, ncp = 2, subdivisions = 200L) |>
-            remove_call()
+        remove_call(integrate(fn, 0, Inf, df = 5, ncp = 2, subdivisions = 200L)),
+        remove_call(stats::integrate(fn, 0, Inf, df = 5, ncp = 2, subdivisions = 200L))
     )
 })
 
@@ -87,33 +77,29 @@ test_that("Smaller required rel. tol. for normal distribution's variance", {
     }
 
     expect_equal(
-        integrate(
+        remove_call(integrate(
             fn, 0, Inf,
             mean = 0, sd = 2,
             rel.tol = .Machine$double.eps^0.125
-        ) |>
-            remove_call(),
-        stats::integrate(
+        )),
+        remove_call(stats::integrate(
             fn, 0, Inf,
             mean = 0, sd = 2,
             rel.tol = .Machine$double.eps^0.125
-        ) |>
-            remove_call()
+        ))
     )
 
     expect_equal(
-        integrate(
+        remove_call(integrate(
             fn, 0, Inf,
             mean = 0, sd = 0.5,
             rel.tol = .Machine$double.eps^0.125
-        ) |>
-            remove_call(),
-        stats::integrate(
+        )),
+        remove_call(stats::integrate(
             fn, 0, Inf,
             mean = 0, sd = 0.5,
             rel.tol = .Machine$double.eps^0.125
-        ) |>
-            remove_call()
+        ))
     )
 })
 
@@ -123,33 +109,29 @@ test_that("Higher required rel. tol. for normal distribution's variance", {
     }
 
     expect_equal(
-        integrate(
+        remove_call(integrate(
             fn, 0, Inf,
             mean = 0, sd = 2,
             rel.tol = .Machine$double.eps^0.5
-        ) |>
-            remove_call(),
-        stats::integrate(
+        )),
+        remove_call(stats::integrate(
             fn, 0, Inf,
             mean = 0, sd = 2,
             rel.tol = .Machine$double.eps^0.5
-        ) |>
-            remove_call()
+        ))
     )
 
     expect_equal(
-        integrate(
+        remove_call(integrate(
             fn, 0, Inf,
             mean = 0, sd = 0.5,
             rel.tol = .Machine$double.eps^0.5
-        ) |>
-            remove_call(),
-        stats::integrate(
+        )),
+        remove_call(stats::integrate(
             fn, 0, Inf,
             mean = 0, sd = 0.5,
             rel.tol = .Machine$double.eps^0.5
-        ) |>
-            remove_call()
+        ))
     )
 })
 
@@ -159,17 +141,13 @@ test_that("Set required abs. tol. to zero for normal distribution's variance", {
     }
 
     expect_equal(
-        integrate(fn, 0, Inf, mean = 0, sd = 2, abs.tol = 0) |>
-            remove_call(),
-        stats::integrate(fn, 0, Inf, mean = 0, sd = 2, abs.tol = 0) |>
-            remove_call()
+        remove_call(integrate(fn, 0, Inf, mean = 0, sd = 2, abs.tol = 0)),
+        remove_call(stats::integrate(fn, 0, Inf, mean = 0, sd = 2, abs.tol = 0))
     )
 
     expect_equal(
-        integrate(fn, 0, Inf, mean = 0, sd = 0.5, abs.tol = 0) |>
-            remove_call(),
-        stats::integrate(fn, 0, Inf, mean = 0, sd = 0.5, abs.tol = 0) |>
-            remove_call()
+        remove_call(integrate(fn, 0, Inf, mean = 0, sd = 0.5, abs.tol = 0)),
+        remove_call(stats::integrate(fn, 0, Inf, mean = 0, sd = 0.5, abs.tol = 0))
     )
 })
 
