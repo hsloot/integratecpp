@@ -3,6 +3,7 @@
 #include <cmath>
 #include <limits>
 #include <stdexcept>
+#include <string>
 #include <vector>
 
 #include <R_ext/Applic.h>
@@ -55,9 +56,16 @@ public:
   //! A class for the integration configuration parameters
   class config_type {
   private:
+    //! An `int` for the max. no. of subdivisions.
     int limit_ = 100;
+
+    //! A `double` for the requested relative accuracy.
     double epsrel_ = std::pow(std::numeric_limits<double>::epsilon(), 0.25);
+
+    //! A `double` for the requested absolute accuracy.
     double epsabs_ = std::pow(std::numeric_limits<double>::epsilon(), 0.25);
+
+    //! An `int` with `lenw >= 4 * limit` for the dimensioning parameter.
     int lenw_ = 400;
 
   public:
@@ -103,6 +111,7 @@ public:
   };
 
 private:
+  //! A `config_type` with the integration configuration
   const config_type cfg_{};
 
 public:
@@ -134,11 +143,13 @@ public:
              const int lenw);
 
   /*!
-   * Integrator Lambda-functor
+   * Integrator Lambda-functor, using `Rdqags` if both bounds are are finite and
+   * `Rdqagi` of at least one of the bounds is infinite.
+   *
    * \param fn     a `Lambda_` functor with a (const) double argument.
    * \param lower  a `double` for the lower bound.
-   * \param upper  a `double` for the upper bound.
-   * \return A `return_type` with the integration results.
+   * \param upper  a `double` for the upper bound. \return A `return_type` with
+   *               the integration results.
    */
   template <typename Lambda_>
   result_type operator()(Lambda_ fn, const double lower,
@@ -159,19 +170,26 @@ integrator::result_type
 integrate(Lambda_ fn, const double lower, const double upper,
           const integrator::config_type config = integrator::config_type{});
 
+/*!
+ * A class for all exceptions of the integration routine.
+ */
 class integration_error : public std::exception {
 public:
   using result_type = integrator::result_type;
 
+private:
+  const std::string what_;
+  const result_type result_;
+
+public:
   integration_error() = delete;
   integration_error(const result_type &result);
+  integration_error(const char *what, const result_type &result);
+  integration_error(const std::string what, const result_type &result);
 
   const char *what() const noexcept override;
 
   result_type result() const noexcept;
-
-private:
-  const result_type result_;
 };
 
 class max_subdivision_error : public integration_error {
@@ -179,7 +197,14 @@ public:
   max_subdivision_error() = delete;
   max_subdivision_error(const result_type &result);
 
-  const char *what() const noexcept override;
+  template <typename... Args,
+            typename std::enable_if<
+                std::is_convertible<
+                    typename std::tuple_element<0, std::tuple<Args...>>::type,
+                    std::string>::value,
+                int>::type = 0>
+  explicit max_subdivision_error(Args &&... args)
+      : integration_error{std::forward<Args>(args)...} {}
 };
 
 class roundoff_error : public integration_error {
@@ -187,39 +212,74 @@ public:
   roundoff_error() = delete;
   roundoff_error(const result_type &result);
 
-  const char *what() const noexcept override;
+  template <typename... Args,
+            typename std::enable_if<
+                std::is_convertible<
+                    typename std::tuple_element<0, std::tuple<Args...>>::type,
+                    std::string>::value,
+                int>::type = 0>
+  explicit roundoff_error(Args &&... args)
+      : integration_error{std::forward<Args>(args)...} {}
 };
 
 class bad_integrand_error : public integration_error {
 public:
   bad_integrand_error() = delete;
-  bad_integrand_error(const result_type &result);
+  explicit bad_integrand_error(const result_type &result);
 
-  const char *what() const noexcept override;
+  template <typename... Args,
+            typename std::enable_if<
+                std::is_convertible<
+                    typename std::tuple_element<0, std::tuple<Args...>>::type,
+                    std::string>::value,
+                int>::type = 0>
+  explicit bad_integrand_error(Args &&... args)
+      : integration_error{std::forward<Args>(args)...} {}
 };
 
 class extrapolation_roundoff_error : public integration_error {
 public:
   extrapolation_roundoff_error() = delete;
-  extrapolation_roundoff_error(const result_type &result);
+  explicit extrapolation_roundoff_error(const result_type &result);
 
-  const char *what() const noexcept override;
+  template <typename... Args,
+            typename std::enable_if<
+                std::is_convertible<
+                    typename std::tuple_element<0, std::tuple<Args...>>::type,
+                    std::string>::value,
+                int>::type = 0>
+  explicit extrapolation_roundoff_error(Args &&... args)
+      : integration_error{std::forward<Args>(args)...} {}
 };
 
 class divergence_error : public integration_error {
 public:
   divergence_error() = delete;
-  divergence_error(const result_type &result);
+  explicit divergence_error(const result_type &result);
 
-  const char *what() const noexcept override;
+  template <typename... Args,
+            typename std::enable_if<
+                std::is_convertible<
+                    typename std::tuple_element<0, std::tuple<Args...>>::type,
+                    std::string>::value,
+                int>::type = 0>
+  explicit divergence_error(Args &&... args)
+      : integration_error{std::forward<Args>(args)...} {}
 };
 
 struct invalid_input_error : public integration_error {
 public:
   invalid_input_error() = delete;
-  invalid_input_error(const result_type &result);
+  explicit invalid_input_error(const result_type &result);
 
-  const char *what() const noexcept override;
+  template <typename... Args,
+            typename std::enable_if<
+                std::is_convertible<
+                    typename std::tuple_element<0, std::tuple<Args...>>::type,
+                    std::string>::value,
+                int>::type = 0>
+  explicit invalid_input_error(Args &&... args)
+      : integration_error{std::forward<Args>(args)...} {}
 };
 
 // -------------------------------------------------------------------------------------------------
@@ -371,10 +431,18 @@ inline auto integrator::config() const noexcept -> decltype(cfg_) {
 }
 
 inline integration_error::integration_error(const result_type &result)
-    : result_{result} {}
+    : integration_error{"error reported by integration routine", result} {}
+
+inline integration_error::integration_error(const char *what,
+                                            const result_type &result)
+    : integration_error{std::string(what), result} {}
+
+inline integration_error::integration_error(const std::string what,
+                                            const result_type &result)
+    : what_{what}, result_{result} {}
 
 inline const char *integration_error::what() const noexcept {
-  return "error reported by integration routine";
+  return what_.c_str();
 }
 
 inline integrator::result_type integration_error::result() const noexcept {
@@ -382,46 +450,23 @@ inline integrator::result_type integration_error::result() const noexcept {
 }
 
 inline max_subdivision_error::max_subdivision_error(const result_type &result)
-    : integration_error{result} {}
-
-inline const char *max_subdivision_error::what() const noexcept {
-  return "maximum number of subdivisions reached";
-}
+    : integration_error{"maximum number of subdivisions reached", result} {}
 
 inline roundoff_error::roundoff_error(const result_type &result)
-    : integration_error{result} {}
-
-inline const char *roundoff_error::what() const noexcept {
-  return "roundoff error was detected";
-}
+    : integration_error{"roundoff error was detected", result} {}
 
 inline bad_integrand_error::bad_integrand_error(const result_type &result)
-    : integration_error{result} {}
-
-inline const char *bad_integrand_error::what() const noexcept {
-  return "extremely bad integrand behaviour";
-}
+    : integration_error{"extremely bad integrand behaviour", result} {}
 
 inline extrapolation_roundoff_error::extrapolation_roundoff_error(
     const result_type &result)
-    : integration_error{result} {}
-
-inline const char *extrapolation_roundoff_error::what() const noexcept {
-  return "roundoff error is detected in the extrapolation table";
-}
+    : integration_error{"roundoff error is detected in the extrapolation table",
+                        result} {}
 
 inline divergence_error::divergence_error(const result_type &result)
-    : integration_error{result} {}
-
-inline const char *divergence_error::what() const noexcept {
-  return "the integral is probably divergent";
-}
+    : integration_error{"the integral is probably divergent", result} {}
 
 inline invalid_input_error::invalid_input_error(const result_type &result)
-    : integration_error{result} {}
-
-inline const char *invalid_input_error::what() const noexcept {
-  return "the input is invalid";
-}
+    : integration_error{"the input is invalid", result} {}
 
 } // namespace integratecpp
