@@ -10,96 +10,122 @@
 
 #include <R_ext/Applic.h>
 
+// BUG: non-acyclic inheritance trees of exceptions seem to cause issues when
+// catching them.
+
 namespace integratecpp {
 
 //!  A Functor wrapping `Rdqags` and `Rdqagi` declared in `<R_ext/Applic.h`.
 class integrator {
 public:
-  //! A class for the integation results
+  /*!
+   * A class for the integation results.
+   *
+   * __Return values__ (see <src/appl/integrate.c> in R-source):
+   * - `value` (`double`): The approximation to the integral. Use with caution
+   *   if fetched from exceptions deriving from integation_error.
+   * - `abserr` (`double`): Estimate of the modules of the absolute error, which
+   *   should be equal or larger than `abs(I-result)`.
+   * - `subdivisions` (`int`): The final number of subintervals produced in the
+   *   subdivision process.
+   * - `neval` (`int`): The number of integrand evaluations.
+   */
   class result_type {
   private:
-    //! A `double` with the approximated value.
     double value_ = 0.;
-
-    //! A `double` with the approximated absolute error.
     double abserr_ = 0.;
-
-    //! An `int` with the no. of subdivisions.
     int subdivisions_ = 0;
-
-    //! An `int` with the no. of neval.
     int neval_ = 0;
 
   public:
     result_type() = default;
     /*!
-     * Full constructor
+     * The full constructor.
+     *
      * \param value         a `double` with the approximated value.
-     * \param abserr        a `double` with the approximated absolute error.
-     * \param subdivisions  an `int` with the no. of subdivisions.
-     * \param neval         an `int` with the no. of neval.
+     * \param abserr        a `double` with the estimated absolute error.
+     * \param subdivisions  an `int` with the number of subdivisions.
+     * \param neval         an `int` with the number of neval.
      */
-    result_type(const double value, const double abserr, const int subdivisions,
-                const int neval);
+    explicit result_type(const double value, const double abserr,
+                         const int subdivisions, const int neval);
 
     //! Accessor to the approximated value.
     auto value() const noexcept -> decltype(value_);
 
-    //! Accessor to the approximated absolute error.
+    //! Accessor to the estimated absolute error.
     auto abserr() const noexcept -> decltype(abserr_);
 
-    //! Accessor to the no. of subdivisions.
+    //! Accessor to the number of subdivisions.
     auto subdivisions() const noexcept -> decltype(subdivisions_);
 
-    //! Accessor to the no. of neval.
+    //! Accessor to the number of neval.
     auto neval() const noexcept -> decltype(neval_);
   };
 
-  //! A class for the integration configuration parameters
+  /*!
+   * A class for the integration configuration parameters.
+   *
+   * __Configuration parameters__ (see <src/appl/integrate.c> in R-source):
+   * - `limit` (`int`): A dimensioning parameter for the maximum number of
+   *   subintervals in the partition of the given integration interval
+   *   (lower, upper). If `limit >= 1` is not fulfilled, an invalid_input_error
+   *   is thrown.
+   * - `epsrel` and `epsabs` (`double`): The requested relative and absolute
+   *   accuracy. Both are equal by default to the fourth root of the Machine
+   *   epsilon. If `epsabs <= 0` and `epsrel < max(50*rel.mach.acc.,0.5d-28)`,
+   *   an invalid_input_error is thrown.
+   * - `lenw` (`int`): A dimensioning parameter for the working array. Must
+   *   equal at least four times `limit`, otherwise an invalid_input_error
+   *   is thrown.
+   */
   class config_type {
   private:
-    //! An `int` for the max. no. of subdivisions.
     int limit_ = 100;
-
-    //! A `double` for the requested relative accuracy.
     double epsrel_ = std::pow(std::numeric_limits<double>::epsilon(), 0.25);
-
-    //! A `double` for the requested absolute accuracy.
     double epsabs_ = std::pow(std::numeric_limits<double>::epsilon(), 0.25);
-
-    //! An `int` with `lenw >= 4 * limit` for the dimensioning parameter.
     int lenw_ = 400;
 
   public:
     config_type() = default;
 
     /*!
-     * Partial constructor
-     * \param limit   an `int` for the max. no. of subdivisions.
+     * A partial constructor for `limit` and `epsrel`.
+     *
+     * \param limit   an `int` for the maximum number of subdivisions.
      * \param epsrel  a `double` for the requested relative accuracy.
+     *
+     * \exception     std::invalid_input_error
      */
-    config_type(const int limit, const double epsrel);
+    explicit config_type(const int limit, const double epsrel);
 
     /*!
-     * Partial constructor
-     * \param limit   an `int` for the max. no. of subdivisions.
+     * A partial constructor for `limit`, `epsrel`, and `epsabs`.
+     *
+     * \param limit   an `int` for the maximum number of subdivisions.
      * \param epsrel  a `double` for the requested relative accuracy.
-     * \param epsrel  a `double` for the requested absolute accuracy.
+     * \param epsabs  a `double` for the requested absolute accuracy.
+     *
+     * \exception     std::invalid_input_error
      */
-    config_type(const int limit, const double epsrel, const double epsabs);
+    explicit config_type(const int limit, const double epsrel,
+                         const double epsabs);
 
     /*!
-     * Full constructor
-     * \param limit   an `int` for the max. no. of subdivisions.
+     * The full constructor.
+     *
+     * \param limit   an `int` for the maximum number of subdivisions.
      * \param epsrel  a `double` for the requested relative accuracy.
      * \param epsabs  a `double` for the requested absolute accuracy.
      * \param lenw    an `int` with `lenw >= 4 * limit` for the dimensioning
      *                parameter.
+     *
+     * \exception     std::invalid_input_error
      */
-    config_type(const int limit, const double epsrel, const double epsabs,
-                const int lenw);
+    explicit config_type(const int limit, const double epsrel,
+                         const double epsabs, const int lenw);
 
-    //! Accessor to the max. no. of subdivisions.
+    //! Accessor to the maximum number of subdivisions.
     auto limit() const noexcept -> decltype(limit_);
 
     //! Accessor to the requested relative accuracy.
@@ -108,41 +134,60 @@ public:
     //! Accessor to the requested absolute accuracy.
     auto epsabs() const noexcept -> decltype(epsabs_);
 
-    //! Accessor to the dimensioning parameter.
+    //! Accessor to the dimensioning parameter `lenw`.
     auto lenw() const noexcept -> decltype(lenw_);
   };
 
 private:
-  //! A `config_type` with the integration configuration
   const config_type cfg_{};
 
 public:
   integrator() = default;
 
   /*!
-   * Full constructor using `config_param`
-   * \param cfg  A `config_param`.
+   * Full constructor using `config_type`.
+   *
+   * \param cfg  a `config_type`.
    */
-  integrator(const config_type &cfg);
+  explicit integrator(const config_type &cfg);
 
-  integrator(const int limit, const double epsrel);
+  /*!
+   * Partial constructor using `limit` and `epsrel`.
+   *
+   * \param limit   an `int` for the maximum number of subdivisions.
+   * \param epsrel  a `double` for the requested relative accuracy.
+   *
+   * \exception     std::invalid_input_error
+   */
+  explicit integrator(const int limit, const double epsrel);
 
-  integrator(const int limit, const double epsrel, const double epsabs);
-
-  auto config() const noexcept -> decltype(cfg_);
+  /*!
+   * [integrator description]
+   * \param limit   an `int` for the maximum number of subdivisions.
+   * \param epsrel  a `double` for the requested relative accuracy.
+   * \param epsabs  a `double` for the requested absolute accuracy.
+   *
+   * \exception     std::invalid_input_error
+   */
+  explicit integrator(const int limit, const double epsrel,
+                      const double epsabs);
 
   /*!
    * Full constructor
-   * \param limit   an `int` for the max. no. of subdivisions.
+   *
+   * \param limit   an `int` for the maximum number of subdivisions.
+   * \param epsrel  a `double` for the requested relative accuracy.
+   * \param epsabs  a `double` for the requested absolute accuracy.
    * \param lenw    an `int` with `lenw >= 4 * limit` for the dimensioning
    *                parameter.
-   * \param epsabs  a `double` for the requested absolute accuracy.
-   * \param epsrel  a `double` for the requested relative accuracy.
    *
-   * \exception     std::invalid_argument
+   * \exception     std::invalid_input_error
    */
-  integrator(const int limit, const double epsrel, const double epsabs,
-             const int lenw);
+  explicit integrator(const int limit, const double epsrel, const double epsabs,
+                      const int lenw);
+
+  //! Accessor for the configuration parameters
+  auto config() const noexcept -> decltype(cfg_);
 
   /*!
    * Integrator Lambda-functor, using `Rdqags` if both bounds are are finite and
@@ -180,19 +225,24 @@ public:
   using result_type = integrator::result_type;
 
 private:
+  //!  A `return_type` with the integration results.
   result_type result_;
 
 public:
   explicit integration_error(const result_type &result);
   virtual ~integration_error() noexcept;
 
-  integration_error() = delete;
+  integration_error() = default;
   integration_error(const integration_error &other) noexcept;
   integration_error &operator=(const integration_error &other) noexcept;
 
+  //! Accessor to the integration results
   virtual result_type result() const noexcept;
 };
 
+/*!
+ * A class for all runtime exceptions of the integration routine.
+ */
 class integration_runtime_error : public std::runtime_error,
                                   public integration_error {
 public:
@@ -206,6 +256,9 @@ public:
                                      const result_type &result);
 };
 
+/*!
+ * A class for all logic exceptions of the integration routine.
+ */
 class integration_logic_error : public std::logic_error,
                                 public integration_error {
 public:
@@ -218,31 +271,84 @@ public:
   explicit integration_logic_error(const char *what, const result_type &result);
 };
 
+/*!
+ * A class for the exception if more subdivisions than the maximum are required.
+ *
+ * From <scr/appl/integate.c>:
+ * maximum number of subdivisions allowed has been achieved. one can allow more
+ * subdivisions by increasing the value of limit (and taking the according
+ * dimension adjustments into account). however, if this yields no improvement
+ * it is advised to analyze the integrand in order to determine the integration
+ * difficulties. if the position of a local difficulty can be determined (e.g.
+ * singularity, discontinuity within the interval) one will probably gain from
+ * splitting up the interval at this point and calling the integrator on the
+ * subranges. if possible, an appropriate special-purpose integrator should be
+ * used, which is designed for handling the type of difficulty involved.
+ */
 class max_subdivision_error : public integration_runtime_error {
 public:
   using integration_runtime_error::integration_runtime_error;
 };
 
+/*!
+ * A class for the exception if a roundoff error occurs.
+ *
+ * From <scr/appl/integate.c>:
+ * the occurrence of roundoff error is detected, which prevents the requested
+ * tolerance from being achieved. the error may be under-estimated.
+ */
 class roundoff_error : public integration_runtime_error {
 public:
   using integration_runtime_error::integration_runtime_error;
 };
 
+/*!
+ * A class for the exception if bad integrand behaviour occurs
+ *
+ * From <scr/appl/integate.c>:
+ * extremely bad integrand behaviour occurs at some points of the integration
+ * interval.
+ */
 class bad_integrand_error : public integration_runtime_error {
 public:
   using integration_runtime_error::integration_runtime_error;
 };
 
+/*!
+ * A class for the exception if roundoff errors in the extrapolation table occur
+ *
+ * From <scr/appl/integate.c>:
+ * the algorithm does not converge. roundoff error is detected in the
+ * extrapolation table. it is assumed that the requested tolerance cannot be
+ * achieved, and that the returned result is the best which can be obtained.
+ */
 class extrapolation_roundoff_error : public integration_runtime_error {
 public:
   using integration_runtime_error::integration_runtime_error;
 };
 
+/*!
+ * A class for the exception if divergence is detected
+ *
+ * From <scr/appl/integate.c>:
+ * the integral is probably divergent, or slowly convergent. it must be noted
+ * that divergence can occur with any other value of ier.
+ */
 class divergence_error : public integration_runtime_error {
 public:
   using integration_runtime_error::integration_runtime_error;
 };
 
+/*!
+ * A class for the exception if inputs are invalid
+ *
+ * From <scr/appl/integate.c>:
+ * the input is invalid, because (epsabs <= 0 and epsrel <
+ * max(50*rel.mach.acc.,0.5d-28)) or limit < 1 or leniw < limit*4. result,
+ * abserr, neval, last are set to zero. exept when limit or leniw is invalid,
+ * iwork(1), work(limit*2+1) and work(limit*3+1) are set to zero, work(1) is set
+ * to a and work(limit+1) to b.
+ */
 struct invalid_input_error : public integration_logic_error {
 public:
   using integration_logic_error::integration_logic_error;
@@ -257,7 +363,7 @@ inline integrator::result_type
 integrator::operator()(Lambda_ fn, const double lower,
                        const double upper) const {
   if (std::isnan(lower) || std::isnan(upper))
-    throw std::invalid_argument("a limit is NA or NaN");
+    throw invalid_input_error("the input is invalid");
 
   auto fn_callback = [](double *x, int n, void *ex) {
     auto fn_ptr = static_cast<decltype(&fn)>(ex);
@@ -358,14 +464,14 @@ inline integrator::config_type::config_type(const int limit,
                                             const double epsabs, const int lenw)
     : limit_{limit}, epsrel_{epsrel}, epsabs_{epsabs}, lenw_{lenw} {
   if (limit_ <= 0)
-    throw std::invalid_argument("invalid parameter values");
+    throw invalid_input_error("the input is invalid");
   if (epsabs_ <= 0. &&
-      epsrel_ <=
+      epsrel_ <
           std::max(50. * std::numeric_limits<double>::epsilon(), 0.5e-28)) {
-    throw std::invalid_argument("invalid parameter values");
+    throw invalid_input_error("the input is invalid");
   }
   if (!(lenw_ >= 4 * limit_))
-    throw std::invalid_argument("lenw >= 4 * limit required");
+    throw invalid_input_error("the input is invalid");
 }
 
 inline auto integrator::config_type::limit() const noexcept

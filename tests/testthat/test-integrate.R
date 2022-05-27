@@ -156,7 +156,7 @@ test_that("`limit == 0` produces invalid-parameter-error", {
 
     expect_error(
         integrate(fn, 0, Inf, rate = 1, subdivisions = 0),
-        "invalid parameter values"
+        "the input is invalid"
     )
 })
 
@@ -165,10 +165,10 @@ test_that("`is.na(lower) || is.na(upper)` produces NA-error", {
 
     expect_error(
         integrate(fn, 0, NA, rate = 1),
-        "a limit is NA or NaN"
+        "the input is invalid"
     )
     expect_error(
         integrate(fn, NA, Inf, rate = 1),
-        "a limit is NA or NaN"
+        "the input is invalid"
     )
 })

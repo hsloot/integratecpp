@@ -57,9 +57,10 @@ Rcpp::List integrate_exponential_expectation(const double lambda) {
   try {
     result =
         integratecpp::integrate(fn, 0., std::numeric_limits<double>::infinity());
-  } catch (const integratecpp::integration_error &e) {
+  } catch (const integratecpp::integration_runtime_error &e) {
     result = e.result();
-    Rcpp::warning(e.what());
+  } catch (const integratecpp::integration_logic_error &e) {
+    result = e.result();
   } catch (const std::exception &e) {
     Rcpp::stop(e.what());
   }
@@ -112,7 +113,6 @@ integrate_exponential_expectation(3)
 #> [1] 75
 
 integrate_exponential_expectation(-1)
-#> Warning in integrate_exponential_expectation(-1): roundoff error was detected
 #> $value
 #> [1] -Inf
 #> 

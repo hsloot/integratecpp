@@ -19,7 +19,10 @@ Rcpp::List Rcpp_integrate(Rcpp::Function fn, const double lower,
         integratecpp::integrator::config_type{subdivisions, epsrel, epsabs};
     result = integratecpp::integrate(fn_, lower, upper, std::move(cfg));
     message = "OK";
-  } catch (const integratecpp::integration_error &e) {
+  } catch (const integratecpp::integration_runtime_error &e) {
+    result = e.result();
+    message = e.what();
+  } catch (const integratecpp::integration_logic_error &e) {
     result = e.result();
     message = e.what();
   } catch (const std::exception &e) {
