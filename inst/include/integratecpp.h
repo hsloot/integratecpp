@@ -298,8 +298,8 @@ public:
   /*!
    * \brief A full constructor, specifying the error message with `std::string`.
    *
-   * @param  what     a `std::string` containing the error message.
-   * @param  result   a `integratecpp::integrator::result_type` with
+   * \param  what     a `std::string` containing the error message.
+   * \param  result   a `integratecpp::integrator::result_type` with
    *                  the integration results at the time of error.
    */
   explicit integration_runtime_error(const std::string what,
@@ -310,9 +310,9 @@ public:
    *        `const char
    * *`.
    *
-   * @param  what     a `const char *` containing a pointer a a const char array
+   * \param  what     a `const char *` containing a pointer a a const char array
    *                  with the error message.
-   * @param  result   a `integratecpp::integrator::result_type` with
+   * \param  result   a `integratecpp::integrator::result_type` with
    *                  the integration results at the time of error.
    */
   explicit integration_runtime_error(const char *what,
@@ -326,7 +326,7 @@ private:
 };
 
 /*!
- * \brief Defines a type of object to be thrown as exception.  It reports errors
+ * \brief Defines a type of object to be thrown as exception. It reports errors
  *        that occur during the integration routine of
  *        `integratecpp::integator::operator()()` or `integratecpp::integrate()`
  *        and that are a consequence of faulty logic within the program such as
@@ -341,8 +341,8 @@ public:
   /*!
    * \brief A full constructor, specifying the error message with `std::string`.
    *
-   * @param  what     a `std::string` containing the error message.
-   * @param  result   a `integratecpp::integrator::result_type` with
+   * \param  what     a `std::string` containing the error message.
+   * \param  result   a `integratecpp::integrator::result_type` with
    *                  the integration results at the time of error.
    */
   explicit integration_logic_error(const std::string what,
@@ -352,9 +352,9 @@ public:
    * \brief A full constructor, specifying the error message with
    *        `const char *`.
    *
-   * @param  what     a `const char *` containing a pointer a a const char array
+   * \param  what     a `const char *` containing a pointer a a const char array
    *                  with the error message.
-   * @param  result   a `integratecpp::integrator::result_type` with
+   * \param  result   a `integratecpp::integrator::result_type` with
    *                  the integration results at the time of error.
    */
   explicit integration_logic_error(const char *what,
@@ -368,20 +368,20 @@ private:
 };
 
 /*!
- * A class for the exception if more subdivisions than the maximum are
- * required.
+ * \brief Defines a type of object to be thrown as exception. It reports errors
+ *        that occur during the integration routine of
+ *        `integratecpp::integator::operator()()` or `integratecpp::integrate()`
+ *        if the maximum number of subdivisions allowed has been achieved.
  *
- * From <scr/appl/integate.c>:
- * maximum number of subdivisions allowed has been achieved. one can allow
- * more subdivisions by increasing the value of limit (and taking the
- * according dimension adjustments into account). however, if this yields no
- * improvement it is advised to analyze the integrand in order to determine
- * the integration difficulties. if the position of a local difficulty can be
- * determined (e.g. singularity, discontinuity within the interval) one will
- * probably gain from splitting up the interval at this point and calling the
- * integrator on the subranges. if possible, an appropriate special-purpose
- * integrator should be used, which is designed for handling the type of
- * difficulty involved.
+ * One can allow more subdivisions by increasing the value of limit (and
+ * taking the according dimension adjustments into account).
+ * However, if this yields no improvement it is advised to analyze the integrand
+ * in order to determine the integration difficulties.
+ * If the position of a local difficulty can be determined (e.g. singularity,
+ * discontinuity within the interval) one will probably gain from splitting up
+ * the interval at this point and calling the integrator on the subranges.
+ * If possible, an appropriate special-purpose integrator should be used, which
+ * is designed for handling the type of difficulty involved.
  */
 class max_subdivision_error : public integration_runtime_error {
 public:
@@ -389,11 +389,13 @@ public:
 };
 
 /*!
- * A class for the exception if a roundoff error occurs.
+ * \brief Defines a type of object to be thrown as exception. It reports errors
+ *        that occur during the integration routine of
+ *        `integratecpp::integator::operator()()` or `integratecpp::integrate()`
+ *        if the occurrence of roundoff error is detected, which prevents the
+ *        requested tolerance from being achieved.
  *
- * From <scr/appl/integate.c>:
- * the occurrence of roundoff error is detected, which prevents the requested
- * tolerance from being achieved. the error may be under-estimated.
+ * The error may be under-estimated.
  */
 class roundoff_error : public integration_runtime_error {
 public:
@@ -401,11 +403,11 @@ public:
 };
 
 /*!
- * A class for the exception if bad integrand behaviour occurs
- *
- * From <scr/appl/integate.c>:
- * extremely bad integrand behaviour occurs at some points of the integration
- * interval.
+ * \brief Defines a type of object to be thrown as exception. It reports errors
+ *        that occur during the integration routine of
+ *        `integratecpp::integator::operator()()` or `integratecpp::integrate()`
+ *        if extremely bad integrand behaviour occurs at some points of the
+ *        integration interval.
  */
 class bad_integrand_error : public integration_runtime_error {
 public:
@@ -413,13 +415,14 @@ public:
 };
 
 /*!
- * A class for the exception if roundoff errors in the extrapolation table
- * occur
+ * \brief Defines a type of object to be thrown as exception. It reports errors
+ *        that occur during the integration routine of
+ *        `integratecpp::integator::operator()()` or `integratecpp::integrate()`
+ *        if the algorithm does not converge. roundoff error is detected in the
+ *        extrapolation table.
  *
- * From <scr/appl/integate.c>:
- * the algorithm does not converge. roundoff error is detected in the
- * extrapolation table. it is assumed that the requested tolerance cannot be
- * achieved, and that the returned result is the best which can be obtained.
+ * It is assumed that the requested tolerance cannot be achieved, and that the
+ * returned result is the best which can be obtained.
  */
 class extrapolation_roundoff_error : public integration_runtime_error {
 public:
@@ -427,11 +430,12 @@ public:
 };
 
 /*!
- * A class for the exception if divergence is detected
+ * \brief Defines a type of object to be thrown as exception. It reports errors
+ *        that occur during the integration routine of
+ *        `integratecpp::integator::operator()()` or `integratecpp::integrate()`
+ *        if the integral is probably divergent, or slowly convergent.
  *
- * From <scr/appl/integate.c>:
- * the integral is probably divergent, or slowly convergent. it must be noted
- * that divergence can occur with any other value of ier.
+ * It must be noted that divergence can occur with any other value of ier.
  */
 class divergence_error : public integration_runtime_error {
 public:
@@ -439,14 +443,15 @@ public:
 };
 
 /*!
- * A class for the exception if inputs are invalid
+ * \brief Defines a type of object to be thrown as exception. It reports errors
+ *        that occur during the integration routine of
+ *        `integratecpp::integator::operator()()` or `integratecpp::integrate()`
+ *        if the integral is probably divergent, or slowly convergent.
+ *        if the input is invalid.
  *
- * From <scr/appl/integate.c>:
- * the input is invalid, because (epsabs <= 0 and epsrel <
- * max(50*rel.mach.acc.,0.5d-28)) or limit < 1 or leniw < limit*4. result,
- * abserr, neval, last are set to zero. exept when limit or leniw is invalid,
- * iwork(1), work(limit*2+1) and work(limit*3+1) are set to zero, work(1) is
- * set to a and work(limit+1) to b.
+ * This could be because (`epsabs <= 0` and
+ * `epsrel < max(50*rel.mach.acc.,0.5d-28)`) or `limit < 1` or `leniw <
+ * limit*4`. Result, `abserr`, `neval`, last are set to zero.
  */
 struct invalid_input_error : public integration_logic_error {
 public:
@@ -454,7 +459,7 @@ public:
 };
 
 // -------------------------------------------------------------------------------------------------
-// # Implementations
+// Implementations of integratecpp::integrator::operator()(...)
 // -------------------------------------------------------------------------------------------------
 
 template <typename Lambda_>
@@ -507,24 +512,33 @@ integrator::operator()(Lambda_ fn, const double lower,
   }
   auto out = result_type{result, abserr, last, neval};
   if (ier > 0) {
-    if (ier == 1)
+    // invalid argument errors should be caught during initialization
+    assert(ier < 6);
+    if (ier == 1) {
       throw max_subdivision_error("maximum number of subdivisions reached",
                                   out);
-    if (ier == 2)
+
+    } else if (ier == 2) {
       throw roundoff_error("roundoff error was detected", out);
-    if (ier == 3)
+    } else if (ier == 3) {
       throw bad_integrand_error("extremely bad integrand behaviour", out);
-    if (ier == 4)
+    } else if (ier == 4) {
       throw extrapolation_roundoff_error(
           "roundoff error is detected in the extrapolation table", out);
-    if (ier == 5)
+    } else if (ier == 5) {
       throw divergence_error("the integral is probably divergent", out);
-    if (ier == 6)
-      throw invalid_input_error("the input is invalid", out);
+    } else {
+      throw std::logic_error(
+          "invalid argument errors should be caught during initialization");
+    }
   }
 
   return out;
 };
+
+// -------------------------------------------------------------------------------------------------
+// Implementations of integratecpp::integrate::(...)
+// -------------------------------------------------------------------------------------------------
 
 template <typename Lambda_>
 integrator::result_type integrate(Lambda_ fn, const double lower,
@@ -532,6 +546,10 @@ integrator::result_type integrate(Lambda_ fn, const double lower,
                                   const integrator::config_type &config) {
   return integrator{config}(fn, lower, upper);
 }
+
+// -------------------------------------------------------------------------------------------------
+// Implementations of integratecpp::integrator::result_type
+// -------------------------------------------------------------------------------------------------
 
 inline integrator::result_type::result_type(const double value,
                                             const double abserr,
@@ -548,6 +566,10 @@ inline int integrator::result_type::subdivisions() const noexcept {
   return subdivisions_;
 }
 inline int integrator::result_type::neval() const noexcept { return neval_; }
+
+// -------------------------------------------------------------------------------------------------
+// Implementations of integratecpp::integrator::conig_type
+// -------------------------------------------------------------------------------------------------
 
 inline integrator::config_type::config_type(const int limit,
                                             const double epsrel)

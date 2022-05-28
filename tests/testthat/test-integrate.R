@@ -62,12 +62,15 @@ test_that("More max. subdivisions for chi-square distribution's expectation", {
 
     expect_equal(
         remove_call(integrate(fn, 0, Inf, df = 3, subdivisions = 200L)),
-        remove_call(stats::integrate(fn, 0, Inf, df = 3, subdivisions = 200L))
+        remove_call(
+          stats::integrate(fn, 0, Inf, df = 3, subdivisions = 200L))
     )
 
     expect_equal(
-        remove_call(integrate(fn, 0, Inf, df = 5, ncp = 2, subdivisions = 200L)),
-        remove_call(stats::integrate(fn, 0, Inf, df = 5, ncp = 2, subdivisions = 200L))
+        remove_call(
+          integrate(fn, 0, Inf, df = 5, ncp = 2, subdivisions = 200L)),
+        remove_call(
+          stats::integrate(fn, 0, Inf, df = 5, ncp = 2, subdivisions = 200L))
     )
 })
 
@@ -147,7 +150,8 @@ test_that("Set required abs. tol. to zero for normal distribution's variance", {
 
     expect_equal(
         remove_call(integrate(fn, 0, Inf, mean = 0, sd = 0.5, abs.tol = 0)),
-        remove_call(stats::integrate(fn, 0, Inf, mean = 0, sd = 0.5, abs.tol = 0))
+        remove_call(
+          stats::integrate(fn, 0, Inf, mean = 0, sd = 0.5, abs.tol = 0))
     )
 })
 
