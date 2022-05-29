@@ -23,6 +23,48 @@ test_that("Default settings for exponential distribtion's expectation", {
     )
 })
 
+test_that("Default settings for beta distribtion's expectation", {
+    fn <- function(x, shape1, shape2) {
+        x * dbeta(x, shape1 = shape1, shape2 = shape2)
+    }
+
+    expect_equal(
+        remove_call(integrate(fn, 0, 1, shape1 = 1, shape2 = 1)),
+        remove_call(stats::integrate(fn, 0, 1, shape1 = 1, shape2 = 1))
+    )
+
+    expect_equal(
+        remove_call(integrate(fn, 0, 1, shape1 = 0.3, shape2 = 0.4)),
+        remove_call(stats::integrate(fn, 0, 1, shape1 = 0.3, shape2 = 0.4))
+    )
+
+    expect_equal(
+        remove_call(integrate(fn, 0, 1, shape1 = 1.5, shape2 = 2)),
+        remove_call(stats::integrate(fn, 0, 1, shape1 = 1.5, shape2 = 2))
+    )
+})
+
+test_that("Default settings for negative Weibull distribtion's expectation", {
+    fn <- function(x, shape, scale = 1) {
+        x * dweibull(-x, shape = shape, scale = scale)
+    }
+
+    expect_equal(
+        remove_call(integrate(fn, -Inf, 0, shape = 1, scale = 1)),
+        remove_call(stats::integrate(fn, -Inf, 0, shape = 1, scale = 1))
+    )
+
+    expect_equal(
+        remove_call(integrate(fn, -Inf, 0, shape = 0.3, scale = 0.4)),
+        remove_call(stats::integrate(fn, -Inf, 0, shape = 0.3, scale = 0.4))
+    )
+
+    expect_equal(
+        remove_call(integrate(fn, -Inf, 0, shape = 1.5, scale = 2)),
+        remove_call(stats::integrate(fn, -Inf, 0, shape = 1.5, scale = 2))
+    )
+})
+
 test_that("Less max. subdivisions for gamma distribution's expectation", {
     fn <- function(x, shape, rate = 1) {
         x * dgamma(x, shape = shape, rate = rate)
@@ -159,7 +201,7 @@ test_that("Set required abs. tol. to zero for normal distribution's variance", {
     )
 })
 
-test_that("`limit == 0` produces invalid-parameter-error", {
+test_that("`limit == 0` produces `invalid_input_error`", {
     fn <- function(x, rate = 1) (x - 1 / rate)^2 * dexp(x, rate = rate)
 
     expect_error(
@@ -168,7 +210,7 @@ test_that("`limit == 0` produces invalid-parameter-error", {
     )
 })
 
-test_that("`is.na(lower) || is.na(upper)` produces NA-error", {
+test_that("`is.na(lower) || is.na(upper)` produces `invalid_input_error`", {
     fn <- function(x, rate = 1) (x - 1 / rate)^2 * dexp(x, rate = rate)
 
     expect_error(
@@ -177,6 +219,24 @@ test_that("`is.na(lower) || is.na(upper)` produces NA-error", {
     )
     expect_error(
         integrate(fn, NA, Inf, rate = 1),
+        "the input is invalid"
+    )
+})
+
+test_that("`eps.abs <= 0 && eps.rel < max(50*.Machine$double.eps, 0.5e-28)` produces `invalid_input_error`", {
+    fn <- function(x, rate = 1) (x - 1 / rate)^2 * dexp(x, rate = rate)
+
+    expect_error(
+        integrate(fn, 0, Inf, rate = 1, abs.tol = 0, rel.tol = 0.5 * max(50 * .Machine$double.eps, 0.5e-28)),
+        "the input is invalid"
+    )
+})
+
+test_that("`lenw < 4 * limits` produces `invalid_input_error`", {
+    fn <- function(x, rate = 1) (x - 1 / rate)^2 * dexp(x, rate = rate)
+
+    expect_error(
+        integrate(fn, 0, Inf, rate = 1, subdivisions = 100, lenw = 399),
         "the input is invalid"
     )
 })

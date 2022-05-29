@@ -33,7 +33,7 @@ invalid_input_error <- function(what) {
     .Call(`_integratecpp_invalid_input_error`, what)
 }
 
-Rcpp_integrate <- function(fn, lower, upper, subdivisions, epsrel, epsabs) {
-    .Call(`_integratecpp_Rcpp_integrate`, fn, lower, upper, subdivisions, epsrel, epsabs)
+Rcpp_integrate <- function(fn, lower, upper, subdivisions, epsrel, epsabs, lenw) {
+    .Call(`_integratecpp_Rcpp_integrate`, fn, lower, upper, subdivisions, epsrel, epsabs, lenw)
 }
 

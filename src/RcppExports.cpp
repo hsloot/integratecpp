@@ -92,8 +92,8 @@ BEGIN_RCPP
 END_RCPP
 }
 // Rcpp_integrate
-Rcpp::List Rcpp_integrate(Rcpp::Function fn, const double lower, const double upper, const int subdivisions, const double epsrel, const double epsabs);
-RcppExport SEXP _integratecpp_Rcpp_integrate(SEXP fnSEXP, SEXP lowerSEXP, SEXP upperSEXP, SEXP subdivisionsSEXP, SEXP epsrelSEXP, SEXP epsabsSEXP) {
+Rcpp::List Rcpp_integrate(Rcpp::Function fn, const double lower, const double upper, const int subdivisions, const double epsrel, const double epsabs, const int lenw);
+RcppExport SEXP _integratecpp_Rcpp_integrate(SEXP fnSEXP, SEXP lowerSEXP, SEXP upperSEXP, SEXP subdivisionsSEXP, SEXP epsrelSEXP, SEXP epsabsSEXP, SEXP lenwSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::traits::input_parameter< Rcpp::Function >::type fn(fnSEXP);
@@ -102,7 +102,8 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const int >::type subdivisions(subdivisionsSEXP);
     Rcpp::traits::input_parameter< const double >::type epsrel(epsrelSEXP);
     Rcpp::traits::input_parameter< const double >::type epsabs(epsabsSEXP);
-    rcpp_result_gen = Rcpp::wrap(Rcpp_integrate(fn, lower, upper, subdivisions, epsrel, epsabs));
+    Rcpp::traits::input_parameter< const int >::type lenw(lenwSEXP);
+    rcpp_result_gen = Rcpp::wrap(Rcpp_integrate(fn, lower, upper, subdivisions, epsrel, epsabs, lenw));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -116,7 +117,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_integratecpp_extrapolation_roundoff_error", (DL_FUNC) &_integratecpp_extrapolation_roundoff_error, 1},
     {"_integratecpp_divergence_error", (DL_FUNC) &_integratecpp_divergence_error, 1},
     {"_integratecpp_invalid_input_error", (DL_FUNC) &_integratecpp_invalid_input_error, 1},
-    {"_integratecpp_Rcpp_integrate", (DL_FUNC) &_integratecpp_Rcpp_integrate, 6},
+    {"_integratecpp_Rcpp_integrate", (DL_FUNC) &_integratecpp_Rcpp_integrate, 7},
     {NULL, NULL, 0}
 };
 

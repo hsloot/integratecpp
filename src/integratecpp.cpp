@@ -10,13 +10,14 @@
 // [[Rcpp::export(rng=false)]]
 Rcpp::List Rcpp_integrate(Rcpp::Function fn, const double lower,
                           const double upper, const int subdivisions,
-                          const double epsrel, const double epsabs) {
+                          const double epsrel, const double epsabs,
+                          const int lenw) {
   auto fn_ = [&fn](const double x) { return Rcpp::as<double>(fn(x)); };
   decltype(integratecpp::integrate(fn_, lower, upper)) result;
   std::string message;
   try {
-    auto cfg =
-        integratecpp::integrator::config_type{subdivisions, epsrel, epsabs};
+    auto cfg = integratecpp::integrator::config_type{subdivisions, epsrel,
+                                                     epsabs, lenw};
     result = integratecpp::integrate(fn_, lower, upper, std::move(cfg));
     message = "OK";
   } catch (const integratecpp::integration_runtime_error &e) {

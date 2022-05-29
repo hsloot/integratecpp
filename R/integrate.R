@@ -4,10 +4,10 @@
 integrate <- function(f, lower, upper, ..., subdivisions = 100L,
                       rel.tol = .Machine$double.eps^0.25, # nolint
                       abs.tol = rel.tol,
-                      stop.on.error = TRUE # nolint
-) {
+                      stop.on.error = TRUE, # nolint
+                      lenw = 4 * subdivisions) {
     out <- Rcpp_integrate(
-        function(x) f(x, ...), lower, upper, subdivisions, rel.tol, abs.tol
+        function(x) f(x, ...), lower, upper, subdivisions, rel.tol, abs.tol, lenw
     )
     out$call <- match.call()
     class(out) <- "integrate"
