@@ -11,6 +11,26 @@ Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
 Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
+// integration_logic_error
+std::string integration_logic_error(std::string what);
+RcppExport SEXP _integratecpp_integration_logic_error(SEXP whatSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::traits::input_parameter< std::string >::type what(whatSEXP);
+    rcpp_result_gen = Rcpp::wrap(integration_logic_error(what));
+    return rcpp_result_gen;
+END_RCPP
+}
+// integration_runtime_error
+std::string integration_runtime_error(std::string what);
+RcppExport SEXP _integratecpp_integration_runtime_error(SEXP whatSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::traits::input_parameter< std::string >::type what(whatSEXP);
+    rcpp_result_gen = Rcpp::wrap(integration_runtime_error(what));
+    return rcpp_result_gen;
+END_RCPP
+}
 // max_subdivision_error
 std::string max_subdivision_error(std::string what);
 RcppExport SEXP _integratecpp_max_subdivision_error(SEXP whatSEXP) {
@@ -88,6 +108,8 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
+    {"_integratecpp_integration_logic_error", (DL_FUNC) &_integratecpp_integration_logic_error, 1},
+    {"_integratecpp_integration_runtime_error", (DL_FUNC) &_integratecpp_integration_runtime_error, 1},
     {"_integratecpp_max_subdivision_error", (DL_FUNC) &_integratecpp_max_subdivision_error, 1},
     {"_integratecpp_roundoff_error", (DL_FUNC) &_integratecpp_roundoff_error, 1},
     {"_integratecpp_bad_integrand_error", (DL_FUNC) &_integratecpp_bad_integrand_error, 1},
