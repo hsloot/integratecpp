@@ -63,14 +63,17 @@ test_that("More max. subdivisions for chi-square distribution's expectation", {
     expect_equal(
         remove_call(integrate(fn, 0, Inf, df = 3, subdivisions = 200L)),
         remove_call(
-          stats::integrate(fn, 0, Inf, df = 3, subdivisions = 200L))
+            stats::integrate(fn, 0, Inf, df = 3, subdivisions = 200L)
+        )
     )
 
     expect_equal(
         remove_call(
-          integrate(fn, 0, Inf, df = 5, ncp = 2, subdivisions = 200L)),
+            integrate(fn, 0, Inf, df = 5, ncp = 2, subdivisions = 200L)
+        ),
         remove_call(
-          stats::integrate(fn, 0, Inf, df = 5, ncp = 2, subdivisions = 200L))
+            stats::integrate(fn, 0, Inf, df = 5, ncp = 2, subdivisions = 200L)
+        )
     )
 })
 
@@ -81,7 +84,7 @@ test_that("Smaller required rel. tol. for normal distribution's variance", {
 
     expect_equal(
         remove_call(integrate(
-            fn, 0, Inf,
+            fn, -Inf, Inf,
             mean = 0, sd = 2,
             rel.tol = .Machine$double.eps^0.125
         )),
@@ -94,12 +97,12 @@ test_that("Smaller required rel. tol. for normal distribution's variance", {
 
     expect_equal(
         remove_call(integrate(
-            fn, 0, Inf,
+            fn, -Inf, Inf,
             mean = 0, sd = 0.5,
             rel.tol = .Machine$double.eps^0.125
         )),
         remove_call(stats::integrate(
-            fn, 0, Inf,
+            fn, -Inf, Inf,
             mean = 0, sd = 0.5,
             rel.tol = .Machine$double.eps^0.125
         ))
@@ -113,12 +116,12 @@ test_that("Higher required rel. tol. for normal distribution's variance", {
 
     expect_equal(
         remove_call(integrate(
-            fn, 0, Inf,
+            fn, -Inf, Inf,
             mean = 0, sd = 2,
             rel.tol = .Machine$double.eps^0.5
         )),
         remove_call(stats::integrate(
-            fn, 0, Inf,
+            fn, -Inf, Inf,
             mean = 0, sd = 2,
             rel.tol = .Machine$double.eps^0.5
         ))
@@ -126,12 +129,12 @@ test_that("Higher required rel. tol. for normal distribution's variance", {
 
     expect_equal(
         remove_call(integrate(
-            fn, 0, Inf,
+            fn, -Inf, Inf,
             mean = 0, sd = 0.5,
             rel.tol = .Machine$double.eps^0.5
         )),
         remove_call(stats::integrate(
-            fn, 0, Inf,
+            fn, -Inf, Inf,
             mean = 0, sd = 0.5,
             rel.tol = .Machine$double.eps^0.5
         ))
@@ -144,14 +147,15 @@ test_that("Set required abs. tol. to zero for normal distribution's variance", {
     }
 
     expect_equal(
-        remove_call(integrate(fn, 0, Inf, mean = 0, sd = 2, abs.tol = 0)),
+        remove_call(integrate(fn, -Inf, Inf, mean = 0, sd = 2, abs.tol = 0)),
         remove_call(stats::integrate(fn, 0, Inf, mean = 0, sd = 2, abs.tol = 0))
     )
 
     expect_equal(
-        remove_call(integrate(fn, 0, Inf, mean = 0, sd = 0.5, abs.tol = 0)),
+        remove_call(integrate(fn, -Inf, Inf, mean = 0, sd = 0.5, abs.tol = 0)),
         remove_call(
-          stats::integrate(fn, 0, Inf, mean = 0, sd = 0.5, abs.tol = 0))
+            stats::integrate(fn, -Inf, Inf, mean = 0, sd = 0.5, abs.tol = 0)
+        )
     )
 })
 
