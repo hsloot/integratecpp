@@ -14,8 +14,8 @@
 namespace integratecpp {
 
 /*!
- * \brief A functor wrapping `Rdqags` and `Rdqagi` declared in
- *   `    <R_ext/Applic.h` and implemented in `src/appl/integrate.c`.
+ * \brief  A functor wrapping `Rdqags` and `Rdqagi` declared in
+ *   `     <R_ext/Applic.h>` and implemented in `src/appl/integrate.c`.
  *
  * - The functor is initialized by a configuration parameter with the maximal
  *   number of subdivisions, the required relative error, the required absolute
@@ -34,17 +34,18 @@ namespace integratecpp {
 class integrator {
 public:
   /*!
-   * \brief Defines a data class for the integation results returned from
-   *   `integratecpp::integrator::operator()()`.
+   * \brief  Defines a data class for the integation results returned from
+   *         `integratecpp::integrator::operator()()`.
    *
    * Contains the following data elements (compare `src/appl/integrate.c` in
    * R-source):
-   * - `double value`: The approximation of the integral.
-   * - `double abserr`: The estimate of the modules of the absolute error,
-   *   which should be equal or larger than `abs(I-result)`.
-   * - `int subdivisions`: The final number of subintervals produced in
-   *   the subdivision process.
-   * - `int neval`: The number of integrand evaluations.
+   * - `double value = 0.`:     The approximation of the integral.
+   * - `double abserr = 0.`:    The estimate of the modules of the absolute
+   *                            error, which should be equal or larger than
+   *                            `abs(I-result)`.
+   * - `int subdivisions = 0`:  The final number of subintervals produced in
+   *                            the subdivision process.
+   * - `int neval = 0`:         The number of integrand evaluations.
    */
   class result_type {
   private:
@@ -56,7 +57,7 @@ public:
   public:
     result_type() = default;
     /*!
-     * \brief The full constructor.
+     * \brief  The full constructor.
      *
      * \param value         a `double` with the approximated value.
      * \param abserr        a `double` with the estimated absolute error.
@@ -80,22 +81,19 @@ public:
   };
 
   /*!
-   * \brief Defines a data class for the integration configuration parameters
-   *        used in `integratecpp::integrator::operator()()`.
+   * \brief  Defines a data class for the integration configuration parameters
+   *         used in `integratecpp::integrator::operator()()`.
    *
    * Contains the following data elements (see `src/appl/integrate.c` in
    * R-source):
-   * - `int limit = 100`: The maximum number of subintervals in the partition of
-   *   the given integration interval (lower, upper). If `limit >= 1` is not
-   *   fulfilled, an `integratecpp::invalid_input_error` exception is thrown.
-   * - `epsrel` (`double`) and `epsabs` (`double`): The requested relative and
-   *   absolute accuracies. Both are equal by default to the fourth root of the
-   *   Machine epsilon. If `epsabs <= 0` and
-   *   `epsrel < max(50*rel.mach.acc.,0.5d-28)`, an
-   *  `integratecpp::invalid_input_error` is thrown.
-   * - `lenw` (`int`): A dimensioning parameter for the working array. Must
-   *   equal at least four times `limit`, otherwise an invalid_input_error
-   *   is thrown.
+   * - `int limit = 100`:                    The maximum number of subintervals
+   *                                         in the partition of the given
+   *                                         integration interval (lower,
+   *                                         upper).
+   * - `double epsrel = rel.mach.acc.^.25`:  The requested relative accuracy.
+   * - `double epsabs = rel.mach.acc.^.25`:  The requested absolute accuracy.
+   * - `int lenw = 400`:                     A dimensioning parameter for the
+   *                                         working array.
    */
   class config_type {
   private:
@@ -108,7 +106,7 @@ public:
     config_type() = default;
 
     /*!
-     * \brief A partial constructor for `limit` and `epsrel`.
+     * \brief  A partial constructor for `limit` and `epsrel`.
      *
      * \param limit   an `int` for the maximum number of subdivisions.
      * \param epsrel  a `double` for the requested relative accuracy.
@@ -118,7 +116,7 @@ public:
     explicit config_type(const int limit, const double epsrel);
 
     /*!
-     * A partial constructor for `limit`, `epsrel`, and `epsabs`.
+     * \brief  A partial constructor for `limit`, `epsrel`, and `epsabs`.
      *
      * \param limit   an `int` for the maximum number of subdivisions.
      * \param epsrel  a `double` for the requested relative accuracy.
@@ -157,7 +155,7 @@ public:
     //! \brief Accessor to the requested absolute accuracy.
     auto epsabs() const noexcept -> decltype(epsabs_);
 
-    //! \brief Accessor to the dimensioning parameter `lenw`.
+    //! \brief Accessor to the dimensioning parameter of the working array.
     auto lenw() const noexcept -> decltype(lenw_);
   };
 
@@ -168,14 +166,14 @@ public:
   integrator() = default;
 
   /*!
-   * \brief A full constructor using `integratecpp::integrator::config_type`.
+   * \brief  A full constructor using `integratecpp::integrator::config_type`.
    *
    * \param cfg  a `integratecpp::integrator::config_type`.
    */
   explicit integrator(const config_type &cfg) noexcept;
 
   /*!
-   * \brief A partial constructor using `limit` and `epsrel`.
+   * \brief  A partial constructor using `limit` and `epsrel`.
    *
    * \param limit   an `int` for the maximum number of subdivisions.
    * \param epsrel  a `double` for the requested relative accuracy.
@@ -185,7 +183,7 @@ public:
   explicit integrator(const int limit, const double epsrel);
 
   /*!
-   * \brief A partial constructor using `limit`, `epsrel`, and `epsabs`.
+   * \brief  A partial constructor using `limit`, `epsrel`, and `epsabs`.
    *
    * \param limit   an `int` for the maximum number of subdivisions.
    * \param epsrel  a `double` for the requested relative accuracy.
@@ -199,7 +197,7 @@ public:
                       const double epsabs);
 
   /*!
-   * \brief A full constructor using `limit`, `epsrel`, `epsabs`, and `lenw`.
+   * \brief  A full constructor using `limit`, `epsrel`, `epsabs`, and `lenw`.
    *
    * \param limit   an `int` for the maximum number of subdivisions.
    * \param epsrel  a `double` for the requested relative accuracy.
@@ -219,9 +217,9 @@ public:
   auto config() const noexcept -> decltype(cfg_);
 
   /*!
-   * \brief Approximates an integratal numerically for a Lambda-functor, lower,
-   *        and upper bound, using `Rdqags` if both bounds are are finite and
-   *        `Rdqagi` of at least one of the bounds is infinite.
+   * \brief  Approximates an integratal numerically for a Lambda-functor, lower,
+   *         and upper bound, using `Rdqags` if both bounds are are finite and
+   *         `Rdqagi` of at least one of the bounds is infinite.
    *
    * \param fn     a `Lambda_` functor compatible with a `const double`
    *               signature.
@@ -250,10 +248,11 @@ public:
 };
 
 /*!
- * \brief A drop-in replacement of `integratecpp::integrator` for numerical
- *        integration. Approximates an integratal numerically for a
- *        Lambda-functor, lower, and upper bound, using `Rdqags` if both bounds
- *        are are finite and `Rdqagi` of at least one of the bounds is infinite.
+ * \brief  A drop-in replacement of `integratecpp::integrator` for numerical
+ *         integration. Approximates an integratal numerically for a
+ *         Lambda-functor, lower, and upper bound, using `Rdqags` if both bounds
+ *         are are finite and `Rdqagi` of at least one of the bounds is
+ *         infinite.
  *
  * \param fn      a `Lambda_` functor compatible with a `const double`
  *                signature.
@@ -263,21 +262,21 @@ public:
  *                `integratecpp::integrator::config_type` configuration
  *                parameter.
  *
- * \return       a `integratecpp::integrator::result_type` with the
- *               integration results.
+ * \return        a `integratecpp::integrator::result_type` with the
+ *                integration results.
  *
- * \exception    throws integratecpp::max_subdivision_error if the maximal
- *               number of subdivisions is reached without fulfilling required
- *               error conditions.
- * \exception    throws integratecpp::roundoff_error if a roundoff error is
- *               detected which prevents the requested accuracy from being
- *               achieved.
- * \exception    throws integratecpp::bad_integrand_error if extremely bad
- *               integrand behaviour is detected during integration.
- * \exception    throws integratecpp::extrapolation_roundoff_error if a
- *               roundoff error is detected in the extrapolation table.
- * \exception    throws integratecpp::divergence_error if the integral is
- *               deemed divergence (or slowly convergent).
+ * \exception     throws integratecpp::max_subdivision_error if the maximal
+ *                number of subdivisions is reached without fulfilling required
+ *                error conditions.
+ * \exception     throws integratecpp::roundoff_error if a roundoff error is
+ *                detected which prevents the requested accuracy from being
+ *                achieved.
+ * \exception     throws integratecpp::bad_integrand_error if extremely bad
+ *                integrand behaviour is detected during integration.
+ * \exception     throws integratecpp::extrapolation_roundoff_error if a
+ *                roundoff error is detected in the extrapolation table.
+ * \exception     throws integratecpp::divergence_error if the integral is
+ *                deemed divergence (or slowly convergent).
  */
 template <typename Lambda_>
 integrator::result_type
@@ -285,18 +284,19 @@ integrate(Lambda_ fn, const double lower, const double upper,
           const integrator::config_type &config = integrator::config_type{});
 
 /*!
- * \brief Defines a type of object to be thrown as exception. It reports errors
- *        that occur during the integration routine of
- *        `integratecpp::integator::operator()()` or `integratecpp::integrate()`
- *        and are due to events beyond the scope of the program and not easily
- *        predicted.
+ * \brief  Defines a type of object to be thrown as exception. It reports errors
+ *         that occur during the integration routine of
+ *         `integratecpp::integator::operator()()` or
+ *         `integratecpp::integrate()` and are due to events beyond the scope of
+ *         the program and not easily predicted.
  */
 class integration_runtime_error : public std::runtime_error {
 public:
   using std::runtime_error::runtime_error;
 
   /*!
-   * \brief A full constructor, specifying the error message with `std::string`.
+   * \brief  A full constructor, specifying the error message with
+   *         `std::string`.
    *
    * \param  what     a `std::string` containing the error message.
    * \param  result   a `integratecpp::integrator::result_type` with
@@ -306,9 +306,8 @@ public:
                                      const integrator::result_type &result);
 
   /*!
-   * \brief A full constructor, specifying the error message with
-   *        `const char
-   * *`.
+   * \brief  A full constructor, specifying the error message with
+   *         `const char *`.
    *
    * \param  what     a `const char *` containing a pointer a a const char array
    *                  with the error message.
@@ -326,12 +325,12 @@ private:
 };
 
 /*!
- * \brief Defines a type of object to be thrown as exception. It reports errors
- *        that occur during the integration routine of
- *        `integratecpp::integator::operator()()` or `integratecpp::integrate()`
- *        and that are a consequence of faulty logic within the program such as
- *        violating logical preconditions or class invariants and may be
- *        preventable.
+ * \brief  Defines a type of object to be thrown as exception. It reports errors
+ *         that occur during the integration routine of
+ *         `integratecpp::integator::operator()()` or
+ *         `integratecpp::integrate()` and that are a consequence of faulty
+ *         logic within the program such as violating logical preconditions or
+ *         class invariants and may be preventable.
  */
 class integration_logic_error : public std::logic_error {
 
@@ -339,7 +338,8 @@ public:
   using std::logic_error::logic_error;
 
   /*!
-   * \brief A full constructor, specifying the error message with `std::string`.
+   * \brief  A full constructor, specifying the error message with
+   *         `std::string`.
    *
    * \param  what     a `std::string` containing the error message.
    * \param  result   a `integratecpp::integrator::result_type` with
@@ -349,8 +349,8 @@ public:
                                    const integrator::result_type &result);
 
   /*!
-   * \brief A full constructor, specifying the error message with
-   *        `const char *`.
+   * \brief  A full constructor, specifying the error message with
+   *         `const char *`.
    *
    * \param  what     a `const char *` containing a pointer a a const char array
    *                  with the error message.
@@ -368,10 +368,11 @@ private:
 };
 
 /*!
- * \brief Defines a type of object to be thrown as exception. It reports errors
- *        that occur during the integration routine of
- *        `integratecpp::integator::operator()()` or `integratecpp::integrate()`
- *        if the maximum number of subdivisions allowed has been achieved.
+ * \brief  Defines a type of object to be thrown as exception. It reports errors
+ *         that occur during the integration routine of
+ *         `integratecpp::integator::operator()()` or
+ *         `integratecpp::integrate()` if the maximum number of subdivisions
+ *         allowed has been achieved.
  *
  * One can allow more subdivisions by increasing the value of limit (and
  * taking the according dimension adjustments into account).
@@ -389,11 +390,11 @@ public:
 };
 
 /*!
- * \brief Defines a type of object to be thrown as exception. It reports errors
- *        that occur during the integration routine of
- *        `integratecpp::integator::operator()()` or `integratecpp::integrate()`
- *        if the occurrence of roundoff error is detected, which prevents the
- *        requested tolerance from being achieved.
+ * \brief  Defines a type of object to be thrown as exception. It reports errors
+ *         that occur during the integration routine of
+ *         `integratecpp::integator::operator()()` or
+ *         `integratecpp::integrate()` if the occurrence of roundoff error is
+ *         detected, which prevents the requested tolerance from being achieved.
  *
  * The error may be under-estimated.
  */
@@ -403,11 +404,11 @@ public:
 };
 
 /*!
- * \brief Defines a type of object to be thrown as exception. It reports errors
- *        that occur during the integration routine of
- *        `integratecpp::integator::operator()()` or `integratecpp::integrate()`
- *        if extremely bad integrand behaviour occurs at some points of the
- *        integration interval.
+ * \brief  Defines a type of object to be thrown as exception. It reports errors
+ *         that occur during the integration routine of
+ *         `integratecpp::integator::operator()()` or
+ *         `integratecpp::integrate()` if extremely bad integrand behaviour
+ *         occurs at some points of the integration interval.
  */
 class bad_integrand_error : public integration_runtime_error {
 public:
@@ -415,11 +416,11 @@ public:
 };
 
 /*!
- * \brief Defines a type of object to be thrown as exception. It reports errors
- *        that occur during the integration routine of
- *        `integratecpp::integator::operator()()` or `integratecpp::integrate()`
- *        if the algorithm does not converge. roundoff error is detected in the
- *        extrapolation table.
+ * \brief  Defines a type of object to be thrown as exception. It reports errors
+ *         that occur during the integration routine of
+ *         `integratecpp::integator::operator()()` or
+ *         `integratecpp::integrate()` if the algorithm does not converge.
+ *         roundoff error is detected in the extrapolation table.
  *
  * It is assumed that the requested tolerance cannot be achieved, and that the
  * returned result is the best which can be obtained.
@@ -430,10 +431,11 @@ public:
 };
 
 /*!
- * \brief Defines a type of object to be thrown as exception. It reports errors
- *        that occur during the integration routine of
- *        `integratecpp::integator::operator()()` or `integratecpp::integrate()`
- *        if the integral is probably divergent, or slowly convergent.
+ * \brief  Defines a type of object to be thrown as exception. It reports errors
+ *         that occur during the integration routine of
+ *         `integratecpp::integator::operator()()` or
+ *         `integratecpp::integrate()` if the integral is probably divergent, or
+ *         slowly convergent.
  *
  * It must be noted that divergence can occur with any other value of ier.
  */
@@ -443,11 +445,11 @@ public:
 };
 
 /*!
- * \brief Defines a type of object to be thrown as exception. It reports errors
- *        that occur during the integration routine of
- *        `integratecpp::integator::operator()()` or `integratecpp::integrate()`
- *        if the integral is probably divergent, or slowly convergent.
- *        if the input is invalid.
+ * \brief  Defines a type of object to be thrown as exception. It reports errors
+ *         that occur during the integration routine of
+ *         `integratecpp::integator::operator()()` or
+ *         `integratecpp::integrate()` if the integral is probably divergent, or
+ *         slowly convergent. if the input is invalid.
  *
  * This could be because (`epsabs <= 0` and
  * `epsrel < max(50*rel.mach.acc.,0.5d-28)`) or `limit < 1` or `leniw <

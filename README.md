@@ -63,6 +63,8 @@ Rcpp::List integrate_exponential_expectation(const double lambda) {
     result = e.result();
   } catch (const std::exception &e) {
     Rcpp::stop(e.what());
+  } catch (...) {
+    Rcpp::stop("Unexcpected error");
   }
 
   return Rcpp::List::create(Rcpp::Named("value") = result.value(),
