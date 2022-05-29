@@ -240,3 +240,55 @@ test_that("`lenw < 4 * limits` produces `invalid_input_error`", {
         "the input is invalid"
     )
 })
+
+test_that("`max_subdivisions_error` is thrown", {
+    expect_error(
+        integrate(function(x) sin(1 / x), 0, 1, stop.on.error = TRUE),
+        "maximum number of subdivisions reached"
+    )
+})
+
+## See
+## Piessens, Robert, et al. "Quadpack."
+## A Subroutine Package for Automatic Integration Springer-Verlag (1983).
+##
+## "[...] terminate early in cases where the exact integral is zero and a
+## pure relative accuracy is requested (EPSABS=O)."
+test_that("`roundoff_error` is thrown", {
+    expect_error(
+        integrate(function(x) x * dnorm(x), -1, 1, abs.tol = 0),
+        "roundoff error was detected"
+    )
+})
+
+## See
+## https://stat.ethz.ch/pipermail/r-help/2013-December/364560.html
+test_that("`bad_integrand_error` is thrown", {
+    expect_error(
+        integrate(function(x) {
+            -((100000 * x)^(-1) - (1000 * x)^(-1)) *
+                1 / (0.20 * sqrt(2 * pi)) *
+                exp(-0.5 * (x - 0.10) / (0.20))^2
+        }, 0, Inf),
+        "extremely bad integrand behaviour"
+    )
+})
+
+test_that("`extrapolation_roundoff_error` is thrown", {
+    expect_error(
+        integrate(
+            function(x) {
+                (x - 2000) * dlnorm(x, meanlog = 9.0167, sdlog = 1.6247)
+            },
+            2000, Inf
+        ),
+        "roundoff error is detected in the extrapolation table"
+    )
+})
+
+test_that("`divergence_error` is thrown", {
+    expect_error(
+        integrate(function(x) x^-0.9999, 0, 1, stop.on.error = TRUE),
+        "the integral is probably divergent"
+    )
+})

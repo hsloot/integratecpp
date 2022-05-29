@@ -15,9 +15,9 @@ std::string integration_logic_error(std::string what) {
   } catch (const integratecpp::integration_logic_error &e) {
     return std::string(e.what());
   } catch (const std::exception &e) {
-    Rcpp::stop(e.what());
+    Rcpp::stop(e.what()); // # nocov
   } catch (...) {
-    Rcpp::stop("Unknown error");
+    Rcpp::stop("Unknown error"); // # nocov
   }
 }
 
@@ -29,9 +29,9 @@ std::string integration_runtime_error(std::string what) {
   } catch (const integratecpp::integration_runtime_error &e) {
     return std::string(e.what());
   } catch (const std::exception &e) {
-    Rcpp::stop(e.what());
+    Rcpp::stop(e.what()); // # nocov
   } catch (...) {
-    Rcpp::stop("Unknown error");
+    Rcpp::stop("Unknown error"); // # nocov
   }
 }
 
@@ -43,9 +43,9 @@ std::string max_subdivision_error(std::string what) {
   } catch (const integratecpp::max_subdivision_error &e) {
     return std::string(e.what());
   } catch (const std::exception &e) {
-    Rcpp::stop(e.what());
+    Rcpp::stop(e.what()); // # nocov
   } catch (...) {
-    Rcpp::stop("Unknown error");
+    Rcpp::stop("Unknown error"); // # nocov
   }
 }
 
@@ -57,9 +57,9 @@ std::string roundoff_error(std::string what) {
   } catch (const integratecpp::roundoff_error &e) {
     return std::string(e.what());
   } catch (const std::exception &e) {
-    Rcpp::stop(e.what());
+    Rcpp::stop(e.what()); // # nocov
   } catch (...) {
-    Rcpp::stop("Unknown error");
+    Rcpp::stop("Unknown error"); // # nocov
   }
 }
 
@@ -71,9 +71,9 @@ std::string bad_integrand_error(std::string what) {
   } catch (const integratecpp::bad_integrand_error &e) {
     return std::string(e.what());
   } catch (const std::exception &e) {
-    Rcpp::stop(e.what());
+    Rcpp::stop(e.what()); // # nocov
   } catch (...) {
-    Rcpp::stop("Unknown error");
+    Rcpp::stop("Unknown error"); // # nocov
   }
 }
 
@@ -85,9 +85,9 @@ std::string extrapolation_roundoff_error(std::string what) {
   } catch (const integratecpp::extrapolation_roundoff_error &e) {
     return std::string(e.what());
   } catch (const std::exception &e) {
-    Rcpp::stop(e.what());
+    Rcpp::stop(e.what()); // # nocov
   } catch (...) {
-    Rcpp::stop("Unknown error");
+    Rcpp::stop("Unknown error"); // # nocov
   }
 }
 
@@ -99,9 +99,9 @@ std::string divergence_error(std::string what) {
   } catch (const integratecpp::divergence_error &e) {
     return std::string(e.what());
   } catch (const std::exception &e) {
-    Rcpp::stop(e.what());
+    Rcpp::stop(e.what()); // # nocov
   } catch (...) {
-    Rcpp::stop("Unknown error");
+    Rcpp::stop("Unknown error"); // # nocov
   }
 }
 
@@ -113,8 +113,8 @@ std::string invalid_input_error(std::string what) {
   } catch (const integratecpp::invalid_input_error &e) {
     return std::string(e.what());
   } catch (const std::exception &e) {
-    Rcpp::stop(e.what());
+    Rcpp::stop(e.what()); // # nocov
   } catch (...) {
-    Rcpp::stop("Unknown error");
+    Rcpp::stop("Unknown error"); // # nocov
   }
 }

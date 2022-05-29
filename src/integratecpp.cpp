@@ -27,9 +27,9 @@ Rcpp::List Rcpp_integrate(Rcpp::Function fn, const double lower,
     result = e.result();
     message = e.what();
   } catch (const std::exception &e) {
-    Rcpp::stop(e.what());
+    Rcpp::stop(e.what()); // # nocov
   } catch (...) {
-    Rcpp::stop("Unexcpected error");
+    Rcpp::stop("Unexcpected error"); // # nocov
   }
   return Rcpp::List::create(Rcpp::Named("value") = result.value(),
                             Rcpp::Named("abs.error") = result.abserr(),
