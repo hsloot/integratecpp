@@ -25,7 +25,7 @@ setMethod("$", "Integrator", function(x, name) {
     if (name %in% c("limit", "epsrel", "epsabs", "lenw")) {
         get(paste("integrator__get", name, sep = "_"))(x@pointer)
     } else if (name == "integrate") {
-        function(f, lower, upper, ..., stop.on.error = TRUE) { # nolint
+        function(f, lower, upper, ..., stop_on_error = TRUE) { # nolint
             out <- integrator__integrate(
                 x@pointer,
                 function(y) f(y, ...), lower, upper
@@ -33,7 +33,7 @@ setMethod("$", "Integrator", function(x, name) {
             out$call <- match.call()
             class(out) <- "integrate"
 
-            if (isTRUE(stop.on.error) && !isTRUE(out$message == "OK")) {
+            if (isTRUE(stop_on_error) && !isTRUE(out$message == "OK")) {
                 stop(out$message)
             }
 
