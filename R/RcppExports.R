@@ -37,3 +37,43 @@ Rcpp_integrate <- function(fn, lower, upper, subdivisions, epsrel, epsabs, lenw)
     .Call(`_integratecpp_Rcpp_integrate`, fn, lower, upper, subdivisions, epsrel, epsabs, lenw)
 }
 
+integrator__new <- function(limit, epsrel, epsabs, lenw) {
+    .Call(`_integratecpp_integrator__new`, limit, epsrel, epsabs, lenw)
+}
+
+integrator__get_limit <- function(ptr) {
+    .Call(`_integratecpp_integrator__get_limit`, ptr)
+}
+
+integrator__set_limit <- function(ptr, limit) {
+    invisible(.Call(`_integratecpp_integrator__set_limit`, ptr, limit))
+}
+
+integrator__get_epsrel <- function(ptr) {
+    .Call(`_integratecpp_integrator__get_epsrel`, ptr)
+}
+
+integrator__set_epsrel <- function(ptr, epsrel) {
+    invisible(.Call(`_integratecpp_integrator__set_epsrel`, ptr, epsrel))
+}
+
+integrator__get_epsabs <- function(ptr) {
+    .Call(`_integratecpp_integrator__get_epsabs`, ptr)
+}
+
+integrator__set_epsabs <- function(ptr, epsabs) {
+    invisible(.Call(`_integratecpp_integrator__set_epsabs`, ptr, epsabs))
+}
+
+integrator__get_lenw <- function(ptr) {
+    .Call(`_integratecpp_integrator__get_lenw`, ptr)
+}
+
+integrator__set_lenw <- function(ptr, lenw) {
+    invisible(.Call(`_integratecpp_integrator__set_lenw`, ptr, lenw))
+}
+
+integrator__integrate <- function(ptr, fn, lower, upper) {
+    .Call(`_integratecpp_integrator__integrate`, ptr, fn, lower, upper)
+}
+

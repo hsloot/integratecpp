@@ -149,18 +149,33 @@ public:
     //! \brief Accessor to the maximum number of subdivisions.
     auto limit() const noexcept -> decltype(limit_);
 
+    //! \brief Setter to the maximum number of subdivisions.
+    void limit(const int limit);
+
     //! \brief Accessor to the requested relative accuracy.
     auto epsrel() const noexcept -> decltype(epsrel_);
+
+    //! \brief Setter to the requested relative accuracy.
+    void epsrel(const double epsrel);
 
     //! \brief Accessor to the requested absolute accuracy.
     auto epsabs() const noexcept -> decltype(epsabs_);
 
+    //! \brief Setter to the requested absolute accuracy.
+    void epsabs(const double epsabs);
+
     //! \brief Accessor to the dimensioning parameter of the working array.
     auto lenw() const noexcept -> decltype(lenw_);
+
+    //! \brief Setter to the dimensioning parameter of the working array.
+    void lenw(const int lenw);
+
+  private:
+    void validate_() const;
   };
 
 private:
-  const config_type cfg_{};
+  config_type cfg_{};
 
 public:
   integrator() = default;
@@ -215,6 +230,33 @@ public:
 
   //! \brief Accessor for the configuration parameters.
   auto config() const noexcept -> decltype(cfg_);
+
+  //! \brief Setter for the configuration parameters.
+  void config(const config_type &cfg);
+
+  //! \brief Accessor to the maximum number of subdivisions.
+  auto limit() const noexcept -> decltype(cfg_.limit());
+
+  //! \brief Setter to the maximum number of subdivisions.
+  void limit(const int limit);
+
+  //! \brief Accessor to the requested relative accuracy.
+  auto epsrel() const noexcept -> decltype(cfg_.epsrel());
+
+  //! \brief Setter to the requested relative accuracy.
+  void epsrel(const double epsrel);
+
+  //! \brief Accessor to the requested absolute accuracy.
+  auto epsabs() const noexcept -> decltype(cfg_.epsabs());
+
+  //! \brief Setter to the requested absolute accuracy.
+  void epsabs(const double epsabs);
+
+  //! \brief Accessor to the dimensioning parameter of the working array.
+  auto lenw() const noexcept -> decltype(cfg_.lenw());
+
+  //! \brief Setter to the dimensioning parameter of the working array.
+  void lenw(const int lenw);
 
   /*!
    * \brief  Approximates an integratal numerically for a Lambda-functor, lower,
@@ -452,7 +494,7 @@ public:
  *         slowly convergent. if the input is invalid.
  *
  * This could be because (`epsabs <= 0` and
- * `epsrel < max(50*rel.mach.acc.,0.5d-28)`) or `limit < 1` or `leniw <
+ * `epsrel < max(50*rel.mach.acc.,0.5d-28)`) or `limit < 1` or `lenw <
  * limit*4`. Result, `abserr`, `neval`, last are set to zero.
  */
 struct invalid_input_error : public integration_logic_error {
@@ -530,8 +572,8 @@ integrator::operator()(Lambda_ fn, const double lower,
     } else if (ier == 5) {
       throw divergence_error("the integral is probably divergent", out);
     } else {
-      throw std::logic_error(
-          "invalid argument errors should be caught during initialization");
+      throw std::logic_error( // # nocov
+          "invalid argument errors should be caught during initialization"); // # nocov
     }
   }
 
@@ -570,7 +612,7 @@ inline int integrator::result_type::subdivisions() const noexcept {
 inline int integrator::result_type::neval() const noexcept { return neval_; }
 
 // -------------------------------------------------------------------------------------------------
-// Implementations of integratecpp::integrator::conig_type
+// Implementations of integratecpp::integrator::config_type
 // -------------------------------------------------------------------------------------------------
 
 inline integrator::config_type::config_type(const int limit,
@@ -601,17 +643,40 @@ inline auto integrator::config_type::limit() const noexcept
     -> decltype(limit_) {
   return limit_;
 }
+inline void integrator::config_type::limit(const int limit) {
+  auto other = config_type{limit, this->epsrel(), this->epsabs(), this->lenw()};
+  std::swap(*this, other);
+}
+
 inline auto integrator::config_type::epsrel() const noexcept
     -> decltype(epsrel_) {
   return epsrel_;
 }
+inline void integrator::config_type::epsrel(const double epsrel) {
+  auto other = config_type{this->limit(), epsrel, this->epsabs(), this->lenw()};
+  std::swap(*this, other);
+}
+
 inline auto integrator::config_type::epsabs() const noexcept
     -> decltype(epsabs_) {
   return epsabs_;
 }
+inline void integrator::config_type::epsabs(const double epsabs) {
+  auto other = config_type{this->limit(), this->epsrel(), epsabs, this->lenw()};
+  std::swap(*this, other);
+}
+
 inline auto integrator::config_type::lenw() const noexcept -> decltype(lenw_) {
   return lenw_;
 }
+inline void integrator::config_type::lenw(const int lenw) {
+  auto other = config_type{this->limit(), this->epsrel(), this->epsabs(), lenw};
+  std::swap(*this, other);
+}
+
+// -------------------------------------------------------------------------------------------------
+// Implementations of integratecpp::integrator
+// -------------------------------------------------------------------------------------------------
 
 inline integrator::integrator(const config_type &cfg) noexcept : cfg_{cfg} {}
 inline integrator::integrator(const int limit, const double epsrel)
@@ -626,6 +691,27 @@ inline integrator::integrator(const int limit, const double epsrel,
 inline auto integrator::config() const noexcept -> decltype(cfg_) {
   return cfg_;
 }
+inline void integrator::config(const config_type &cfg) { cfg_ = cfg; }
+
+inline auto integrator::limit() const noexcept -> decltype(cfg_.limit()) {
+  return cfg_.limit();
+}
+inline void integrator::limit(const int limit) { cfg_.limit(limit); }
+
+inline auto integrator::epsrel() const noexcept -> decltype(cfg_.epsrel()) {
+  return cfg_.epsrel();
+}
+inline void integrator::epsrel(const double epsrel) { cfg_.epsrel(epsrel); }
+
+inline auto integrator::epsabs() const noexcept -> decltype(cfg_.epsabs()) {
+  return cfg_.epsabs();
+}
+inline void integrator::epsabs(const double epsabs) { cfg_.epsabs(epsabs); }
+
+inline auto integrator::lenw() const noexcept -> decltype(cfg_.lenw()) {
+  return cfg_.lenw();
+}
+inline void integrator::lenw(const int lenw) { return cfg_.lenw(lenw); }
 
 // -------------------------------------------------------------------------------------------------
 // ## Implementations of exception classes
