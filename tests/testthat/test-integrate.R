@@ -223,11 +223,15 @@ test_that("`is.na(lower) || is.na(upper)` produces `invalid_input_error`", {
     )
 })
 
-test_that("`eps.abs <= 0 && eps.rel < max(50*.Machine$double.eps, 0.5e-28)` produces `invalid_input_error`", {
+test_that("`eps.abs <= 0 && eps.rel < max(50*.Machine$double.eps, 0.5e-28)` produces `invalid_input_error`", { # nolint
     fn <- function(x, rate = 1) (x - 1 / rate)^2 * dexp(x, rate = rate)
 
     expect_error(
-        integrate(fn, 0, Inf, rate = 1, epsabs= 0, epsrel = 0.5 * max(50 * .Machine$double.eps, 0.5e-28)),
+        integrate(
+            fn, 0, Inf,
+            rate = 1,
+            epsabs = 0, epsrel = 0.5 * max(50 * .Machine$double.eps, 0.5e-28)
+        ),
         "the input is invalid"
     )
 })
@@ -266,9 +270,11 @@ test_that("`roundoff_error` is thrown", {
 test_that("`bad_integrand_error` is thrown", {
     expect_error(
         integrate(function(x) {
+            ## nolint start
             -((100000 * x)^(-1) - (1000 * x)^(-1)) *
                 1 / (0.20 * sqrt(2 * pi)) *
                 exp(-0.5 * (x - 0.10) / (0.20))^2
+            ## nolint end
         }, 0, Inf),
         "extremely bad integrand behaviour"
     )

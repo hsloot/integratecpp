@@ -8,10 +8,10 @@
 #include "integratecpp.h"
 
 // [[Rcpp::export(rng=false)]]
-Rcpp::List Rcpp_integrate(Rcpp::Function fn, const double lower,
-                          const double upper, const int subdivisions,
-                          const double epsrel, const double epsabs,
-                          const int lenw) {
+Rcpp::List Rcpp__integrate(Rcpp::Function fn, const double lower,
+                           const double upper, const int subdivisions,
+                           const double epsrel, const double epsabs,
+                           const int lenw) {
   auto fn_ = [&fn](const double x) { return Rcpp::as<double>(fn(x)); };
   decltype(integratecpp::integrate(fn_, lower, upper)) result;
   std::string message;

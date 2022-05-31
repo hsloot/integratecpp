@@ -11,7 +11,11 @@ test_that("Parameter default initialization works as expected", {
 })
 
 test_that("Parameter custom initialization works as expected", {
-    integrator <- Integrator(limit = 50, epsrel = .Machine$double.eps^0.5, epsabs = 0, lenw = 800)
+    integrator <- Integrator(
+        limit = 50,
+        epsrel = .Machine$double.eps^0.5, epsabs = 0,
+        lenw = 800
+    )
     expect_equal(integrator$limit, 50)
     expect_equal(integrator$epsrel, .Machine$double.eps^0.5)
     expect_equal(integrator$epsabs, 0)
@@ -86,7 +90,9 @@ test_that("Default settings for negative Weibull distribtion's expectation", {
     )
 
     expect_equal(
-        remove_call(integrator$integrate(fn, -Inf, 0, shape = 0.3, scale = 0.4)),
+        remove_call(
+            integrator$integrate(fn, -Inf, 0, shape = 0.3, scale = 0.4)
+        ),
         remove_call(stats::integrate(fn, -Inf, 0, shape = 0.3, scale = 0.4))
     )
 
@@ -260,9 +266,12 @@ test_that("`is.na(lower) || is.na(upper)` produces `invalid_input_error`", {
     )
 })
 
-test_that("`eps.abs <= 0 && eps.rel < max(50*.Machine$double.eps, 0.5e-28)` produces `invalid_input_error`", {
+test_that("`eps.abs <= 0 && eps.rel < max(50*.Machine$double.eps, 0.5e-28)` produces `invalid_input_error`", { # nolint
     expect_error(
-        Integrator(epsabs = 0, epsrel = 0.5 * max(50 * .Machine$double.eps, 0.5e-28)),
+        Integrator(
+            epsabs = 0,
+            epsrel = 0.5 * max(50 * .Machine$double.eps, 0.5e-28)
+        ),
         "the input is invalid"
     )
 })
@@ -303,9 +312,11 @@ test_that("`bad_integrand_error` is thrown", {
     integrator <- Integrator()
     expect_error(
         integrator$integrate(function(x) {
+            ## nolint start
             -((100000 * x)^(-1) - (1000 * x)^(-1)) *
                 1 / (0.20 * sqrt(2 * pi)) *
                 exp(-0.5 * (x - 0.10) / (0.20))^2
+            ## nolint end
         }, 0, Inf),
         "extremely bad integrand behaviour"
     )

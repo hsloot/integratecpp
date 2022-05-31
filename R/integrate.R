@@ -1,18 +1,28 @@
+## REVIEW: consider moving file to `inst/Rsource`
+##   and load specifically as test-helper.
+
+#' A method for numerical integration
+#'
+#' @inherit stats::integrate
+#' @param limit the maximum number of subintervals.
+#' @param epsrel relative accuracy requested.
+#' @param epsabs absolute accuracy requested.
+#'
 #' @include RcppExports.R
 #' @keywords internal
-#' @noRd
 integrate <- function(f, lower, upper, ..., limit = 100L,
                       epsrel = .Machine$double.eps^0.25,
                       epsabs = epsrel,
-                      stop_on_error = TRUE,
-                      lenw = 4 * limit) {
-    out <- Rcpp_integrate(
+                      lenw = 4 * limit,
+                      stop.on.error = TRUE # nolint
+) {
+    out <- Rcpp__integrate(
         function(x) f(x, ...), lower, upper, limit, epsrel, epsabs, lenw
     )
     out$call <- match.call()
     class(out) <- "integrate"
 
-    if (isTRUE(stop_on_error) && !isTRUE(out$message == "OK")) {
+    if (isTRUE(stop.on.error) && !isTRUE(out$message == "OK")) {
         stop(out$message)
     }
 

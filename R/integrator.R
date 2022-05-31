@@ -1,32 +1,54 @@
-#' @include RcppExports.R
-#' @importFrom methods new setClass setGeneric setMethod validObject classLabel
-NULL
+## REVIEW: consider moving file to `inst/Rsource`
+##   and load specifically as test-helper.
 
 #' A class for numerical integration
 #'
 #' @slot pointer An external pointer to a C++ object.
 #'
+#' @importFrom methods setClass
 #' @keywords internal
 Integrator <- setClass("Integrator", slots = c("pointer" = "externalptr")) # nolint
 
+#' @importFrom methods setValidity new
 #' @keywords internal
 #' @noRd
-setMethod("initialize", "Integrator", function(.Object, limit = 100, epsrel = .Machine$double.eps^0.25, epsabs = epsrel, lenw = 4 * limit) {
-    .Object@pointer <- integrator__new(limit, epsrel, epsabs, lenw)
+setValidity("Integrator", function(object) {
+    if (identical(object@pointer, new("externalptr"))) {
+        return("dangling pointer")
+    }
+
+    invisible(TRUE)
+})
+
+#' @describeIn Integrator-class
+#'   Construct an object of class `Integrator`.
+#'
+#' @include RcppExports.R
+#' @importFrom methods setMethod validObject
+#' @keywords internal
+setMethod("initialize", "Integrator", function(.Object, limit = 100, epsrel = .Machine$double.eps^0.25, epsabs = epsrel, lenw = 4 * limit) { # nolint
+    .Object@pointer <- Rcpp__integrator__new(limit, epsrel, epsabs, lenw)
+    validObject(.Object)
+
     .Object
 })
 
 #' @describeIn Integrator-class
-#'   Either access configuration parameters `limit`, `epsrel`, `epsabs`, or `lenw` or get the
-#'   integration routine with signature `function(f, lower, upper, ..., stop.on.error = TRUE)`.
+#'   Either access configuration parameters
+#'   `limit`, `epsrel`, `epsabs`, or `lenw` or get the
+#'   integration routine with signature
+#'   `function(f, lower, upper, ..., stop.on.error = TRUE)`.
+#'
+#' @include RcppExports.R
+#' @importFrom methods setMethod
 #'
 #' @keywords internal
 setMethod("$", "Integrator", function(x, name) {
     if (name %in% c("limit", "epsrel", "epsabs", "lenw")) {
-        get(paste("integrator__get", name, sep = "_"))(x@pointer)
+        get(paste("Rcpp__integrator__get", name, sep = "_"))(x@pointer)
     } else if (name == "integrate") {
         function(f, lower, upper, ..., stop_on_error = TRUE) { # nolint
-            out <- integrator__integrate(
+            out <- Rcpp__integrator__integrate(
                 x@pointer,
                 function(y) f(y, ...), lower, upper
             )
@@ -45,12 +67,18 @@ setMethod("$", "Integrator", function(x, name) {
 })
 
 #' @describeIn Integrator-class
-#'   Set any of the configuration parameters `limit`, `epsrel`, `epsabs`, or `lenw`.
+#'   Set any of the configuration parameters
+#'   `limit`, `epsrel`, `epsabs`, or `lenw`.
+#'
+#' @include RcppExports.R
+#' @importFrom methods setMethod validObject
 #'
 #' @keywords internal
 setMethod("$<-", "Integrator", function(x, name, value) {
     if (name %in% c("limit", "epsrel", "epsabs", "lenw")) {
-        get(paste("integrator__set", name, sep = "_"))(x@pointer, value)
+        get(paste("Rcpp__integrator__set", name, sep = "_"))(x@pointer, value)
+        validObject(x)
+
         x
     } else {
         stop("not implemented") # nocov
@@ -59,6 +87,12 @@ setMethod("$<-", "Integrator", function(x, name, value) {
 
 # nocov start
 
+#' @describeIn Integrator-class
+#'   print an object of class `Integrator`.
+#'
+#' @include RcppExports.R
+#' @importFrom methods setMethod classLabel validObject
+#'
 #' @keywords internal
 #' @noRd
 setMethod("show", "Integrator", function(object) {

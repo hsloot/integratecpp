@@ -4,10 +4,19 @@
 \name{Integrator-class}
 \alias{Integrator-class}
 \alias{Integrator}
+\alias{initialize,Integrator-method}
 \alias{$,Integrator-method}
 \alias{$<-,Integrator-method}
 \title{A class for numerical integration}
 \usage{
+\S4method{initialize}{Integrator}(
+  .Object,
+  limit = 100,
+  epsrel = .Machine$double.eps^0.25,
+  epsabs = epsrel,
+  lenw = 4 * limit
+)
+
 \S4method{$}{Integrator}(x, name)
 
 \S4method{$}{Integrator}(x, name) <- value
@@ -17,10 +26,15 @@ A class for numerical integration
 }
 \section{Functions}{
 \itemize{
-\item \code{$,Integrator-method}: Either access configuration parameters \code{limit}, \code{epsrel}, \code{epsabs}, or \code{lenw} or get the
-integration routine with signature \verb{function(f, lower, upper, ..., stop.on.error = TRUE)}.
+\item \code{initialize,Integrator-method}: Construct an object of class \code{Integrator}.
 
-\item \code{$<-,Integrator-method}: Set any of the configuration parameters \code{limit}, \code{epsrel}, \code{epsabs}, or \code{lenw}.
+\item \code{$,Integrator-method}: Either access configuration parameters
+\code{limit}, \code{epsrel}, \code{epsabs}, or \code{lenw} or get the
+integration routine with signature
+\verb{function(f, lower, upper, ..., stop.on.error = TRUE)}.
+
+\item \code{$<-,Integrator-method}: Set any of the configuration parameters
+\code{limit}, \code{epsrel}, \code{epsabs}, or \code{lenw}.
 }}
 
 \section{Slots}{

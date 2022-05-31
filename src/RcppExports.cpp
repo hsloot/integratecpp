@@ -11,89 +11,89 @@ Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
 Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
-// integration_logic_error
-std::string integration_logic_error(std::string what);
-RcppExport SEXP _integratecpp_integration_logic_error(SEXP whatSEXP) {
+// Rcpp__integration_logic_error__catch_what
+std::string Rcpp__integration_logic_error__catch_what(std::string what);
+RcppExport SEXP _integratecpp_Rcpp__integration_logic_error__catch_what(SEXP whatSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::traits::input_parameter< std::string >::type what(whatSEXP);
-    rcpp_result_gen = Rcpp::wrap(integration_logic_error(what));
+    rcpp_result_gen = Rcpp::wrap(Rcpp__integration_logic_error__catch_what(what));
     return rcpp_result_gen;
 END_RCPP
 }
-// integration_runtime_error
-std::string integration_runtime_error(std::string what);
-RcppExport SEXP _integratecpp_integration_runtime_error(SEXP whatSEXP) {
+// Rcpp__integration_runtime_error__catch_what
+std::string Rcpp__integration_runtime_error__catch_what(std::string what);
+RcppExport SEXP _integratecpp_Rcpp__integration_runtime_error__catch_what(SEXP whatSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::traits::input_parameter< std::string >::type what(whatSEXP);
-    rcpp_result_gen = Rcpp::wrap(integration_runtime_error(what));
+    rcpp_result_gen = Rcpp::wrap(Rcpp__integration_runtime_error__catch_what(what));
     return rcpp_result_gen;
 END_RCPP
 }
-// max_subdivision_error
-std::string max_subdivision_error(std::string what);
-RcppExport SEXP _integratecpp_max_subdivision_error(SEXP whatSEXP) {
+// Rcpp__max_subdivision_error__catch_what
+std::string Rcpp__max_subdivision_error__catch_what(std::string what);
+RcppExport SEXP _integratecpp_Rcpp__max_subdivision_error__catch_what(SEXP whatSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::traits::input_parameter< std::string >::type what(whatSEXP);
-    rcpp_result_gen = Rcpp::wrap(max_subdivision_error(what));
+    rcpp_result_gen = Rcpp::wrap(Rcpp__max_subdivision_error__catch_what(what));
     return rcpp_result_gen;
 END_RCPP
 }
-// roundoff_error
-std::string roundoff_error(std::string what);
-RcppExport SEXP _integratecpp_roundoff_error(SEXP whatSEXP) {
+// Rcpp__roundoff_error__catch_what
+std::string Rcpp__roundoff_error__catch_what(std::string what);
+RcppExport SEXP _integratecpp_Rcpp__roundoff_error__catch_what(SEXP whatSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::traits::input_parameter< std::string >::type what(whatSEXP);
-    rcpp_result_gen = Rcpp::wrap(roundoff_error(what));
+    rcpp_result_gen = Rcpp::wrap(Rcpp__roundoff_error__catch_what(what));
     return rcpp_result_gen;
 END_RCPP
 }
-// bad_integrand_error
-std::string bad_integrand_error(std::string what);
-RcppExport SEXP _integratecpp_bad_integrand_error(SEXP whatSEXP) {
+// Rcpp__bad_integrand_error__catch_what
+std::string Rcpp__bad_integrand_error__catch_what(std::string what);
+RcppExport SEXP _integratecpp_Rcpp__bad_integrand_error__catch_what(SEXP whatSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::traits::input_parameter< std::string >::type what(whatSEXP);
-    rcpp_result_gen = Rcpp::wrap(bad_integrand_error(what));
+    rcpp_result_gen = Rcpp::wrap(Rcpp__bad_integrand_error__catch_what(what));
     return rcpp_result_gen;
 END_RCPP
 }
-// extrapolation_roundoff_error
-std::string extrapolation_roundoff_error(std::string what);
-RcppExport SEXP _integratecpp_extrapolation_roundoff_error(SEXP whatSEXP) {
+// Rcpp__extrapolation_roundoff_error__catch_what
+std::string Rcpp__extrapolation_roundoff_error__catch_what(std::string what);
+RcppExport SEXP _integratecpp_Rcpp__extrapolation_roundoff_error__catch_what(SEXP whatSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::traits::input_parameter< std::string >::type what(whatSEXP);
-    rcpp_result_gen = Rcpp::wrap(extrapolation_roundoff_error(what));
+    rcpp_result_gen = Rcpp::wrap(Rcpp__extrapolation_roundoff_error__catch_what(what));
     return rcpp_result_gen;
 END_RCPP
 }
-// divergence_error
-std::string divergence_error(std::string what);
-RcppExport SEXP _integratecpp_divergence_error(SEXP whatSEXP) {
+// Rcpp__divergence_error__catch_what
+std::string Rcpp__divergence_error__catch_what(std::string what);
+RcppExport SEXP _integratecpp_Rcpp__divergence_error__catch_what(SEXP whatSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::traits::input_parameter< std::string >::type what(whatSEXP);
-    rcpp_result_gen = Rcpp::wrap(divergence_error(what));
+    rcpp_result_gen = Rcpp::wrap(Rcpp__divergence_error__catch_what(what));
     return rcpp_result_gen;
 END_RCPP
 }
-// invalid_input_error
-std::string invalid_input_error(std::string what);
-RcppExport SEXP _integratecpp_invalid_input_error(SEXP whatSEXP) {
+// Rcpp__invalid_input_error__catch_what
+std::string Rcpp__invalid_input_error__catch_what(std::string what);
+RcppExport SEXP _integratecpp_Rcpp__invalid_input_error__catch_what(SEXP whatSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::traits::input_parameter< std::string >::type what(whatSEXP);
-    rcpp_result_gen = Rcpp::wrap(invalid_input_error(what));
+    rcpp_result_gen = Rcpp::wrap(Rcpp__invalid_input_error__catch_what(what));
     return rcpp_result_gen;
 END_RCPP
 }
-// Rcpp_integrate
-Rcpp::List Rcpp_integrate(Rcpp::Function fn, const double lower, const double upper, const int subdivisions, const double epsrel, const double epsabs, const int lenw);
-RcppExport SEXP _integratecpp_Rcpp_integrate(SEXP fnSEXP, SEXP lowerSEXP, SEXP upperSEXP, SEXP subdivisionsSEXP, SEXP epsrelSEXP, SEXP epsabsSEXP, SEXP lenwSEXP) {
+// Rcpp__integrate
+Rcpp::List Rcpp__integrate(Rcpp::Function fn, const double lower, const double upper, const int subdivisions, const double epsrel, const double epsabs, const int lenw);
+RcppExport SEXP _integratecpp_Rcpp__integrate(SEXP fnSEXP, SEXP lowerSEXP, SEXP upperSEXP, SEXP subdivisionsSEXP, SEXP epsrelSEXP, SEXP epsabsSEXP, SEXP lenwSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::traits::input_parameter< Rcpp::Function >::type fn(fnSEXP);
@@ -103,137 +103,137 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const double >::type epsrel(epsrelSEXP);
     Rcpp::traits::input_parameter< const double >::type epsabs(epsabsSEXP);
     Rcpp::traits::input_parameter< const int >::type lenw(lenwSEXP);
-    rcpp_result_gen = Rcpp::wrap(Rcpp_integrate(fn, lower, upper, subdivisions, epsrel, epsabs, lenw));
+    rcpp_result_gen = Rcpp::wrap(Rcpp__integrate(fn, lower, upper, subdivisions, epsrel, epsabs, lenw));
     return rcpp_result_gen;
 END_RCPP
 }
-// integrator__new
-Rcpp::XPtr<integratecpp::integrator> integrator__new(const int limit, const double epsrel, const double epsabs, const int lenw);
-RcppExport SEXP _integratecpp_integrator__new(SEXP limitSEXP, SEXP epsrelSEXP, SEXP epsabsSEXP, SEXP lenwSEXP) {
+// Rcpp__integrator__new
+Rcpp::XPtr<integratecpp::integrator> Rcpp__integrator__new(const int limit, const double epsrel, const double epsabs, const int lenw);
+RcppExport SEXP _integratecpp_Rcpp__integrator__new(SEXP limitSEXP, SEXP epsrelSEXP, SEXP epsabsSEXP, SEXP lenwSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::traits::input_parameter< const int >::type limit(limitSEXP);
     Rcpp::traits::input_parameter< const double >::type epsrel(epsrelSEXP);
     Rcpp::traits::input_parameter< const double >::type epsabs(epsabsSEXP);
     Rcpp::traits::input_parameter< const int >::type lenw(lenwSEXP);
-    rcpp_result_gen = Rcpp::wrap(integrator__new(limit, epsrel, epsabs, lenw));
+    rcpp_result_gen = Rcpp::wrap(Rcpp__integrator__new(limit, epsrel, epsabs, lenw));
     return rcpp_result_gen;
 END_RCPP
 }
-// integrator__get_limit
-int integrator__get_limit(Rcpp::XPtr<integratecpp::integrator> ptr);
-RcppExport SEXP _integratecpp_integrator__get_limit(SEXP ptrSEXP) {
+// Rcpp__integrator__get_limit
+int Rcpp__integrator__get_limit(Rcpp::XPtr<integratecpp::integrator> ptr);
+RcppExport SEXP _integratecpp_Rcpp__integrator__get_limit(SEXP ptrSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::traits::input_parameter< Rcpp::XPtr<integratecpp::integrator> >::type ptr(ptrSEXP);
-    rcpp_result_gen = Rcpp::wrap(integrator__get_limit(ptr));
+    rcpp_result_gen = Rcpp::wrap(Rcpp__integrator__get_limit(ptr));
     return rcpp_result_gen;
 END_RCPP
 }
-// integrator__set_limit
-void integrator__set_limit(Rcpp::XPtr<integratecpp::integrator> ptr, const int limit);
-RcppExport SEXP _integratecpp_integrator__set_limit(SEXP ptrSEXP, SEXP limitSEXP) {
+// Rcpp__integrator__set_limit
+void Rcpp__integrator__set_limit(Rcpp::XPtr<integratecpp::integrator> ptr, const int limit);
+RcppExport SEXP _integratecpp_Rcpp__integrator__set_limit(SEXP ptrSEXP, SEXP limitSEXP) {
 BEGIN_RCPP
     Rcpp::traits::input_parameter< Rcpp::XPtr<integratecpp::integrator> >::type ptr(ptrSEXP);
     Rcpp::traits::input_parameter< const int >::type limit(limitSEXP);
-    integrator__set_limit(ptr, limit);
+    Rcpp__integrator__set_limit(ptr, limit);
     return R_NilValue;
 END_RCPP
 }
-// integrator__get_epsrel
-double integrator__get_epsrel(Rcpp::XPtr<integratecpp::integrator> ptr);
-RcppExport SEXP _integratecpp_integrator__get_epsrel(SEXP ptrSEXP) {
+// Rcpp__integrator__get_epsrel
+double Rcpp__integrator__get_epsrel(Rcpp::XPtr<integratecpp::integrator> ptr);
+RcppExport SEXP _integratecpp_Rcpp__integrator__get_epsrel(SEXP ptrSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::traits::input_parameter< Rcpp::XPtr<integratecpp::integrator> >::type ptr(ptrSEXP);
-    rcpp_result_gen = Rcpp::wrap(integrator__get_epsrel(ptr));
+    rcpp_result_gen = Rcpp::wrap(Rcpp__integrator__get_epsrel(ptr));
     return rcpp_result_gen;
 END_RCPP
 }
-// integrator__set_epsrel
-void integrator__set_epsrel(Rcpp::XPtr<integratecpp::integrator> ptr, const double epsrel);
-RcppExport SEXP _integratecpp_integrator__set_epsrel(SEXP ptrSEXP, SEXP epsrelSEXP) {
+// Rcpp__integrator__set_epsrel
+void Rcpp__integrator__set_epsrel(Rcpp::XPtr<integratecpp::integrator> ptr, const double epsrel);
+RcppExport SEXP _integratecpp_Rcpp__integrator__set_epsrel(SEXP ptrSEXP, SEXP epsrelSEXP) {
 BEGIN_RCPP
     Rcpp::traits::input_parameter< Rcpp::XPtr<integratecpp::integrator> >::type ptr(ptrSEXP);
     Rcpp::traits::input_parameter< const double >::type epsrel(epsrelSEXP);
-    integrator__set_epsrel(ptr, epsrel);
+    Rcpp__integrator__set_epsrel(ptr, epsrel);
     return R_NilValue;
 END_RCPP
 }
-// integrator__get_epsabs
-double integrator__get_epsabs(Rcpp::XPtr<integratecpp::integrator> ptr);
-RcppExport SEXP _integratecpp_integrator__get_epsabs(SEXP ptrSEXP) {
+// Rcpp__integrator__get_epsabs
+double Rcpp__integrator__get_epsabs(Rcpp::XPtr<integratecpp::integrator> ptr);
+RcppExport SEXP _integratecpp_Rcpp__integrator__get_epsabs(SEXP ptrSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::traits::input_parameter< Rcpp::XPtr<integratecpp::integrator> >::type ptr(ptrSEXP);
-    rcpp_result_gen = Rcpp::wrap(integrator__get_epsabs(ptr));
+    rcpp_result_gen = Rcpp::wrap(Rcpp__integrator__get_epsabs(ptr));
     return rcpp_result_gen;
 END_RCPP
 }
-// integrator__set_epsabs
-void integrator__set_epsabs(Rcpp::XPtr<integratecpp::integrator> ptr, const double epsabs);
-RcppExport SEXP _integratecpp_integrator__set_epsabs(SEXP ptrSEXP, SEXP epsabsSEXP) {
+// Rcpp__integrator__set_epsabs
+void Rcpp__integrator__set_epsabs(Rcpp::XPtr<integratecpp::integrator> ptr, const double epsabs);
+RcppExport SEXP _integratecpp_Rcpp__integrator__set_epsabs(SEXP ptrSEXP, SEXP epsabsSEXP) {
 BEGIN_RCPP
     Rcpp::traits::input_parameter< Rcpp::XPtr<integratecpp::integrator> >::type ptr(ptrSEXP);
     Rcpp::traits::input_parameter< const double >::type epsabs(epsabsSEXP);
-    integrator__set_epsabs(ptr, epsabs);
+    Rcpp__integrator__set_epsabs(ptr, epsabs);
     return R_NilValue;
 END_RCPP
 }
-// integrator__get_lenw
-int integrator__get_lenw(Rcpp::XPtr<integratecpp::integrator> ptr);
-RcppExport SEXP _integratecpp_integrator__get_lenw(SEXP ptrSEXP) {
+// Rcpp__integrator__get_lenw
+int Rcpp__integrator__get_lenw(Rcpp::XPtr<integratecpp::integrator> ptr);
+RcppExport SEXP _integratecpp_Rcpp__integrator__get_lenw(SEXP ptrSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::traits::input_parameter< Rcpp::XPtr<integratecpp::integrator> >::type ptr(ptrSEXP);
-    rcpp_result_gen = Rcpp::wrap(integrator__get_lenw(ptr));
+    rcpp_result_gen = Rcpp::wrap(Rcpp__integrator__get_lenw(ptr));
     return rcpp_result_gen;
 END_RCPP
 }
-// integrator__set_lenw
-void integrator__set_lenw(Rcpp::XPtr<integratecpp::integrator> ptr, const int lenw);
-RcppExport SEXP _integratecpp_integrator__set_lenw(SEXP ptrSEXP, SEXP lenwSEXP) {
+// Rcpp__integrator__set_lenw
+void Rcpp__integrator__set_lenw(Rcpp::XPtr<integratecpp::integrator> ptr, const int lenw);
+RcppExport SEXP _integratecpp_Rcpp__integrator__set_lenw(SEXP ptrSEXP, SEXP lenwSEXP) {
 BEGIN_RCPP
     Rcpp::traits::input_parameter< Rcpp::XPtr<integratecpp::integrator> >::type ptr(ptrSEXP);
     Rcpp::traits::input_parameter< const int >::type lenw(lenwSEXP);
-    integrator__set_lenw(ptr, lenw);
+    Rcpp__integrator__set_lenw(ptr, lenw);
     return R_NilValue;
 END_RCPP
 }
-// integrator__integrate
-Rcpp::List integrator__integrate(Rcpp::XPtr<integratecpp::integrator> ptr, Rcpp::Function fn, const double lower, const double upper);
-RcppExport SEXP _integratecpp_integrator__integrate(SEXP ptrSEXP, SEXP fnSEXP, SEXP lowerSEXP, SEXP upperSEXP) {
+// Rcpp__integrator__integrate
+Rcpp::List Rcpp__integrator__integrate(Rcpp::XPtr<integratecpp::integrator> ptr, Rcpp::Function fn, const double lower, const double upper);
+RcppExport SEXP _integratecpp_Rcpp__integrator__integrate(SEXP ptrSEXP, SEXP fnSEXP, SEXP lowerSEXP, SEXP upperSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::traits::input_parameter< Rcpp::XPtr<integratecpp::integrator> >::type ptr(ptrSEXP);
     Rcpp::traits::input_parameter< Rcpp::Function >::type fn(fnSEXP);
     Rcpp::traits::input_parameter< const double >::type lower(lowerSEXP);
     Rcpp::traits::input_parameter< const double >::type upper(upperSEXP);
-    rcpp_result_gen = Rcpp::wrap(integrator__integrate(ptr, fn, lower, upper));
+    rcpp_result_gen = Rcpp::wrap(Rcpp__integrator__integrate(ptr, fn, lower, upper));
     return rcpp_result_gen;
 END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_integratecpp_integration_logic_error", (DL_FUNC) &_integratecpp_integration_logic_error, 1},
-    {"_integratecpp_integration_runtime_error", (DL_FUNC) &_integratecpp_integration_runtime_error, 1},
-    {"_integratecpp_max_subdivision_error", (DL_FUNC) &_integratecpp_max_subdivision_error, 1},
-    {"_integratecpp_roundoff_error", (DL_FUNC) &_integratecpp_roundoff_error, 1},
-    {"_integratecpp_bad_integrand_error", (DL_FUNC) &_integratecpp_bad_integrand_error, 1},
-    {"_integratecpp_extrapolation_roundoff_error", (DL_FUNC) &_integratecpp_extrapolation_roundoff_error, 1},
-    {"_integratecpp_divergence_error", (DL_FUNC) &_integratecpp_divergence_error, 1},
-    {"_integratecpp_invalid_input_error", (DL_FUNC) &_integratecpp_invalid_input_error, 1},
-    {"_integratecpp_Rcpp_integrate", (DL_FUNC) &_integratecpp_Rcpp_integrate, 7},
-    {"_integratecpp_integrator__new", (DL_FUNC) &_integratecpp_integrator__new, 4},
-    {"_integratecpp_integrator__get_limit", (DL_FUNC) &_integratecpp_integrator__get_limit, 1},
-    {"_integratecpp_integrator__set_limit", (DL_FUNC) &_integratecpp_integrator__set_limit, 2},
-    {"_integratecpp_integrator__get_epsrel", (DL_FUNC) &_integratecpp_integrator__get_epsrel, 1},
-    {"_integratecpp_integrator__set_epsrel", (DL_FUNC) &_integratecpp_integrator__set_epsrel, 2},
-    {"_integratecpp_integrator__get_epsabs", (DL_FUNC) &_integratecpp_integrator__get_epsabs, 1},
-    {"_integratecpp_integrator__set_epsabs", (DL_FUNC) &_integratecpp_integrator__set_epsabs, 2},
-    {"_integratecpp_integrator__get_lenw", (DL_FUNC) &_integratecpp_integrator__get_lenw, 1},
-    {"_integratecpp_integrator__set_lenw", (DL_FUNC) &_integratecpp_integrator__set_lenw, 2},
-    {"_integratecpp_integrator__integrate", (DL_FUNC) &_integratecpp_integrator__integrate, 4},
+    {"_integratecpp_Rcpp__integration_logic_error__catch_what", (DL_FUNC) &_integratecpp_Rcpp__integration_logic_error__catch_what, 1},
+    {"_integratecpp_Rcpp__integration_runtime_error__catch_what", (DL_FUNC) &_integratecpp_Rcpp__integration_runtime_error__catch_what, 1},
+    {"_integratecpp_Rcpp__max_subdivision_error__catch_what", (DL_FUNC) &_integratecpp_Rcpp__max_subdivision_error__catch_what, 1},
+    {"_integratecpp_Rcpp__roundoff_error__catch_what", (DL_FUNC) &_integratecpp_Rcpp__roundoff_error__catch_what, 1},
+    {"_integratecpp_Rcpp__bad_integrand_error__catch_what", (DL_FUNC) &_integratecpp_Rcpp__bad_integrand_error__catch_what, 1},
+    {"_integratecpp_Rcpp__extrapolation_roundoff_error__catch_what", (DL_FUNC) &_integratecpp_Rcpp__extrapolation_roundoff_error__catch_what, 1},
+    {"_integratecpp_Rcpp__divergence_error__catch_what", (DL_FUNC) &_integratecpp_Rcpp__divergence_error__catch_what, 1},
+    {"_integratecpp_Rcpp__invalid_input_error__catch_what", (DL_FUNC) &_integratecpp_Rcpp__invalid_input_error__catch_what, 1},
+    {"_integratecpp_Rcpp__integrate", (DL_FUNC) &_integratecpp_Rcpp__integrate, 7},
+    {"_integratecpp_Rcpp__integrator__new", (DL_FUNC) &_integratecpp_Rcpp__integrator__new, 4},
+    {"_integratecpp_Rcpp__integrator__get_limit", (DL_FUNC) &_integratecpp_Rcpp__integrator__get_limit, 1},
+    {"_integratecpp_Rcpp__integrator__set_limit", (DL_FUNC) &_integratecpp_Rcpp__integrator__set_limit, 2},
+    {"_integratecpp_Rcpp__integrator__get_epsrel", (DL_FUNC) &_integratecpp_Rcpp__integrator__get_epsrel, 1},
+    {"_integratecpp_Rcpp__integrator__set_epsrel", (DL_FUNC) &_integratecpp_Rcpp__integrator__set_epsrel, 2},
+    {"_integratecpp_Rcpp__integrator__get_epsabs", (DL_FUNC) &_integratecpp_Rcpp__integrator__get_epsabs, 1},
+    {"_integratecpp_Rcpp__integrator__set_epsabs", (DL_FUNC) &_integratecpp_Rcpp__integrator__set_epsabs, 2},
+    {"_integratecpp_Rcpp__integrator__get_lenw", (DL_FUNC) &_integratecpp_Rcpp__integrator__get_lenw, 1},
+    {"_integratecpp_Rcpp__integrator__set_lenw", (DL_FUNC) &_integratecpp_Rcpp__integrator__set_lenw, 2},
+    {"_integratecpp_Rcpp__integrator__integrate", (DL_FUNC) &_integratecpp_Rcpp__integrator__integrate, 4},
     {NULL, NULL, 0}
 };
 
