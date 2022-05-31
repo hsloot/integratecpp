@@ -27,7 +27,7 @@ Suggests:
 Config/testthat/edition: 3
 Collate: 
     'RcppExports.R'
-    'catch_what.R'
+    'exceptions.R'
     'integrate.R'
     'integratecpp-package.R'
     'integrator.R'
