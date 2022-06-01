@@ -125,7 +125,7 @@ public:
     //       `std::pow` is `noexcept(false)` as it might throw. however, for the
     //       values used it should not throw. hence, one could think about
     //       making this constructor noexcept.
-    config_type() noexcept(false) = default;
+    config_type() = default;
 
     /*!
      * \brief  A partial constructor for `limit` and `epsrel`.
