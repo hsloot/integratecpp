@@ -23,13 +23,7 @@ int Rcpp__integrator__get_limit(Rcpp::XPtr<integratecpp::integrator> ptr) {
 // [[Rcpp::export(rng=false)]]
 void Rcpp__integrator__set_limit(Rcpp::XPtr<integratecpp::integrator> ptr,
                                  const int limit) {
-  try {
-    ptr->limit(limit);
-  } catch (const integratecpp::integration_logic_error &e) {
-    Rcpp::stop(e.what());       // # nocov
-  } catch (...) {               // # nocov
-    Rcpp::stop("Unkown error"); // # nocov
-  }
+  ptr->limit(limit);
 }
 
 // [[Rcpp::export(rng=false)]]
@@ -39,13 +33,7 @@ double Rcpp__integrator__get_epsrel(Rcpp::XPtr<integratecpp::integrator> ptr) {
 // [[Rcpp::export(rng=false)]]
 void Rcpp__integrator__set_epsrel(Rcpp::XPtr<integratecpp::integrator> ptr,
                                   const double epsrel) {
-  try {
-    ptr->epsrel(epsrel);
-  } catch (const integratecpp::integration_logic_error &e) {
-    Rcpp::stop(e.what());       // # nocov
-  } catch (...) {               // # nocov
-    Rcpp::stop("Unkown error"); // # nocov
-  }
+  ptr->epsrel(epsrel);
 }
 
 // [[Rcpp::export(rng=false)]]
@@ -55,13 +43,7 @@ double Rcpp__integrator__get_epsabs(Rcpp::XPtr<integratecpp::integrator> ptr) {
 // [[Rcpp::export(rng=false)]]
 void Rcpp__integrator__set_epsabs(Rcpp::XPtr<integratecpp::integrator> ptr,
                                   const double epsabs) {
-  try {
-    ptr->epsabs(epsabs);
-  } catch (const integratecpp::integration_logic_error &e) {
-    Rcpp::stop(e.what());       // # nocov
-  } catch (...) {               // # nocov
-    Rcpp::stop("Unkown error"); // # nocov
-  }
+  ptr->epsabs(epsabs);
 }
 
 // [[Rcpp::export(rng=false)]]
@@ -71,12 +53,31 @@ int Rcpp__integrator__get_lenw(Rcpp::XPtr<integratecpp::integrator> ptr) {
 // [[Rcpp::export(rng=false)]]
 void Rcpp__integrator__set_lenw(Rcpp::XPtr<integratecpp::integrator> ptr,
                                 const int lenw) {
+  ptr->lenw(lenw);
+}
+
+// [[Rcpp::export(rng=false)]]
+bool Rcpp__integrator__is_valid(Rcpp::XPtr<integratecpp::integrator> ptr) {
   try {
-    ptr->lenw(lenw);
-  } catch (const integratecpp::integration_logic_error &e) {
-    Rcpp::stop(e.what());       // # nocov
-  } catch (...) {               // # nocov
-    Rcpp::stop("Unkown error"); // # nocov
+    return (*ptr).is_valid();
+  } catch (::Rcpp::exception &e) { // # nocov
+    return false;                  // # nocov
+  } catch (...) {                  // # nocov
+    Rcpp::stop("Unknown error");   // # nocov
+  }
+}
+
+// [[Rcpp::export(rng=false)]]
+void Rcpp__integrator__assert_validity(
+    Rcpp::XPtr<integratecpp::integrator> ptr) {
+  try {
+    (*ptr).assert_validity();
+  } catch (::Rcpp::exception &e) {                       // # nocov
+    Rcpp::stop("Not initialized");                       // # nocov
+  } catch (const integratecpp::invalid_input_error &e) { // # nocov
+    Rcpp::stop(e.what());                                // # nocov
+  } catch (...) {                                        // # nocov
+    Rcpp::stop("Unknown error");                         // # nocov
   }
 }
 

@@ -15,6 +15,12 @@ Integrator <- setClass("Integrator", slots = c("pointer" = "externalptr")) # nol
 setValidity("Integrator", function(object) {
     if (identical(object@pointer, new("externalptr"))) {
         return("dangling pointer")
+    } else {
+        return(tryCatch(
+            Rcpp__integrator__assert_validity(object@pointer),
+            error = function(cond) {
+                return(as.character(cond))
+            }))
     }
 
     invisible(TRUE)

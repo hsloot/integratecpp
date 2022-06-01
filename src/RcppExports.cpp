@@ -200,6 +200,25 @@ BEGIN_RCPP
     return R_NilValue;
 END_RCPP
 }
+// Rcpp__integrator__is_valid
+bool Rcpp__integrator__is_valid(Rcpp::XPtr<integratecpp::integrator> ptr);
+RcppExport SEXP _integratecpp_Rcpp__integrator__is_valid(SEXP ptrSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::traits::input_parameter< Rcpp::XPtr<integratecpp::integrator> >::type ptr(ptrSEXP);
+    rcpp_result_gen = Rcpp::wrap(Rcpp__integrator__is_valid(ptr));
+    return rcpp_result_gen;
+END_RCPP
+}
+// Rcpp__integrator__assert_validity
+void Rcpp__integrator__assert_validity(Rcpp::XPtr<integratecpp::integrator> ptr);
+RcppExport SEXP _integratecpp_Rcpp__integrator__assert_validity(SEXP ptrSEXP) {
+BEGIN_RCPP
+    Rcpp::traits::input_parameter< Rcpp::XPtr<integratecpp::integrator> >::type ptr(ptrSEXP);
+    Rcpp__integrator__assert_validity(ptr);
+    return R_NilValue;
+END_RCPP
+}
 // Rcpp__integrator__integrate
 Rcpp::List Rcpp__integrator__integrate(Rcpp::XPtr<integratecpp::integrator> ptr, Rcpp::Function fn, const double lower, const double upper);
 RcppExport SEXP _integratecpp_Rcpp__integrator__integrate(SEXP ptrSEXP, SEXP fnSEXP, SEXP lowerSEXP, SEXP upperSEXP) {
@@ -233,6 +252,8 @@ static const R_CallMethodDef CallEntries[] = {
     {"_integratecpp_Rcpp__integrator__set_epsabs", (DL_FUNC) &_integratecpp_Rcpp__integrator__set_epsabs, 2},
     {"_integratecpp_Rcpp__integrator__get_lenw", (DL_FUNC) &_integratecpp_Rcpp__integrator__get_lenw, 1},
     {"_integratecpp_Rcpp__integrator__set_lenw", (DL_FUNC) &_integratecpp_Rcpp__integrator__set_lenw, 2},
+    {"_integratecpp_Rcpp__integrator__is_valid", (DL_FUNC) &_integratecpp_Rcpp__integrator__is_valid, 1},
+    {"_integratecpp_Rcpp__integrator__assert_validity", (DL_FUNC) &_integratecpp_Rcpp__integrator__assert_validity, 1},
     {"_integratecpp_Rcpp__integrator__integrate", (DL_FUNC) &_integratecpp_Rcpp__integrator__integrate, 4},
     {NULL, NULL, 0}
 };
