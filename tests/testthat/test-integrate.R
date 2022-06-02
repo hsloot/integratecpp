@@ -298,3 +298,10 @@ test_that("`divergence_error` is thrown", {
         "the integral is probably divergent"
     )
 })
+
+test_that("`function evaluation error` is thrown", {
+    expect_error(
+        integrate(function(x) stop("function evaluation error"), 0, 1),
+        "function evaluation error"
+    )
+})

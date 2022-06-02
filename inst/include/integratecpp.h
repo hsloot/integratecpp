@@ -12,6 +12,9 @@
 
 #include <R_ext/Applic.h>
 
+// TODO: comment calls to `noexcept(<cond>)` if `<cond>` is known to be `true`
+//       by `static_assert`.
+
 namespace integratecpp {
 
 /*!
@@ -119,7 +122,8 @@ public:
   class config_type {
   private:
     int limit_{100};
-    double epsrel_{std::pow(std::numeric_limits<double>::epsilon(), 0.25)};
+    double epsrel_{std::pow(std::numeric_limits<double>::epsilon(),
+                            0.25)}; // = 0.0001220703125
     double epsabs_{epsrel_};
     int lenw_{400};
 
@@ -613,10 +617,32 @@ integrator::operator()(UnaryRealFunction_ fn, const double lower,
     throw invalid_input_error("the input is invalid");
 
   auto fn_callback = [](double *x, int n, void *ex) {
-    auto fn_ptr = static_cast<decltype(&fn)>(ex);
-    for (auto i = 0; i < n; ++i) {
-      x[i] = (*fn_ptr)(x[i]);
+    auto fn_ptr =
+        (*static_cast<std::pair<decltype(&fn),
+                                std::unique_ptr<integration_runtime_error>> *>(
+             ex))
+            .first;
+    auto &e_ptr =
+        (*static_cast<std::pair<decltype(&fn),
+                                std::unique_ptr<integration_runtime_error>> *>(
+             ex))
+            .second;
+    try {
+      for (auto i = 0; i < n; ++i) {
+        x[i] = (*fn_ptr)(x[i]);
+      }
+    } catch (const std::exception &e) {
+      for (auto i = 0; i < n; ++i) {
+        x[i] = 0.;
+      }
+      e_ptr.reset(new integration_runtime_error(e.what()));
+    } catch (...) {
+      for (auto i = 0; i < n; ++i) {
+        x[i] = 0.;
+      }
+      e_ptr.reset(new integration_runtime_error("Unkown error"));
     }
+
     return;
   };
 
@@ -633,8 +659,12 @@ integrator::operator()(UnaryRealFunction_ fn, const double lower,
   auto iwork = std::vector<int>(cfg_.limit());
   auto work = std::vector<double>(cfg_.lenw());
 
+  auto ex =
+      std::make_pair<decltype(&fn), std::unique_ptr<integration_runtime_error>>(
+          &fn, std::unique_ptr<integration_runtime_error>());
+
   if (std::isfinite(lower) && std::isfinite(upper)) {
-    Rdqags(fn_callback, &fn, const_cast<double *>(&lower),
+    Rdqags(fn_callback, &ex, const_cast<double *>(&lower),
            const_cast<double *>(&upper), &epsabs, &epsrel, &result, &abserr,
            &neval, &ier, &limit, &lenw, &last, iwork.data(), work.data());
   } else {
@@ -650,8 +680,11 @@ integrator::operator()(UnaryRealFunction_ fn, const double lower,
       inf = 2;
       bound = 0.;
     }
-    Rdqagi(fn_callback, &fn, &bound, &inf, &epsabs, &epsrel, &result, &abserr,
+    Rdqagi(fn_callback, &ex, &bound, &inf, &epsabs, &epsrel, &result, &abserr,
            &neval, &ier, &limit, &lenw, &last, iwork.data(), work.data());
+  }
+  if (ex.second.get() != nullptr) {
+    throw *(ex.second);
   }
   auto out = result_type{result, abserr, last, neval};
   if (ier > 0) {
