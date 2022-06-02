@@ -81,6 +81,9 @@ public:
     //! \brief Accessor to the number of neval.
     constexpr auto neval() const noexcept -> decltype(neval_);
   };
+  static_assert(std::is_nothrow_default_constructible<result_type>::value,
+                "`integratecpp::integator::result_type` not nothrow "
+                "default-constructible");
   static_assert(
       std::is_nothrow_copy_constructible<result_type>::value,
       "`integratecpp::integator::result_type` not nothrow copy-constructible");
@@ -121,11 +124,11 @@ public:
     int lenw_{400};
 
   public:
-    // NOTE: default constructor of `config_type` is `noexcept(false)` since
-    //       `std::pow` is `noexcept(false)` as it might throw. however, for the
-    //       values used it should not throw. hence, one could think about
-    //       making this constructor noexcept.
-    config_type() = default;
+    // NOTE: default constructor of `config_type` is technically
+    //       `noexcept(false)` since `std::pow` is `noexcept(false)` as it might
+    //       throw. however, for the values used it should not throw. hence, we
+    //       set it to `noexcept(true)`.
+    config_type() noexcept = default;
 
     /*!
      * \brief  A partial constructor for `limit` and `epsrel`.
@@ -207,6 +210,9 @@ public:
      */
     void assert_validity() const;
   };
+  static_assert(std::is_nothrow_default_constructible<config_type>::value,
+                "`integratecpp::integator::config_type` not nothrow "
+                "default-constructible");
   static_assert(
       std::is_nothrow_copy_constructible<config_type>::value,
       "`integratecpp::integator::config_type` not nothrow copy-constructible");
@@ -357,6 +363,9 @@ public:
   result_type operator()(UnaryRealFunction_ fn, const double lower,
                          const double upper) const;
 };
+static_assert(std::is_nothrow_default_constructible<integrator>::value,
+              "`integratecpp::integator::integrator` not nothrow "
+              "default-constructible");
 static_assert(std::is_nothrow_copy_constructible<integrator>::value,
               "`integratecpp::integator` not nothrow copy-constructible");
 static_assert(std::is_nothrow_copy_assignable<integrator>::value,
@@ -675,9 +684,9 @@ integrator::operator()(UnaryRealFunction_ fn, const double lower,
 // -------------------------------------------------------------------------------------------------
 
 template <typename UnaryRealFunction_>
-integrator::result_type integrate(UnaryRealFunction_ fn, const double lower,
-                                  const double upper,
-                                  const integrator::config_type &config) {
+inline integrator::result_type
+integrate(UnaryRealFunction_ fn, const double lower, const double upper,
+          const integrator::config_type &config) {
   return integrator{config}(fn, lower, upper);
 }
 
