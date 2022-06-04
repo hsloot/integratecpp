@@ -1,6 +1,7 @@
 #pragma once
 //! \file integratecpp.h
 
+#include <algorithm>
 #include <cassert>
 #include <cmath>
 #include <cstring>
@@ -12,6 +13,30 @@
 #include <vector>
 
 #include <R_ext/Applic.h>
+
+#ifndef INTEGRATECPP__MAYBE_UNUSED
+#if __cplusplus >= 201703L
+#define INTEGRATECPP__MAYBE_UNUSED [[maybe_unused]]
+#else
+#define INTEGRATECPP__MAYBE_UNUSED
+#endif
+#endif
+
+#ifndef INTEGRATECPP__NODISCARD
+#if __cplusplus >= 201703L
+#define INTEGRATECPP__NODISCARD [[nodiscard]]
+#else
+#define INTEGRATECPP__NODISCARD
+#endif
+#endif
+
+#ifndef INTEGRATECPP__NORETURN
+#if __cplusplus >= 201703L
+#define INTEGRATECPP__NORETURN [[noreturn]]
+#else
+#define INTEGRATECPP__NORETURN
+#endif
+#endif
 
 // TODO: comment calls to `noexcept(<cond>)` if `<cond>` is known to be `true`
 //       by `static_assert`.
@@ -365,7 +390,7 @@ public:
    *               deemed divergence (or slowly convergent).
    */
   template <typename UnaryRealFunction_>
-  result_type operator()(UnaryRealFunction_ fn, const double lower,
+  result_type operator()(UnaryRealFunction_ &&fn, const double lower,
                          const double upper) const;
 };
 static_assert(std::is_nothrow_default_constructible<integrator>::value,
@@ -419,8 +444,8 @@ static_assert(std::is_standard_layout<integrator>::value,
  */
 template <typename UnaryRealFunction_>
 integrator::result_type
-integrate(UnaryRealFunction_ fn, const double lower, const double upper,
-          const integrator::config_type &config = integrator::config_type{});
+integrate(UnaryRealFunction_ &&fn, const double lower, const double upper,
+          const integrator::config_type config = integrator::config_type{});
 
 /*!
  * \brief  Defines a type of object to be thrown as exception. It reports errors
@@ -600,115 +625,178 @@ public:
 };
 
 // -------------------------------------------------------------------------------------------------
-// Implementations of integratecpp::integrator::operator()(...)
+// Implementations of aux-functions in integratecpp::details
 // -------------------------------------------------------------------------------------------------
 
+namespace details {
+
+template <typename InputIt_, typename OutputIt_, typename UnaryRealFunction_>
+inline void
+guarded_transform(InputIt_ first, InputIt_ last, OutputIt_ d_first,
+                  UnaryRealFunction_ fn,
+                  std::unique_ptr<integration_runtime_error> &e_ptr) {
+  const auto cleanup = [](OutputIt_ first, std::size_t size) {
+    try {
+      std::fill_n(first, size, 0.);
+    } catch (...) {
+    }
+  };
+  try {
+    std::transform(first, last, d_first, fn);
+  } catch (const std::bad_alloc &e) {
+    // memory allocation issues inside std::transform must not be ignored
+    std::throw_with_nested(e);
+  } catch (const std::exception &e) {
+    cleanup(d_first, std::distance(first, last));
+    e_ptr.reset(new integration_runtime_error(e.what()));
+  } catch (...) {
+    cleanup(d_first, std::distance(first, last));
+    e_ptr.reset(new integration_runtime_error("Unknown error"));
+  }
+}
+
 template <typename UnaryRealFunction_>
-inline integrator::result_type
-integrator::operator()(UnaryRealFunction_ fn, const double lower,
-                       const double upper) const {
+inline void integrand_callback(double *x, int n, void *ex) {
 #if __cplusplus >= 201703L
   static_assert(
       std::is_invocable_r<double, UnaryRealFunction_, const double>::value,
       "UnaryRealFunction_ is not invocable with `const double` and return "
       "value `double`");
+#else
+  static_assert(
+      std::is_constructible<
+          std::function<double(const double)>,
+          std::reference_wrapper<
+              typename std::remove_reference<UnaryRealFunction_>::type>>::value,
+      "`UnaryRealFunction_` is not convertible to `std::function<double(const "
+      "double)>`");
 #endif
-  assert_validity();
-  if (std::isnan(lower) || std::isnan(upper))
-    throw invalid_input_error("the input is invalid");
+  using iterator = double *;
+  using const_iterator = const double *;
+  const auto cbegin = [](const double *x) {
+    return static_cast<const_iterator>(&x[0]);
+  };
+  const auto cend = [](const double *x, const int n) {
+    return static_cast<const_iterator>(&x[n]);
+  };
+  const auto begin = [](double *x) { return static_cast<iterator>(&x[0]); };
+  // auto end = [](double *x, const int n) {
+  //   return static_cast<iterator>(&x[n]);
+  // };
+  using ex_t =
+      std::pair<typename std::remove_reference<UnaryRealFunction_>::type,
+                std::unique_ptr<integration_runtime_error>>;
 
-  auto fn_callback = [](double *x, int n, void *ex) {
-    auto fn_ptr =
-        (*static_cast<std::pair<decltype(&fn),
-                                std::unique_ptr<integration_runtime_error>> *>(
-             ex))
-            .first;
-    auto &e_ptr =
-        (*static_cast<std::pair<decltype(&fn),
-                                std::unique_ptr<integration_runtime_error>> *>(
-             ex))
-            .second;
-    try {
-      for (auto i = 0; i < n; ++i) {
-        x[i] = (*fn_ptr)(x[i]);
-      }
-    } catch (const std::exception &e) {
-      for (auto i = 0; i < n; ++i) {
-        x[i] = 0.;
-      }
-      e_ptr.reset(new integration_runtime_error(e.what()));
-    } catch (...) {
-      for (auto i = 0; i < n; ++i) {
-        x[i] = 0.;
-      }
-      e_ptr.reset(new integration_runtime_error("Unkown error"));
-    }
+  const auto fn_integrand = (*static_cast<ex_t *>(ex)).first;
+  auto &e_ptr = (*static_cast<ex_t *>(ex)).second;
+  details::guarded_transform(cbegin(x), cend(x, n), begin(x), fn_integrand,
+                             e_ptr);
+}
 
+} // namespace details
+
+// -------------------------------------------------------------------------------------------------
+// Implementations of integratecpp::integrator::operator()(...)
+// -------------------------------------------------------------------------------------------------
+
+template <typename UnaryRealFunction_>
+inline integrator::result_type
+integrator::operator()(UnaryRealFunction_ &&fn, const double lower,
+                       const double upper) const {
+  const auto assert_validity = [this](const double lower, const double upper) {
+    this->assert_validity();
+    if (std::isnan(lower) || std::isnan(upper))
+      throw invalid_input_error("the input is invalid");
     return;
   };
+  assert_validity(lower, upper);
 
+#if _cplusplus >= 201703L
+  auto [limit, epsabs, epsrel, lenw] = cfg_;
+#else
+  auto limit = cfg_.limit();
   auto epsabs = cfg_.epsabs();
   auto epsrel = cfg_.epsrel();
-  auto limit = cfg_.limit();
   auto lenw = cfg_.lenw();
+#endif
 
   auto result = 0.;
   auto abserr = 0.;
-  auto ier = 0;
   auto neval = 0;
   auto last = 0;
+  auto ier = 0;
   auto iwork = std::vector<int>(cfg_.limit());
   auto work = std::vector<double>(cfg_.lenw());
 
-  auto ex =
-      std::make_pair<decltype(&fn), std::unique_ptr<integration_runtime_error>>(
-          &fn, std::unique_ptr<integration_runtime_error>());
+  auto ex = std::make_pair(std::forward<UnaryRealFunction_>(fn),
+                           std::unique_ptr<integration_runtime_error>());
 
   if (std::isfinite(lower) && std::isfinite(upper)) {
-    Rdqags(fn_callback, &ex, const_cast<double *>(&lower),
-           const_cast<double *>(&upper), &epsabs, &epsrel, &result, &abserr,
-           &neval, &ier, &limit, &lenw, &last, iwork.data(), work.data());
+    Rdqags(details::integrand_callback<
+               typename std::remove_reference<UnaryRealFunction_>::type>,
+           &ex, const_cast<double *>(&lower), const_cast<double *>(&upper),
+           &epsabs, &epsrel, &result, &abserr, &neval, &ier, &limit, &lenw,
+           &last, iwork.data(), work.data());
   } else {
-    auto inf = 0;
-    auto bound = 0.;
-    if (std::isfinite(lower)) {
-      inf = 1;
-      bound = lower;
-    } else if (std::isfinite(upper)) {
-      inf = -1;
-      bound = upper;
-    } else {
-      inf = 2;
-      bound = 0.;
-    }
-    Rdqagi(fn_callback, &ex, &bound, &inf, &epsabs, &epsrel, &result, &abserr,
-           &neval, &ier, &limit, &lenw, &last, iwork.data(), work.data());
-  }
-  if (ex.second.get() != nullptr) {
-    throw *(ex.second);
+    const auto translate_bounds = [](const double lower, const double upper) {
+      auto inf = 0;
+      auto bound = 0.;
+      if (std::isfinite(lower)) {
+        inf = 1;
+        bound = lower;
+      } else if (std::isfinite(upper)) {
+        inf = -1;
+        bound = upper;
+      } else {
+        inf = 2;
+        bound = 0.;
+      }
+      return std::make_pair(bound, inf);
+    };
+#if _cplusplus >= 201703L
+    auto [bound, inf] = translate_bounds(lower, upper);
+#else
+    auto bounds_info = translate_bounds(lower, upper);
+    auto bound = std::move(bounds_info.first);
+    auto inf = std::move(bounds_info.second);
+#endif
+
+    Rdqagi(details::integrand_callback<
+               typename std::remove_reference<UnaryRealFunction_>::type>,
+           &ex, &bound, &inf, &epsabs, &epsrel, &result, &abserr, &neval, &ier,
+           &limit, &lenw, &last, iwork.data(), work.data());
   }
   auto out = result_type{result, abserr, last, neval};
-  if (ier > 0) {
-    // invalid argument errors should be caught during initialization
-    assert(ier < 6);
-    if (ier == 1) {
-      throw max_subdivision_error("maximum number of subdivisions reached",
-                                  out);
+  const auto translate_error =
+      [&out](const int ier, std::unique_ptr<integration_runtime_error> &&e) {
+        if (e.get() != nullptr) {
+          throw *e;
+        }
+        if (ier > 0) {
+          // invalid argument errors should be caught during initialization
+          assert(ier < 6);
+          if (ier == 1) {
+            throw max_subdivision_error(
+                "maximum number of subdivisions reached", out);
 
-    } else if (ier == 2) {
-      throw roundoff_error("roundoff error was detected", out);
-    } else if (ier == 3) {
-      throw bad_integrand_error("extremely bad integrand behaviour", out);
-    } else if (ier == 4) {
-      throw extrapolation_roundoff_error(
-          "roundoff error is detected in the extrapolation table", out);
-    } else if (ier == 5) {
-      throw divergence_error("the integral is probably divergent", out);
-    } else {
-      throw std::logic_error( // # nocov
-          "invalid argument errors should be caught during initialization"); // # nocov
-    }
-  }
+          } else if (ier == 2) {
+            throw roundoff_error("roundoff error was detected", out);
+          } else if (ier == 3) {
+            throw bad_integrand_error("extremely bad integrand behaviour", out);
+          } else if (ier == 4) {
+            throw extrapolation_roundoff_error(
+                "roundoff error is detected in the extrapolation table", out);
+          } else if (ier == 5) {
+            throw divergence_error("the integral is probably divergent", out);
+          } else {
+            throw std::logic_error( // # nocov
+                "invalid argument errors should be caught during "
+                "initialization"); // # nocov
+          }
+        }
+        return;
+      };
+  translate_error(ier, std::move(ex.second));
 
   return out;
 };
@@ -718,10 +806,10 @@ integrator::operator()(UnaryRealFunction_ fn, const double lower,
 // -------------------------------------------------------------------------------------------------
 
 template <typename UnaryRealFunction_>
-inline integrator::result_type
-integrate(UnaryRealFunction_ fn, const double lower, const double upper,
-          const integrator::config_type &config) {
-  return integrator{config}(fn, lower, upper);
+inline integrator::result_type integrate(UnaryRealFunction_ &&fn,
+                                         const double lower, const double upper,
+                                         const integrator::config_type config) {
+  return integrator{config}(std::forward<UnaryRealFunction_>(fn), lower, upper);
 }
 
 // -------------------------------------------------------------------------------------------------
