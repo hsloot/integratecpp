@@ -263,7 +263,7 @@ public:
                 "`integratecpp::integator::config_type` not standard layout");
 
 private:
-  config_type cfg_{};
+  config_type config_{};
 
 public:
   integrator() noexcept(
@@ -272,9 +272,9 @@ public:
   /*!
    * \brief  A full constructor using `integratecpp::integrator::config_type`.
    *
-   * \param cfg  a `integratecpp::integrator::config_type`.
+   * \param config  a `integratecpp::integrator::config_type`.
    */
-  explicit constexpr integrator(const config_type &cfg) noexcept(
+  explicit constexpr integrator(const config_type &config) noexcept(
       std::is_nothrow_copy_constructible<config_type>::value);
 
   /*!
@@ -321,31 +321,31 @@ public:
   //! \brief Accessor for the configuration parameters.
   constexpr auto config() const
       noexcept(std::is_nothrow_copy_assignable<config_type>::value)
-          -> decltype(cfg_);
+          -> decltype(config_);
 
   //! \brief Setter for the configuration parameters.
-  void config(const config_type &cfg) noexcept;
+  void config(const config_type &config) noexcept;
 
   //! \brief Accessor to the maximum number of subdivisions.
-  constexpr auto limit() const noexcept -> decltype(cfg_.limit());
+  constexpr auto limit() const noexcept -> decltype(config_.limit());
 
   //! \brief Setter to the maximum number of subdivisions.
   void limit(const int limit) noexcept;
 
   //! \brief Accessor to the requested relative accuracy.
-  constexpr auto epsrel() const noexcept -> decltype(cfg_.epsrel());
+  constexpr auto epsrel() const noexcept -> decltype(config_.epsrel());
 
   //! \brief Setter to the requested relative accuracy.
   void epsrel(const double epsrel) noexcept;
 
   //! \brief Accessor to the requested absolute accuracy.
-  constexpr auto epsabs() const noexcept -> decltype(cfg_.epsabs());
+  constexpr auto epsabs() const noexcept -> decltype(config_.epsabs());
 
   //! \brief Setter to the requested absolute accuracy.
   void epsabs(const double epsabs) noexcept;
 
   //! \brief Accessor to the dimensioning parameter of the working array.
-  constexpr auto lenw() const noexcept -> decltype(cfg_.lenw());
+  constexpr auto lenw() const noexcept -> decltype(config_.lenw());
 
   //! \brief Setter to the dimensioning parameter of the working array.
   void lenw(const int lenw) noexcept;
@@ -633,7 +633,7 @@ namespace details {
 template <typename InputIt_, typename OutputIt_, typename UnaryRealFunction_>
 inline void
 guarded_transform(InputIt_ first, InputIt_ last, OutputIt_ d_first,
-                  UnaryRealFunction_ fn,
+                  UnaryRealFunction_ &&fn,
                   std::unique_ptr<integration_runtime_error> &e_ptr) {
   const auto cleanup = [](OutputIt_ first, std::size_t size) {
     try {
@@ -642,7 +642,7 @@ guarded_transform(InputIt_ first, InputIt_ last, OutputIt_ d_first,
     }
   };
   try {
-    std::transform(first, last, d_first, fn);
+    std::transform(first, last, d_first, std::forward<UnaryRealFunction_>(fn));
   } catch (const std::bad_alloc &e) {
     // memory allocation issues inside std::transform must not be ignored
     std::throw_with_nested(e);
@@ -711,22 +711,18 @@ integrator::operator()(UnaryRealFunction_ &&fn, const double lower,
   };
   assert_validity(lower, upper);
 
-#if _cplusplus >= 201703L
-  auto [limit, epsabs, epsrel, lenw] = cfg_;
-#else
-  auto limit = cfg_.limit();
-  auto epsabs = cfg_.epsabs();
-  auto epsrel = cfg_.epsrel();
-  auto lenw = cfg_.lenw();
-#endif
+  auto limit = config_.limit();
+  auto epsabs = config_.epsabs();
+  auto epsrel = config_.epsrel();
+  auto lenw = config_.lenw();
 
   auto result = 0.;
   auto abserr = 0.;
   auto neval = 0;
   auto last = 0;
   auto ier = 0;
-  auto iwork = std::vector<int>(cfg_.limit());
-  auto work = std::vector<double>(cfg_.lenw());
+  auto iwork = std::vector<int>(config_.limit());
+  auto work = std::vector<double>(config_.lenw());
 
   auto ex = std::make_pair(std::forward<UnaryRealFunction_>(fn),
                            std::unique_ptr<integration_runtime_error>());
@@ -739,8 +735,8 @@ integrator::operator()(UnaryRealFunction_ &&fn, const double lower,
            &last, iwork.data(), work.data());
   } else {
     const auto translate_bounds = [](const double lower, const double upper) {
-      auto inf = 0;
-      auto bound = 0.;
+      int inf;
+      double bound;
       if (std::isfinite(lower)) {
         inf = 1;
         bound = lower;
@@ -913,57 +909,61 @@ inline void integrator::config_type::assert_validity() const {
 // Implementations of integratecpp::integrator
 // -------------------------------------------------------------------------------------------------
 
-inline constexpr integrator::integrator(const config_type &cfg) noexcept
-    : cfg_{cfg} {}
+inline constexpr integrator::integrator(const config_type &config) noexcept
+    : config_{config} {}
 inline constexpr integrator::integrator(const int limit,
                                         const double epsrel) noexcept
-    : cfg_{limit, epsrel} {}
+    : config_{limit, epsrel} {}
 inline constexpr integrator::integrator(const int limit, const double epsrel,
                                         const double epsabs) noexcept
-    : cfg_{limit, epsrel, epsabs} {}
+    : config_{limit, epsrel, epsabs} {}
 inline constexpr integrator::integrator(const int limit, const double epsrel,
                                         const double epsabs,
                                         const int lenw) noexcept
-    : cfg_{limit, epsrel, epsabs, lenw} {}
+    : config_{limit, epsrel, epsabs, lenw} {}
 
-inline constexpr auto integrator::config() const noexcept -> decltype(cfg_) {
-  return cfg_;
+inline constexpr auto integrator::config() const noexcept -> decltype(config_) {
+  return config_;
 }
-inline void integrator::config(const config_type &cfg) noexcept { cfg_ = cfg; }
+inline void integrator::config(const config_type &config) noexcept {
+  config_ = config;
+}
 
 inline constexpr auto integrator::limit() const noexcept
-    -> decltype(cfg_.limit()) {
-  return cfg_.limit();
+    -> decltype(config_.limit()) {
+  return config_.limit();
 }
-inline void integrator::limit(const int limit) noexcept { cfg_.limit(limit); }
+inline void integrator::limit(const int limit) noexcept {
+  config_.limit(limit);
+}
 
 inline constexpr auto integrator::epsrel() const noexcept
-    -> decltype(cfg_.epsrel()) {
-  return cfg_.epsrel();
+    -> decltype(config_.epsrel()) {
+  return config_.epsrel();
 }
 inline void integrator::epsrel(const double epsrel) noexcept {
-  cfg_.epsrel(epsrel);
+  config_.epsrel(epsrel);
 }
 
 inline constexpr auto integrator::epsabs() const noexcept
-    -> decltype(cfg_.epsabs()) {
-  return cfg_.epsabs();
+    -> decltype(config_.epsabs()) {
+  return config_.epsabs();
 }
 inline void integrator::epsabs(const double epsabs) noexcept {
-  cfg_.epsabs(epsabs);
+  config_.epsabs(epsabs);
 }
 
 inline constexpr auto integrator::lenw() const noexcept
-    -> decltype(cfg_.lenw()) {
-  return cfg_.lenw();
+    -> decltype(config_.lenw()) {
+  return config_.lenw();
 }
 inline void integrator::lenw(const int lenw) noexcept {
-  return cfg_.lenw(lenw);
+  return config_.lenw(lenw);
 }
 
-inline bool integrator::is_valid() const noexcept { return cfg_.is_valid(); }
+inline bool integrator::is_valid() const noexcept { return config_.is_valid(); }
 
-inline void integrator::assert_validity() const { cfg_.assert_validity(); }
+inline void integrator::assert_validity() const { config_.assert_validity(); }
 
 // -------------------------------------------------------------------------------------------------
 // ## Implementations of exception classes
