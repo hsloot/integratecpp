@@ -18,10 +18,6 @@
 // TODO: comment calls to `noexcept(<cond>)` if `<cond>` is known to be `true`
 //       by `static_assert`.
 
-#if __cplusplus >= 201703L
-static_assert(false, "running with CXX_STD >= C++17");
-#endif
-
 namespace integratecpp {
 
 /*!
