@@ -20,7 +20,8 @@ setValidity("Integrator", function(object) {
             Rcpp__integrator__assert_validity(object@pointer),
             error = function(cond) {
                 return(as.character(cond))
-            }))
+            }
+        ))
     }
 
     invisible(TRUE)
@@ -32,8 +33,8 @@ setValidity("Integrator", function(object) {
 #' @include RcppExports.R
 #' @importFrom methods setMethod validObject
 #' @keywords internal
-setMethod("initialize", "Integrator", function(.Object, limit = 100, epsrel = .Machine$double.eps^0.25, epsabs = epsrel, lenw = 4 * limit) { # nolint
-    .Object@pointer <- Rcpp__integrator__new(limit, epsrel, epsabs, lenw)
+setMethod("initialize", "Integrator", function(.Object, max_subdivisions = 100, relative_accuracy = .Machine$double.eps^0.25, absolute_accuracy = relative_accuracy, work_size = 4 * max_subdivisions) { # nolint
+    .Object@pointer <- Rcpp__integrator__new(max_subdivisions, relative_accuracy, absolute_accuracy, work_size)
     validObject(.Object)
 
     .Object
@@ -41,7 +42,7 @@ setMethod("initialize", "Integrator", function(.Object, limit = 100, epsrel = .M
 
 #' @describeIn Integrator-class
 #'   Either access configuration parameters
-#'   `limit`, `epsrel`, `epsabs`, or `lenw` or get the
+#'   `max_subdivisions`, `relative_accuracy`, `absolute_accuracy`, or `work_size` or get the
 #'   integration routine with signature
 #'   `function(f, lower, upper, ..., stop.on.error = TRUE)`.
 #'
@@ -50,7 +51,7 @@ setMethod("initialize", "Integrator", function(.Object, limit = 100, epsrel = .M
 #'
 #' @keywords internal
 setMethod("$", "Integrator", function(x, name) {
-    if (name %in% c("limit", "epsrel", "epsabs", "lenw")) {
+    if (name %in% c("max_subdivisions", "relative_accuracy", "absolute_accuracy", "work_size")) {
         get(paste("Rcpp__integrator__get", name, sep = "_"))(x@pointer)
     } else if (name == "integrate") {
         function(f, lower, upper, ..., stop_on_error = TRUE) { # nolint
@@ -74,14 +75,14 @@ setMethod("$", "Integrator", function(x, name) {
 
 #' @describeIn Integrator-class
 #'   Set any of the configuration parameters
-#'   `limit`, `epsrel`, `epsabs`, or `lenw`.
+#'   `max_subdivisions`, `relative_accuracy`, `absolute_accuracy`, or `work_size`.
 #'
 #' @include RcppExports.R
 #' @importFrom methods setMethod validObject
 #'
 #' @keywords internal
 setMethod("$<-", "Integrator", function(x, name, value) {
-    if (name %in% c("limit", "epsrel", "epsabs", "lenw")) {
+    if (name %in% c("max_subdivisions", "relative_accuracy", "absolute_accuracy", "work_size")) {
         get(paste("Rcpp__integrator__set", name, sep = "_"))(x@pointer, value)
         validObject(x)
 
@@ -105,10 +106,10 @@ setMethod("show", "Integrator", function(object) {
     cat(sprintf("An object of class %s\n", classLabel(class(object))))
     if (isTRUE(validObject(object, test = TRUE))) {
         cat(sprintf("%s\n", format(object@pointer)))
-        cat(sprintf("- limit: %s\n", format(object$limit)))
-        cat(sprintf("- epsrel: %s\n", format(object$epsrel, scientific = TRUE)))
-        cat(sprintf("- epsabs: %s\n", format(object$epsabs, scientific = TRUE)))
-        cat(sprintf("- lenw: %s\n", format(object$lenw)))
+        cat(sprintf("- max_subdivisions: %s\n", format(object$max_subdivisions)))
+        cat(sprintf("- relative_accuracy: %s\n", format(object$relative_accuracy, scientific = TRUE)))
+        cat(sprintf("- absolute_accuracy: %s\n", format(object$absolute_accuracy, scientific = TRUE)))
+        cat(sprintf("- work_size: %s\n", format(object$work_size)))
     } else {
         cat("\t (invalid or not initialized)\n")
     }

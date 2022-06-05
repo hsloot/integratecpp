@@ -92,111 +92,111 @@ BEGIN_RCPP
 END_RCPP
 }
 // Rcpp__integrate
-Rcpp::List Rcpp__integrate(Rcpp::Function fn, const double lower, const double upper, const int subdivisions, const double epsrel, const double epsabs, const int lenw);
-RcppExport SEXP _integratecpp_Rcpp__integrate(SEXP fnSEXP, SEXP lowerSEXP, SEXP upperSEXP, SEXP subdivisionsSEXP, SEXP epsrelSEXP, SEXP epsabsSEXP, SEXP lenwSEXP) {
+Rcpp::List Rcpp__integrate(Rcpp::Function fn, const double lower, const double upper, const int max_subdivisions, const double relative_accuracy, const double absolute_accuracy, const int work_size);
+RcppExport SEXP _integratecpp_Rcpp__integrate(SEXP fnSEXP, SEXP lowerSEXP, SEXP upperSEXP, SEXP max_subdivisionsSEXP, SEXP relative_accuracySEXP, SEXP absolute_accuracySEXP, SEXP work_sizeSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::traits::input_parameter< Rcpp::Function >::type fn(fnSEXP);
     Rcpp::traits::input_parameter< const double >::type lower(lowerSEXP);
     Rcpp::traits::input_parameter< const double >::type upper(upperSEXP);
-    Rcpp::traits::input_parameter< const int >::type subdivisions(subdivisionsSEXP);
-    Rcpp::traits::input_parameter< const double >::type epsrel(epsrelSEXP);
-    Rcpp::traits::input_parameter< const double >::type epsabs(epsabsSEXP);
-    Rcpp::traits::input_parameter< const int >::type lenw(lenwSEXP);
-    rcpp_result_gen = Rcpp::wrap(Rcpp__integrate(fn, lower, upper, subdivisions, epsrel, epsabs, lenw));
+    Rcpp::traits::input_parameter< const int >::type max_subdivisions(max_subdivisionsSEXP);
+    Rcpp::traits::input_parameter< const double >::type relative_accuracy(relative_accuracySEXP);
+    Rcpp::traits::input_parameter< const double >::type absolute_accuracy(absolute_accuracySEXP);
+    Rcpp::traits::input_parameter< const int >::type work_size(work_sizeSEXP);
+    rcpp_result_gen = Rcpp::wrap(Rcpp__integrate(fn, lower, upper, max_subdivisions, relative_accuracy, absolute_accuracy, work_size));
     return rcpp_result_gen;
 END_RCPP
 }
 // Rcpp__integrator__new
-Rcpp::XPtr<integratecpp::integrator> Rcpp__integrator__new(const int limit, const double epsrel, const double epsabs, const int lenw);
-RcppExport SEXP _integratecpp_Rcpp__integrator__new(SEXP limitSEXP, SEXP epsrelSEXP, SEXP epsabsSEXP, SEXP lenwSEXP) {
+Rcpp::XPtr<integratecpp::integrator> Rcpp__integrator__new(const int max_subdivisions, const double relative_accuracy, const double absolute_accuracy, const int work_size);
+RcppExport SEXP _integratecpp_Rcpp__integrator__new(SEXP max_subdivisionsSEXP, SEXP relative_accuracySEXP, SEXP absolute_accuracySEXP, SEXP work_sizeSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
-    Rcpp::traits::input_parameter< const int >::type limit(limitSEXP);
-    Rcpp::traits::input_parameter< const double >::type epsrel(epsrelSEXP);
-    Rcpp::traits::input_parameter< const double >::type epsabs(epsabsSEXP);
-    Rcpp::traits::input_parameter< const int >::type lenw(lenwSEXP);
-    rcpp_result_gen = Rcpp::wrap(Rcpp__integrator__new(limit, epsrel, epsabs, lenw));
+    Rcpp::traits::input_parameter< const int >::type max_subdivisions(max_subdivisionsSEXP);
+    Rcpp::traits::input_parameter< const double >::type relative_accuracy(relative_accuracySEXP);
+    Rcpp::traits::input_parameter< const double >::type absolute_accuracy(absolute_accuracySEXP);
+    Rcpp::traits::input_parameter< const int >::type work_size(work_sizeSEXP);
+    rcpp_result_gen = Rcpp::wrap(Rcpp__integrator__new(max_subdivisions, relative_accuracy, absolute_accuracy, work_size));
     return rcpp_result_gen;
 END_RCPP
 }
-// Rcpp__integrator__get_limit
-int Rcpp__integrator__get_limit(Rcpp::XPtr<integratecpp::integrator> ptr);
-RcppExport SEXP _integratecpp_Rcpp__integrator__get_limit(SEXP ptrSEXP) {
+// Rcpp__integrator__get_max_subdivisions
+int Rcpp__integrator__get_max_subdivisions(Rcpp::XPtr<integratecpp::integrator> ptr);
+RcppExport SEXP _integratecpp_Rcpp__integrator__get_max_subdivisions(SEXP ptrSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::traits::input_parameter< Rcpp::XPtr<integratecpp::integrator> >::type ptr(ptrSEXP);
-    rcpp_result_gen = Rcpp::wrap(Rcpp__integrator__get_limit(ptr));
+    rcpp_result_gen = Rcpp::wrap(Rcpp__integrator__get_max_subdivisions(ptr));
     return rcpp_result_gen;
 END_RCPP
 }
-// Rcpp__integrator__set_limit
-void Rcpp__integrator__set_limit(Rcpp::XPtr<integratecpp::integrator> ptr, const int limit);
-RcppExport SEXP _integratecpp_Rcpp__integrator__set_limit(SEXP ptrSEXP, SEXP limitSEXP) {
+// Rcpp__integrator__set_max_subdivisions
+void Rcpp__integrator__set_max_subdivisions(Rcpp::XPtr<integratecpp::integrator> ptr, const int max_subdivisions);
+RcppExport SEXP _integratecpp_Rcpp__integrator__set_max_subdivisions(SEXP ptrSEXP, SEXP max_subdivisionsSEXP) {
 BEGIN_RCPP
     Rcpp::traits::input_parameter< Rcpp::XPtr<integratecpp::integrator> >::type ptr(ptrSEXP);
-    Rcpp::traits::input_parameter< const int >::type limit(limitSEXP);
-    Rcpp__integrator__set_limit(ptr, limit);
+    Rcpp::traits::input_parameter< const int >::type max_subdivisions(max_subdivisionsSEXP);
+    Rcpp__integrator__set_max_subdivisions(ptr, max_subdivisions);
     return R_NilValue;
 END_RCPP
 }
-// Rcpp__integrator__get_epsrel
-double Rcpp__integrator__get_epsrel(Rcpp::XPtr<integratecpp::integrator> ptr);
-RcppExport SEXP _integratecpp_Rcpp__integrator__get_epsrel(SEXP ptrSEXP) {
+// Rcpp__integrator__get_relative_accuracy
+double Rcpp__integrator__get_relative_accuracy(Rcpp::XPtr<integratecpp::integrator> ptr);
+RcppExport SEXP _integratecpp_Rcpp__integrator__get_relative_accuracy(SEXP ptrSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::traits::input_parameter< Rcpp::XPtr<integratecpp::integrator> >::type ptr(ptrSEXP);
-    rcpp_result_gen = Rcpp::wrap(Rcpp__integrator__get_epsrel(ptr));
+    rcpp_result_gen = Rcpp::wrap(Rcpp__integrator__get_relative_accuracy(ptr));
     return rcpp_result_gen;
 END_RCPP
 }
-// Rcpp__integrator__set_epsrel
-void Rcpp__integrator__set_epsrel(Rcpp::XPtr<integratecpp::integrator> ptr, const double epsrel);
-RcppExport SEXP _integratecpp_Rcpp__integrator__set_epsrel(SEXP ptrSEXP, SEXP epsrelSEXP) {
+// Rcpp__integrator__set_relative_accuracy
+void Rcpp__integrator__set_relative_accuracy(Rcpp::XPtr<integratecpp::integrator> ptr, const double relative_accuracy);
+RcppExport SEXP _integratecpp_Rcpp__integrator__set_relative_accuracy(SEXP ptrSEXP, SEXP relative_accuracySEXP) {
 BEGIN_RCPP
     Rcpp::traits::input_parameter< Rcpp::XPtr<integratecpp::integrator> >::type ptr(ptrSEXP);
-    Rcpp::traits::input_parameter< const double >::type epsrel(epsrelSEXP);
-    Rcpp__integrator__set_epsrel(ptr, epsrel);
+    Rcpp::traits::input_parameter< const double >::type relative_accuracy(relative_accuracySEXP);
+    Rcpp__integrator__set_relative_accuracy(ptr, relative_accuracy);
     return R_NilValue;
 END_RCPP
 }
-// Rcpp__integrator__get_epsabs
-double Rcpp__integrator__get_epsabs(Rcpp::XPtr<integratecpp::integrator> ptr);
-RcppExport SEXP _integratecpp_Rcpp__integrator__get_epsabs(SEXP ptrSEXP) {
+// Rcpp__integrator__get_absolute_accuracy
+double Rcpp__integrator__get_absolute_accuracy(Rcpp::XPtr<integratecpp::integrator> ptr);
+RcppExport SEXP _integratecpp_Rcpp__integrator__get_absolute_accuracy(SEXP ptrSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::traits::input_parameter< Rcpp::XPtr<integratecpp::integrator> >::type ptr(ptrSEXP);
-    rcpp_result_gen = Rcpp::wrap(Rcpp__integrator__get_epsabs(ptr));
+    rcpp_result_gen = Rcpp::wrap(Rcpp__integrator__get_absolute_accuracy(ptr));
     return rcpp_result_gen;
 END_RCPP
 }
-// Rcpp__integrator__set_epsabs
-void Rcpp__integrator__set_epsabs(Rcpp::XPtr<integratecpp::integrator> ptr, const double epsabs);
-RcppExport SEXP _integratecpp_Rcpp__integrator__set_epsabs(SEXP ptrSEXP, SEXP epsabsSEXP) {
+// Rcpp__integrator__set_absolute_accuracy
+void Rcpp__integrator__set_absolute_accuracy(Rcpp::XPtr<integratecpp::integrator> ptr, const double absolute_accuracy);
+RcppExport SEXP _integratecpp_Rcpp__integrator__set_absolute_accuracy(SEXP ptrSEXP, SEXP absolute_accuracySEXP) {
 BEGIN_RCPP
     Rcpp::traits::input_parameter< Rcpp::XPtr<integratecpp::integrator> >::type ptr(ptrSEXP);
-    Rcpp::traits::input_parameter< const double >::type epsabs(epsabsSEXP);
-    Rcpp__integrator__set_epsabs(ptr, epsabs);
+    Rcpp::traits::input_parameter< const double >::type absolute_accuracy(absolute_accuracySEXP);
+    Rcpp__integrator__set_absolute_accuracy(ptr, absolute_accuracy);
     return R_NilValue;
 END_RCPP
 }
-// Rcpp__integrator__get_lenw
-int Rcpp__integrator__get_lenw(Rcpp::XPtr<integratecpp::integrator> ptr);
-RcppExport SEXP _integratecpp_Rcpp__integrator__get_lenw(SEXP ptrSEXP) {
+// Rcpp__integrator__get_work_size
+int Rcpp__integrator__get_work_size(Rcpp::XPtr<integratecpp::integrator> ptr);
+RcppExport SEXP _integratecpp_Rcpp__integrator__get_work_size(SEXP ptrSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::traits::input_parameter< Rcpp::XPtr<integratecpp::integrator> >::type ptr(ptrSEXP);
-    rcpp_result_gen = Rcpp::wrap(Rcpp__integrator__get_lenw(ptr));
+    rcpp_result_gen = Rcpp::wrap(Rcpp__integrator__get_work_size(ptr));
     return rcpp_result_gen;
 END_RCPP
 }
-// Rcpp__integrator__set_lenw
-void Rcpp__integrator__set_lenw(Rcpp::XPtr<integratecpp::integrator> ptr, const int lenw);
-RcppExport SEXP _integratecpp_Rcpp__integrator__set_lenw(SEXP ptrSEXP, SEXP lenwSEXP) {
+// Rcpp__integrator__set_work_size
+void Rcpp__integrator__set_work_size(Rcpp::XPtr<integratecpp::integrator> ptr, const int work_size);
+RcppExport SEXP _integratecpp_Rcpp__integrator__set_work_size(SEXP ptrSEXP, SEXP work_sizeSEXP) {
 BEGIN_RCPP
     Rcpp::traits::input_parameter< Rcpp::XPtr<integratecpp::integrator> >::type ptr(ptrSEXP);
-    Rcpp::traits::input_parameter< const int >::type lenw(lenwSEXP);
-    Rcpp__integrator__set_lenw(ptr, lenw);
+    Rcpp::traits::input_parameter< const int >::type work_size(work_sizeSEXP);
+    Rcpp__integrator__set_work_size(ptr, work_size);
     return R_NilValue;
 END_RCPP
 }
@@ -244,14 +244,14 @@ static const R_CallMethodDef CallEntries[] = {
     {"_integratecpp_Rcpp__invalid_input_error__catch_what", (DL_FUNC) &_integratecpp_Rcpp__invalid_input_error__catch_what, 1},
     {"_integratecpp_Rcpp__integrate", (DL_FUNC) &_integratecpp_Rcpp__integrate, 7},
     {"_integratecpp_Rcpp__integrator__new", (DL_FUNC) &_integratecpp_Rcpp__integrator__new, 4},
-    {"_integratecpp_Rcpp__integrator__get_limit", (DL_FUNC) &_integratecpp_Rcpp__integrator__get_limit, 1},
-    {"_integratecpp_Rcpp__integrator__set_limit", (DL_FUNC) &_integratecpp_Rcpp__integrator__set_limit, 2},
-    {"_integratecpp_Rcpp__integrator__get_epsrel", (DL_FUNC) &_integratecpp_Rcpp__integrator__get_epsrel, 1},
-    {"_integratecpp_Rcpp__integrator__set_epsrel", (DL_FUNC) &_integratecpp_Rcpp__integrator__set_epsrel, 2},
-    {"_integratecpp_Rcpp__integrator__get_epsabs", (DL_FUNC) &_integratecpp_Rcpp__integrator__get_epsabs, 1},
-    {"_integratecpp_Rcpp__integrator__set_epsabs", (DL_FUNC) &_integratecpp_Rcpp__integrator__set_epsabs, 2},
-    {"_integratecpp_Rcpp__integrator__get_lenw", (DL_FUNC) &_integratecpp_Rcpp__integrator__get_lenw, 1},
-    {"_integratecpp_Rcpp__integrator__set_lenw", (DL_FUNC) &_integratecpp_Rcpp__integrator__set_lenw, 2},
+    {"_integratecpp_Rcpp__integrator__get_max_subdivisions", (DL_FUNC) &_integratecpp_Rcpp__integrator__get_max_subdivisions, 1},
+    {"_integratecpp_Rcpp__integrator__set_max_subdivisions", (DL_FUNC) &_integratecpp_Rcpp__integrator__set_max_subdivisions, 2},
+    {"_integratecpp_Rcpp__integrator__get_relative_accuracy", (DL_FUNC) &_integratecpp_Rcpp__integrator__get_relative_accuracy, 1},
+    {"_integratecpp_Rcpp__integrator__set_relative_accuracy", (DL_FUNC) &_integratecpp_Rcpp__integrator__set_relative_accuracy, 2},
+    {"_integratecpp_Rcpp__integrator__get_absolute_accuracy", (DL_FUNC) &_integratecpp_Rcpp__integrator__get_absolute_accuracy, 1},
+    {"_integratecpp_Rcpp__integrator__set_absolute_accuracy", (DL_FUNC) &_integratecpp_Rcpp__integrator__set_absolute_accuracy, 2},
+    {"_integratecpp_Rcpp__integrator__get_work_size", (DL_FUNC) &_integratecpp_Rcpp__integrator__get_work_size, 1},
+    {"_integratecpp_Rcpp__integrator__set_work_size", (DL_FUNC) &_integratecpp_Rcpp__integrator__set_work_size, 2},
     {"_integratecpp_Rcpp__integrator__is_valid", (DL_FUNC) &_integratecpp_Rcpp__integrator__is_valid, 1},
     {"_integratecpp_Rcpp__integrator__assert_validity", (DL_FUNC) &_integratecpp_Rcpp__integrator__assert_validity, 1},
     {"_integratecpp_Rcpp__integrator__integrate", (DL_FUNC) &_integratecpp_Rcpp__integrator__integrate, 4},

@@ -13,10 +13,10 @@ integrate(
   lower,
   upper,
   ...,
-  limit = 100L,
-  epsrel = .Machine$double.eps^0.25,
-  epsabs = epsrel,
-  lenw = 4 * limit,
+  max_subdivisions = 100L,
+  relative_accuracy = .Machine$double.eps^0.25,
+  absolute_accuracy = relative_accuracy,
+  work_size = 4 * max_subdivisions,
   stop.on.error = TRUE
 )
 }
@@ -29,11 +29,11 @@ integrate(
 
 \item{...}{additional arguments to be passed to \code{f}.}
 
-\item{limit}{the maximum number of subintervals.}
+\item{max_subdivisions}{the maximum number of subintervals.}
 
-\item{epsrel}{relative accuracy requested.}
+\item{relative_accuracy}{relative accuracy requested.}
 
-\item{epsabs}{absolute accuracy requested.}
+\item{absolute_accuracy}{absolute accuracy requested.}
 
 \item{stop.on.error}{logical. If true (the default) an error stops the
     function.  If false some errors will give a result with a warning in

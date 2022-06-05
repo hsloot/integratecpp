@@ -11,10 +11,10 @@
 \usage{
 \S4method{initialize}{Integrator}(
   .Object,
-  limit = 100,
-  epsrel = .Machine$double.eps^0.25,
-  epsabs = epsrel,
-  lenw = 4 * limit
+  max_subdivisions = 100,
+  relative_accuracy = .Machine$double.eps^0.25,
+  absolute_accuracy = relative_accuracy,
+  work_size = 4 * max_subdivisions
 )
 
 \S4method{$}{Integrator}(x, name)
@@ -29,12 +29,12 @@ A class for numerical integration
 \item \code{initialize,Integrator-method}: Construct an object of class \code{Integrator}.
 
 \item \code{$,Integrator-method}: Either access configuration parameters
-\code{limit}, \code{epsrel}, \code{epsabs}, or \code{lenw} or get the
+\code{max_subdivisions}, \code{relative_accuracy}, \code{absolute_accuracy}, or \code{work_size} or get the
 integration routine with signature
 \verb{function(f, lower, upper, ..., stop.on.error = TRUE)}.
 
 \item \code{$<-,Integrator-method}: Set any of the configuration parameters
-\code{limit}, \code{epsrel}, \code{epsabs}, or \code{lenw}.
+\code{max_subdivisions}, \code{relative_accuracy}, \code{absolute_accuracy}, or \code{work_size}.
 }}
 
 \section{Slots}{

@@ -8,52 +8,55 @@
 #include "integratecpp.h"
 
 // [[Rcpp::export(rng=false)]]
-Rcpp::XPtr<integratecpp::integrator> Rcpp__integrator__new(const int limit,
-                                                           const double epsrel,
-                                                           const double epsabs,
-                                                           const int lenw) {
-  return Rcpp::XPtr<integratecpp::integrator>(
-      new integratecpp::integrator{limit, epsrel, epsabs, lenw});
+Rcpp::XPtr<integratecpp::integrator>
+Rcpp__integrator__new(const int max_subdivisions,
+                      const double relative_accuracy,
+                      const double absolute_accuracy, const int work_size) {
+  return Rcpp::XPtr<integratecpp::integrator>(new integratecpp::integrator{
+      max_subdivisions, relative_accuracy, absolute_accuracy, work_size});
 }
 
 // [[Rcpp::export(rng=false)]]
-int Rcpp__integrator__get_limit(Rcpp::XPtr<integratecpp::integrator> ptr) {
-  return ptr->limit();
+int Rcpp__integrator__get_max_subdivisions(
+    Rcpp::XPtr<integratecpp::integrator> ptr) {
+  return ptr->max_subdivisions();
 }
 // [[Rcpp::export(rng=false)]]
-void Rcpp__integrator__set_limit(Rcpp::XPtr<integratecpp::integrator> ptr,
-                                 const int limit) {
-  ptr->limit(limit);
-}
-
-// [[Rcpp::export(rng=false)]]
-double Rcpp__integrator__get_epsrel(Rcpp::XPtr<integratecpp::integrator> ptr) {
-  return ptr->epsrel();
-}
-// [[Rcpp::export(rng=false)]]
-void Rcpp__integrator__set_epsrel(Rcpp::XPtr<integratecpp::integrator> ptr,
-                                  const double epsrel) {
-  ptr->epsrel(epsrel);
+void Rcpp__integrator__set_max_subdivisions(
+    Rcpp::XPtr<integratecpp::integrator> ptr, const int max_subdivisions) {
+  ptr->max_subdivisions(max_subdivisions);
 }
 
 // [[Rcpp::export(rng=false)]]
-double Rcpp__integrator__get_epsabs(Rcpp::XPtr<integratecpp::integrator> ptr) {
-  return ptr->epsabs();
+double Rcpp__integrator__get_relative_accuracy(
+    Rcpp::XPtr<integratecpp::integrator> ptr) {
+  return ptr->relative_accuracy();
 }
 // [[Rcpp::export(rng=false)]]
-void Rcpp__integrator__set_epsabs(Rcpp::XPtr<integratecpp::integrator> ptr,
-                                  const double epsabs) {
-  ptr->epsabs(epsabs);
+void Rcpp__integrator__set_relative_accuracy(
+    Rcpp::XPtr<integratecpp::integrator> ptr, const double relative_accuracy) {
+  ptr->relative_accuracy(relative_accuracy);
 }
 
 // [[Rcpp::export(rng=false)]]
-int Rcpp__integrator__get_lenw(Rcpp::XPtr<integratecpp::integrator> ptr) {
-  return ptr->lenw();
+double Rcpp__integrator__get_absolute_accuracy(
+    Rcpp::XPtr<integratecpp::integrator> ptr) {
+  return ptr->absolute_accuracy();
 }
 // [[Rcpp::export(rng=false)]]
-void Rcpp__integrator__set_lenw(Rcpp::XPtr<integratecpp::integrator> ptr,
-                                const int lenw) {
-  ptr->lenw(lenw);
+void Rcpp__integrator__set_absolute_accuracy(
+    Rcpp::XPtr<integratecpp::integrator> ptr, const double absolute_accuracy) {
+  ptr->absolute_accuracy(absolute_accuracy);
+}
+
+// [[Rcpp::export(rng=false)]]
+int Rcpp__integrator__get_work_size(Rcpp::XPtr<integratecpp::integrator> ptr) {
+  return ptr->work_size();
+}
+// [[Rcpp::export(rng=false)]]
+void Rcpp__integrator__set_work_size(Rcpp::XPtr<integratecpp::integrator> ptr,
+                                     const int work_size) {
+  ptr->work_size(work_size);
 }
 
 // [[Rcpp::export(rng=false)]]
@@ -103,7 +106,7 @@ Rcpp::List Rcpp__integrator__integrate(Rcpp::XPtr<integratecpp::integrator> ptr,
     Rcpp::stop("Unexcpected error"); // # nocov
   }
   return Rcpp::List::create(Rcpp::Named("value") = result.value,
-                            Rcpp::Named("abs.error") = result.abserr,
+                            Rcpp::Named("abs.error") = result.absolute_error,
                             Rcpp::Named("subdivisions") = result.subdivisions,
                             Rcpp::Named("message") = message);
 }

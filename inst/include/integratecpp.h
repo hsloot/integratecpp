@@ -47,7 +47,8 @@ public:
    * Contains the following data elements (compare `src/appl/integrate.c` in
    * R-source):
    * - `double value = 0.`:     The approximation of the integral.
-   * - `double abserr = 0.`:    The estimate of the modules of the absolute
+   * - `double absolute_error = 0.`:
+   *                            The estimate of the modules of the absolute
    *                            error, which should be equal or larger than
    *                            `abs(I-result)`.
    * - `int subdivisions = 0`:  The final number of subintervals produced in
@@ -58,7 +59,7 @@ public:
     //! \brief The approximated value.
     double value;
     //! \brief The estimated absolute error.
-    double abserr;
+    double absolute_error;
     //! \brief The final number of subdivisions.
     int subdivisions;
     //! \brief The number of function evaluations.
@@ -68,12 +69,13 @@ public:
     /*!
      * \brief  The full constructor.
      *
-     * \param value         a `double` with the approximated value.
-     * \param abserr        a `double` with the estimated absolute error.
-     * \param subdivisions  an `int` with the final number of subdivisions.
-     * \param neval         an `int` with the number of neval.
+     * \param value           a `double` with the approximated value.
+     * \param absolute_error  a `double` with the estimated absolute error.
+     * \param subdivisions    an `int` with the final number of subdivisions.
+     * \param neval           an `int` with the number of neval.
      */
-    explicit constexpr return_type(const double value, const double abserr,
+    explicit constexpr return_type(const double value,
+                                   const double absolute_error,
                                    const int subdivisions,
                                    const int neval) noexcept;
   };
@@ -103,14 +105,15 @@ public:
    *
    * Contains the following data elements (see `src/appl/integrate.c` in
    * R-source):
-   * - `int limit = 100`:                    The maximum number of subintervals
-   *                                         in the partition of the given
-   *                                         integration interval (lower,
-   *                                         upper).
-   * - `double epsrel = rel.mach.acc.^.25`:  The requested relative accuracy.
-   * - `double epsabs = rel.mach.acc.^.25`:  The requested absolute accuracy.
-   * - `int lenw = 400`:                     A dimensioning parameter for the
-   *                                         working array.
+   * - `int max_subdivisions = 100`:    The maximum number of subintervals in
+   *                                    the partition of the given integration
+   *                                    interval (lower, upper).
+   * - `double relative_accuracy = rel.mach.acc.^.25`:
+   *                                    The requested relative accuracy.
+   * - `double absolute_accuracy = rel.mach.acc.^.25`:
+   *                                    The requested absolute accuracy.
+   * - `int work_size = 400`:           A dimensioning parameter for the working
+   *                                    array.
    *
    * Warning:  Objects of type `integratecpp::integrator::config_type` are
    *           allowed to have states which are invalid for
@@ -119,14 +122,14 @@ public:
    */
   struct config_type {
     //! \brief The maximum number of subdivisions.
-    int limit{100};
+    int max_subdivisions{100};
     //! \brief The requested relative accuracy.
-    double epsrel{std::pow(std::numeric_limits<double>::epsilon(),
-                           0.25)}; // = 0.0001220703125
+    double relative_accuracy{std::pow(std::numeric_limits<double>::epsilon(),
+                                      0.25)}; // = 0.0001220703125
     //! \brief The requested absolute accuracy.
-    double epsabs{epsrel};
+    double absolute_accuracy{relative_accuracy};
     //! \brief The dimensioning parameter of the working array.
-    int lenw{400};
+    int work_size{400};
 
     // NOTE: default constructor of `config_type` is technically
     //       `noexcept(false)` since `std::pow` is `noexcept(false)` as it might
@@ -135,50 +138,62 @@ public:
     config_type() noexcept = default;
 
     /*!
-     * \brief  A partial constructor for `limit` and `epsrel`.
+     * \brief  A partial constructor for `max_subdivisions` and
+     *         `relative_accuracy`.
      *
-     * \param limit   an `int` for the maximum number of subdivisions.
-     * \param epsrel  a `double` for the requested relative accuracy.
+     * \param max_subdivisions   an `int` for the maximum number of
+     *                           subdivisions.
+     * \param relative_accuracy  a `double` for the requested relative accuracy.
      *
-     * \exception     throws integratecpp::invalid_input_error if limit < 1.
+     * \exception     throws integratecpp::invalid_input_error if
+     *                max_subdivisions < 1.
      */
-    explicit constexpr config_type(const int limit,
-                                   const double epsrel) noexcept;
+    explicit constexpr config_type(const int max_subdivisions,
+                                   const double relative_accuracy) noexcept;
 
     /*!
-     * \brief  A partial constructor for `limit`, `epsrel`, and `epsabs`.
+     * \brief  A partial constructor for `max_subdivisions`,
+     *         `relative_accuracy`, and `absolute_accuracy`.
      *
-     * \param limit   an `int` for the maximum number of subdivisions.
-     * \param epsrel  a `double` for the requested relative accuracy.
-     * \param epsabs  a `double` for the requested absolute accuracy.
+     * \param max_subdivisions   an `int` for the maximum number of
+     *                           subdivisions.
+     * \param relative_accuracy  a `double` for the requested relative accuracy.
+     * \param absolute_accuracy  a `double` for the requested absolute accuracy.
      *
-     * \exception     throws integratecpp::invalid_input_error if limit < 1.
-     * \exception     throws integratecpp::invalid_input_error if epsabs <= 0
-     *                and epsrel < max(50*rel.mach.acc.,0.5d-28).
+     * \exception     throws integratecpp::invalid_input_error if
+     *                max_subdivisions < 1.
+     * \exception     throws integratecpp::invalid_input_error if
+     *                absolute_accuracy <= 0 and relative_accuracy <
+     *                max(50*rel.mach.acc.,0.5d-28).
      */
-    explicit constexpr config_type(const int limit, const double epsrel,
-                                   const double epsabs) noexcept;
+    explicit constexpr config_type(const int max_subdivisions,
+                                   const double relative_accuracy,
+                                   const double absolute_accuracy) noexcept;
 
     /*!
      * \brief The full constructor.
      *
-     * \param limit   an `int` for the maximum number of subdivisions.
-     * \param epsrel  a `double` for the requested relative accuracy.
-     * \param epsabs  a `double` for the requested absolute accuracy.
-     * \param lenw    an `int` for the size of the working array.
+     * \param max_subdivisions   an `int` for the maximum number of
+     *                           subdivisions.
+     * \param relative_accuracy  a `double` for the requested relative accuracy.
+     * \param absolute_accuracy  a `double` for the requested absolute accuracy.
+     * \param work_size          an `int` for the size of the working array.
      *
-     * \exception     throws integratecpp::invalid_input_error if limit < 1.
-     * \exception     throws integratecpp::invalid_input_error if epsabs <= 0
-     *                and epsrel < max(50*rel.mach.acc.,0.5d-28).
-     * \exception     throws integratecpp::invalid_input_error if lenw < 4 *
-     *                limit.
+     * \exception     throws integratecpp::invalid_input_error if
+     *                max_subdivisions < 1.
+     * \exception     throws integratecpp::invalid_input_error if
+     *                absolute_accuracy <= 0 and relative_accuracy <
+     *                max(50*rel.mach.acc.,0.5d-28).
+     * \exception     throws integratecpp::invalid_input_error if
+     *                work_size < 4 * max_subdivisions.
      */
-    explicit constexpr config_type(const int limit, const double epsrel,
-                                   const double epsabs,
-                                   const int lenw) noexcept;
+    explicit constexpr config_type(const int max_subdivisions,
+                                   const double relative_accuracy,
+                                   const double absolute_accuracy,
+                                   const int work_size) noexcept;
 
-    //! \brief Indicates whether object is in a valid state for usage in
-    //!        `integratecpp::integrator::operator()()`.
+    //! \brief  Indicates whether object is in a valid state for usage in
+    //!         `integratecpp::integrator::operator()()`.
     bool is_valid() const noexcept;
 
     /*!
@@ -228,45 +243,57 @@ public:
       std::is_nothrow_copy_constructible<config_type>::value);
 
   /*!
-   * \brief  A partial constructor using `limit` and `epsrel`.
+   * \brief  A partial constructor using `max_subdivisions` and
+   *         `relative_accuracy`.
    *
-   * \param limit   an `int` for the maximum number of subdivisions.
-   * \param epsrel  a `double` for the requested relative accuracy.
+   * \param max_subdivisions   an `int` for the maximum number of subdivisions.
+   * \param relative_accuracy  a `double` for the requested relative accuracy.
    *
-   * \exception     throws integratecpp::invalid_input_error if limit < 1.
+   * \exception     throws integratecpp::invalid_input_error if
+   *                max_subdivisions < 1.
    */
-  explicit constexpr integrator(const int limit, const double epsrel) noexcept;
+  explicit constexpr integrator(const int max_subdivisions,
+                                const double relative_accuracy) noexcept;
 
   /*!
-   * \brief  A partial constructor using `limit`, `epsrel`, and `epsabs`.
+   * \brief  A partial constructor using `max_subdivisions`,
+   *         `relative_accuracy`, and `absolute_accuracy`.
    *
-   * \param limit   an `int` for the maximum number of subdivisions.
-   * \param epsrel  a `double` for the requested relative accuracy.
-   * \param epsabs  a `double` for the requested absolute accuracy.
+   * \param max_subdivisions   an `int` for the maximum number of subdivisions.
+   * \param relative_accuracy  a `double` for the requested relative accuracy.
+   * \param absolute_accuracy  a `double` for the requested absolute accuracy.
    *
-   * \exception     throws integratecpp::invalid_input_error if limit < 1.
-   * \exception     throws integratecpp::invalid_input_error if epsabs <= 0
-   *                and epsrel < max(50*rel.mach.acc.,0.5d-28).
+   * \exception     throws integratecpp::invalid_input_error if
+   *                max_subdivisions < 1.
+   * \exception     throws integratecpp::invalid_input_error if
+   *                absolute_accuracy <= 0 and
+   *                relative_accuracy < max(50*rel.mach.acc.,0.5d-28).
    */
-  explicit constexpr integrator(const int limit, const double epsrel,
-                                const double epsabs) noexcept;
+  explicit constexpr integrator(const int max_subdivisions,
+                                const double relative_accuracy,
+                                const double absolute_accuracy) noexcept;
 
   /*!
-   * \brief  A full constructor using `limit`, `epsrel`, `epsabs`, and `lenw`.
+   * \brief  A full constructor using `max_subdivisions`, `relative_accuracy`,
+   *         `absolute_accuracy`, and `work_size`.
    *
-   * \param limit   an `int` for the maximum number of subdivisions.
-   * \param epsrel  a `double` for the requested relative accuracy.
-   * \param epsabs  a `double` for the requested absolute accuracy.
-   * \param lenw    an `int` for the size of the working array.
+   * \param max_subdivisions   an `int` for the maximum number of subdivisions.
+   * \param relative_accuracy  a `double` for the requested relative accuracy.
+   * \param absolute_accuracy  a `double` for the requested absolute accuracy.
+   * \param work_size          an `int` for the size of the working array.
    *
-   * \exception     throws integratecpp::invalid_input_error if limit < 1.
-   * \exception     throws integratecpp::invalid_input_error if epsabs <= 0
-   *                and epsrel < max(50*rel.mach.acc.,0.5d-28).
-   * \exception     throws integratecpp::invalid_input_error if lenw < 4 *
-   *                limit.
+   * \exception     throws integratecpp::invalid_input_error if
+   *                max_subdivisions < 1.
+   * \exception     throws integratecpp::invalid_input_error if
+   *                absolute_accuracy <= 0 and
+   *                relative_accuracy < max(50*rel.mach.acc.,0.5d-28).
+   * \exception     throws integratecpp::invalid_input_error if
+   *                work_size < 4 * max_subdivisions.
    */
-  explicit constexpr integrator(const int limit, const double epsrel,
-                                const double epsabs, const int lenw) noexcept;
+  explicit constexpr integrator(const int max_subdivisions,
+                                const double relative_accuracy,
+                                const double absolute_accuracy,
+                                const int work_size) noexcept;
 
   //! \brief Accessor for the configuration parameters.
   constexpr auto config() const
@@ -277,28 +304,31 @@ public:
   void config(const config_type &config) noexcept;
 
   //! \brief Accessor to the maximum number of subdivisions.
-  constexpr auto limit() const noexcept -> decltype(config_.limit);
+  constexpr auto max_subdivisions() const noexcept
+      -> decltype(config_.max_subdivisions);
 
   //! \brief Setter to the maximum number of subdivisions.
-  void limit(const int limit) noexcept;
+  void max_subdivisions(const int max_subdivisions) noexcept;
 
   //! \brief Accessor to the requested relative accuracy.
-  constexpr auto epsrel() const noexcept -> decltype(config_.epsrel);
+  constexpr auto relative_accuracy() const noexcept
+      -> decltype(config_.relative_accuracy);
 
   //! \brief Setter to the requested relative accuracy.
-  void epsrel(const double epsrel) noexcept;
+  void relative_accuracy(const double relative_accuracy) noexcept;
 
   //! \brief Accessor to the requested absolute accuracy.
-  constexpr auto epsabs() const noexcept -> decltype(config_.epsabs);
+  constexpr auto absolute_accuracy() const noexcept
+      -> decltype(config_.absolute_accuracy);
 
   //! \brief Setter to the requested absolute accuracy.
-  void epsabs(const double epsabs) noexcept;
+  void absolute_accuracy(const double absolute_accuracy) noexcept;
 
   //! \brief Accessor to the dimensioning parameter of the working array.
-  constexpr auto lenw() const noexcept -> decltype(config_.lenw);
+  constexpr auto work_size() const noexcept -> decltype(config_.work_size);
 
   //! \brief Setter to the dimensioning parameter of the working array.
-  void lenw(const int lenw) noexcept;
+  void work_size(const int work_size) noexcept;
 
   //! \brief Indicates whether object is in a valid state for usage in
   //!        `integratecpp::integrator::operator()()`.
@@ -320,7 +350,7 @@ public:
    *
    * \param fn     a `UnaryRealFunction_` functor compatible with a
    *               `const double` signature.
-   *               \param lower  a `double` for the lower bound.
+   * \param lower  a `double` for the lower bound.
    * \param upper  a `double` for the upper bound.
    *
    * \return       a `integratecpp::integrator::return_type` with the
@@ -488,15 +518,15 @@ private:
  *         `integratecpp::integrate()` if the maximum number of subdivisions
  *         allowed has been achieved.
  *
- * One can allow more subdivisions by increasing the value of limit (and
- * taking the according dimension adjustments into account).
- * However, if this yields no improvement it is advised to analyze the integrand
- * in order to determine the integration difficulties.
- * If the position of a local difficulty can be determined (e.g. singularity,
- * discontinuity within the interval) one will probably gain from splitting up
- * the interval at this point and calling the integrator on the subranges.
- * If possible, an appropriate special-purpose integrator should be used, which
- * is designed for handling the type of difficulty involved.
+ * One can allow more subdivisions by increasing the value of `max_subdivisions`
+ * (and taking the according dimension adjustments into account). However, if
+ * this yields no improvement it is advised to analyze the integrand in order to
+ * determine the integration difficulties. If the position of a local difficulty
+ * can be determined (e.g. singularity, discontinuity within the interval) one
+ * will probably gain from splitting up the interval at this point and calling
+ * the integrator on the subranges. If possible, an appropriate special-purpose
+ * integrator should be used, which is designed for handling the type of
+ * difficulty involved.
  */
 class max_subdivision_error : public integration_runtime_error {
 public:
@@ -565,9 +595,10 @@ public:
  *         `integratecpp::integrate()` if the integral is probably divergent, or
  *         slowly convergent. if the input is invalid.
  *
- * This could be because (`epsabs <= 0` and
- * `epsrel < max(50*rel.mach.acc.,0.5d-28)`) or `limit < 1` or `lenw <
- * limit*4`. Result, `abserr`, `neval`, last are set to zero.
+ * This could be because (`absolute_accuracy <= 0` and
+ * `relative_accuracy < max(50*rel.mach.acc.,0.5d-28)`) or
+ * `max_subdivisions < 1` or `work_size < max_subdivisions*4`.
+ * Result, `absolute_error`, `neval`, last are set to zero.
  */
 struct invalid_input_error : public integration_logic_error {
 public:
@@ -664,10 +695,10 @@ integrator::operator()(UnaryRealFunction_ &&fn, const double lower,
 #if __cplusplus >= 201703L
   auto [limit, epsrel, epsabs, lenw] = config_;
 #else
-  auto limit = config_.limit;
-  auto epsrel = config_.epsrel;
-  auto epsabs = config_.epsabs;
-  auto lenw = config_.lenw;
+  auto limit = config_.max_subdivisions;
+  auto epsrel = config_.relative_accuracy;
+  auto epsabs = config_.absolute_accuracy;
+  auto lenw = config_.work_size;
 #endif
 
   auto out = return_type{};
@@ -675,14 +706,14 @@ integrator::operator()(UnaryRealFunction_ &&fn, const double lower,
   auto &[result, abserr, last, neval] = out;
 #else
   auto &result = out.value;
-  auto &abserr = out.abserr;
+  auto &abserr = out.absolute_error;
   auto &last = out.subdivisions;
   auto &neval = out.neval;
 #endif
 
   auto ier = 0;
-  auto iwork = std::vector<int>(config_.limit);
-  auto work = std::vector<double>(config_.lenw);
+  auto iwork = std::vector<int>(limit);
+  auto work = std::vector<double>(lenw);
 
   auto ex = std::make_pair(std::forward<UnaryRealFunction_>(fn),
                            std::unique_ptr<integration_runtime_error>());
@@ -772,38 +803,42 @@ inline integrator::return_type integrate(UnaryRealFunction_ &&fn,
 // Implementations of integratecpp::integrator::return_type
 // -------------------------------------------------------------------------------------------------
 
-inline constexpr integrator::return_type::return_type(const double value,
-                                                      const double abserr,
-                                                      const int subdivisions,
-                                                      const int neval) noexcept
-    : value{value}, abserr{abserr}, subdivisions{subdivisions}, neval{neval} {}
+inline constexpr integrator::return_type::return_type(
+    const double value, const double absolute_error, const int subdivisions,
+    const int neval) noexcept
+    : value{value}, absolute_error{absolute_error},
+      subdivisions{subdivisions}, neval{neval} {}
 
 // -------------------------------------------------------------------------------------------------
 // Implementations of integratecpp::integrator::config_type
 // -------------------------------------------------------------------------------------------------
 
 inline constexpr integrator::config_type::config_type(
-    const int limit, const double epsrel) noexcept
-    : config_type{limit, epsrel, epsrel, 4 * limit} {}
+    const int max_subdivisions, const double relative_accuracy) noexcept
+    : config_type{max_subdivisions, relative_accuracy, relative_accuracy,
+                  4 * max_subdivisions} {}
 
 inline constexpr integrator::config_type::config_type(
-    const int limit, const double epsrel, const double epsabs) noexcept
-    : config_type{limit, epsrel, epsabs, 4 * limit} {}
+    const int max_subdivisions, const double relative_accuracy,
+    const double absolute_accuracy) noexcept
+    : config_type{max_subdivisions, relative_accuracy, absolute_accuracy,
+                  4 * max_subdivisions} {}
 
-inline constexpr integrator::config_type::config_type(const int limit,
-                                                      const double epsrel,
-                                                      const double epsabs,
-                                                      const int lenw) noexcept
-    : limit{limit}, epsrel{epsrel}, epsabs{epsabs}, lenw{lenw} {}
+inline constexpr integrator::config_type::config_type(
+    const int max_subdivisions, const double relative_accuracy,
+    const double absolute_accuracy, const int work_size) noexcept
+    : max_subdivisions{max_subdivisions}, relative_accuracy{relative_accuracy},
+      absolute_accuracy{absolute_accuracy}, work_size{work_size} {}
 
 inline bool integrator::config_type::is_valid() const noexcept {
-  if (limit <= 0) {
+  if (max_subdivisions <= 0) {
     return false;
-  } else if (epsabs <= 0. &&
-             epsrel < std::max(50. * std::numeric_limits<double>::epsilon(),
-                               0.5e-28)) {
+  } else if (absolute_accuracy <= 0. &&
+             relative_accuracy <
+                 std::max(50. * std::numeric_limits<double>::epsilon(),
+                          0.5e-28)) {
     return false;
-  } else if (lenw < 4 * limit) {
+  } else if (work_size < 4 * max_subdivisions) {
     return false;
   } else {
     return true;
@@ -821,16 +856,19 @@ inline void integrator::config_type::assert_validity() const {
 
 inline constexpr integrator::integrator(const config_type &config) noexcept
     : config_{config} {}
-inline constexpr integrator::integrator(const int limit,
-                                        const double epsrel) noexcept
-    : config_{limit, epsrel} {}
-inline constexpr integrator::integrator(const int limit, const double epsrel,
-                                        const double epsabs) noexcept
-    : config_{limit, epsrel, epsabs} {}
-inline constexpr integrator::integrator(const int limit, const double epsrel,
-                                        const double epsabs,
-                                        const int lenw) noexcept
-    : config_{limit, epsrel, epsabs, lenw} {}
+inline constexpr integrator::integrator(const int max_subdivisions,
+                                        const double relative_accuracy) noexcept
+    : config_{max_subdivisions, relative_accuracy} {}
+inline constexpr integrator::integrator(const int max_subdivisions,
+                                        const double relative_accuracy,
+                                        const double absolute_accuracy) noexcept
+    : config_{max_subdivisions, relative_accuracy, absolute_accuracy} {}
+inline constexpr integrator::integrator(const int max_subdivisions,
+                                        const double relative_accuracy,
+                                        const double absolute_accuracy,
+                                        const int work_size) noexcept
+    : config_{max_subdivisions, relative_accuracy, absolute_accuracy,
+              work_size} {}
 
 inline constexpr auto integrator::config() const noexcept -> decltype(config_) {
   return config_;
@@ -839,35 +877,39 @@ inline void integrator::config(const config_type &config) noexcept {
   config_ = config;
 }
 
-inline constexpr auto integrator::limit() const noexcept
-    -> decltype(config_.limit) {
-  return config_.limit;
+inline constexpr auto integrator::max_subdivisions() const noexcept
+    -> decltype(config_.max_subdivisions) {
+  return config_.max_subdivisions;
 }
-inline void integrator::limit(const int limit) noexcept {
-  config_.limit = limit;
-}
-
-inline constexpr auto integrator::epsrel() const noexcept
-    -> decltype(config_.epsrel) {
-  return config_.epsrel;
-}
-inline void integrator::epsrel(const double epsrel) noexcept {
-  config_.epsrel = epsrel;
+inline void integrator::max_subdivisions(const int max_subdivisions) noexcept {
+  config_.max_subdivisions = max_subdivisions;
 }
 
-inline constexpr auto integrator::epsabs() const noexcept
-    -> decltype(config_.epsabs) {
-  return config_.epsabs;
+inline constexpr auto integrator::relative_accuracy() const noexcept
+    -> decltype(config_.relative_accuracy) {
+  return config_.relative_accuracy;
 }
-inline void integrator::epsabs(const double epsabs) noexcept {
-  config_.epsabs = epsabs;
+inline void
+integrator::relative_accuracy(const double relative_accuracy) noexcept {
+  config_.relative_accuracy = relative_accuracy;
 }
 
-inline constexpr auto integrator::lenw() const noexcept
-    -> decltype(config_.lenw) {
-  return config_.lenw;
+inline constexpr auto integrator::absolute_accuracy() const noexcept
+    -> decltype(config_.absolute_accuracy) {
+  return config_.absolute_accuracy;
 }
-inline void integrator::lenw(const int lenw) noexcept { config_.lenw = lenw; }
+inline void
+integrator::absolute_accuracy(const double absolute_accuracy) noexcept {
+  config_.absolute_accuracy = absolute_accuracy;
+}
+
+inline constexpr auto integrator::work_size() const noexcept
+    -> decltype(config_.work_size) {
+  return config_.work_size;
+}
+inline void integrator::work_size(const int work_size) noexcept {
+  config_.work_size = work_size;
+}
 
 inline bool integrator::is_valid() const noexcept { return config_.is_valid(); }
 

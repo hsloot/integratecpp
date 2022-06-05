@@ -4,20 +4,20 @@
 #' A method for numerical integration
 #'
 #' @inherit stats::integrate
-#' @param limit the maximum number of subintervals.
-#' @param epsrel relative accuracy requested.
-#' @param epsabs absolute accuracy requested.
+#' @param max_subdivisions the maximum number of subintervals.
+#' @param relative_accuracy relative accuracy requested.
+#' @param absolute_accuracy absolute accuracy requested.
 #'
 #' @include RcppExports.R
 #' @keywords internal
-integrate <- function(f, lower, upper, ..., limit = 100L,
-                      epsrel = .Machine$double.eps^0.25,
-                      epsabs = epsrel,
-                      lenw = 4 * limit,
+integrate <- function(f, lower, upper, ..., max_subdivisions = 100L,
+                      relative_accuracy = .Machine$double.eps^0.25,
+                      absolute_accuracy = relative_accuracy,
+                      work_size = 4 * max_subdivisions,
                       stop.on.error = TRUE # nolint
 ) {
     out <- Rcpp__integrate(
-        function(x) f(x, ...), lower, upper, limit, epsrel, epsabs, lenw
+        function(x) f(x, ...), lower, upper, max_subdivisions, relative_accuracy, absolute_accuracy, work_size
     )
     out$call <- match.call()
     class(out) <- "integrate"

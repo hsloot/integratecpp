@@ -33,44 +33,44 @@ Rcpp__invalid_input_error__catch_what <- function(what) {
     .Call(`_integratecpp_Rcpp__invalid_input_error__catch_what`, what)
 }
 
-Rcpp__integrate <- function(fn, lower, upper, subdivisions, epsrel, epsabs, lenw) {
-    .Call(`_integratecpp_Rcpp__integrate`, fn, lower, upper, subdivisions, epsrel, epsabs, lenw)
+Rcpp__integrate <- function(fn, lower, upper, max_subdivisions, relative_accuracy, absolute_accuracy, work_size) {
+    .Call(`_integratecpp_Rcpp__integrate`, fn, lower, upper, max_subdivisions, relative_accuracy, absolute_accuracy, work_size)
 }
 
-Rcpp__integrator__new <- function(limit, epsrel, epsabs, lenw) {
-    .Call(`_integratecpp_Rcpp__integrator__new`, limit, epsrel, epsabs, lenw)
+Rcpp__integrator__new <- function(max_subdivisions, relative_accuracy, absolute_accuracy, work_size) {
+    .Call(`_integratecpp_Rcpp__integrator__new`, max_subdivisions, relative_accuracy, absolute_accuracy, work_size)
 }
 
-Rcpp__integrator__get_limit <- function(ptr) {
-    .Call(`_integratecpp_Rcpp__integrator__get_limit`, ptr)
+Rcpp__integrator__get_max_subdivisions <- function(ptr) {
+    .Call(`_integratecpp_Rcpp__integrator__get_max_subdivisions`, ptr)
 }
 
-Rcpp__integrator__set_limit <- function(ptr, limit) {
-    invisible(.Call(`_integratecpp_Rcpp__integrator__set_limit`, ptr, limit))
+Rcpp__integrator__set_max_subdivisions <- function(ptr, max_subdivisions) {
+    invisible(.Call(`_integratecpp_Rcpp__integrator__set_max_subdivisions`, ptr, max_subdivisions))
 }
 
-Rcpp__integrator__get_epsrel <- function(ptr) {
-    .Call(`_integratecpp_Rcpp__integrator__get_epsrel`, ptr)
+Rcpp__integrator__get_relative_accuracy <- function(ptr) {
+    .Call(`_integratecpp_Rcpp__integrator__get_relative_accuracy`, ptr)
 }
 
-Rcpp__integrator__set_epsrel <- function(ptr, epsrel) {
-    invisible(.Call(`_integratecpp_Rcpp__integrator__set_epsrel`, ptr, epsrel))
+Rcpp__integrator__set_relative_accuracy <- function(ptr, relative_accuracy) {
+    invisible(.Call(`_integratecpp_Rcpp__integrator__set_relative_accuracy`, ptr, relative_accuracy))
 }
 
-Rcpp__integrator__get_epsabs <- function(ptr) {
-    .Call(`_integratecpp_Rcpp__integrator__get_epsabs`, ptr)
+Rcpp__integrator__get_absolute_accuracy <- function(ptr) {
+    .Call(`_integratecpp_Rcpp__integrator__get_absolute_accuracy`, ptr)
 }
 
-Rcpp__integrator__set_epsabs <- function(ptr, epsabs) {
-    invisible(.Call(`_integratecpp_Rcpp__integrator__set_epsabs`, ptr, epsabs))
+Rcpp__integrator__set_absolute_accuracy <- function(ptr, absolute_accuracy) {
+    invisible(.Call(`_integratecpp_Rcpp__integrator__set_absolute_accuracy`, ptr, absolute_accuracy))
 }
 
-Rcpp__integrator__get_lenw <- function(ptr) {
-    .Call(`_integratecpp_Rcpp__integrator__get_lenw`, ptr)
+Rcpp__integrator__get_work_size <- function(ptr) {
+    .Call(`_integratecpp_Rcpp__integrator__get_work_size`, ptr)
 }
 
-Rcpp__integrator__set_lenw <- function(ptr, lenw) {
-    invisible(.Call(`_integratecpp_Rcpp__integrator__set_lenw`, ptr, lenw))
+Rcpp__integrator__set_work_size <- function(ptr, work_size) {
+    invisible(.Call(`_integratecpp_Rcpp__integrator__set_work_size`, ptr, work_size))
 }
 
 Rcpp__integrator__is_valid <- function(ptr) {
