@@ -36,6 +36,8 @@ jobs:
           - {os: ubuntu-18.04,   r: 'oldrel-2'}
           - {os: ubuntu-18.04,   r: 'oldrel-3'}
           - {os: ubuntu-18.04,   r: 'oldrel-4'}
+          - {os: ubuntu-18.04,   r: 'release',  cxx_std: 'C++14'}
+          - {os: ubuntu-18.04,   r: 'release',  cxx_std: 'C++17'}
 
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
@@ -56,6 +58,33 @@ jobs:
         with:
           extra-packages: any::rcmdcheck
           needs: check
+
+      - if: ${{ matrix.config.cxx_std }}
+        name: use CXX_STD = ${{ matrix.config.cxx_std }}
+        run:  |
+          cxx_std <- "${{ matrix.config.cxx_std }}"
+          file <- file.path("DESCRIPTION")
+          readLines(file) |>
+              sapply(
+                  function(x)
+                      gsub(
+                          "(?<=SystemRequirements:[[:space:]])C\\+\\+11",
+                          cxx_std,
+                          x,
+                          perl = TRUE)) |>
+              writeLines(file)
+          cxx_std <- gsub("[\\+]{2}", "XX", cxx_std)
+          file <- file.path("src", "Makevars")
+          readLines(file) |>
+              sapply(
+                  function(x)
+                      gsub(
+                          "(?<=CXX_STD[[:space:]]=[[:space:]])CXX11",
+                          cxx_std,
+                          x,
+                          perl = TRUE)) |>
+              writeLines(file)
+        shell: Rscript {0}
 
       - uses: r-lib/actions/check-r-package@v2
         with:
