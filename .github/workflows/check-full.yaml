@@ -16,28 +16,26 @@ jobs:
   R-CMD-check:
     runs-on: ${{ matrix.config.os }}
 
-    name: ${{ matrix.config.os }} (${{ matrix.config.r }})
+    name: ${{ matrix.config.os }} (${{ matrix.config.r }} with ${{ matrix.config.cxx_std }})
 
     strategy:
       fail-fast: false
       matrix:
         config:
-          - {os: macOS-latest,   r: 'release'}
+          - {os: macOS-latest,   r: 'release',    cxx_std: 'C++11'}
 
-          - {os: windows-latest, r: 'release'}
-          # Don't test on Windows + R<4.0 due to missing C++17 support of Rtools35
-          # Use 4.0 to trigger usage of Rtools40
-          - {os: windows-latest, r: '4.0'}
+          - {os: windows-latest, r: 'release',    cxx_std: 'C++11'}
+          - {os: windows-latest, r: '3.6',        cxx_std: 'C++11'}
 
           # Use older ubuntu to maximise backward compatibility
-          - {os: ubuntu-18.04,   r: 'devel', http-user-agent: 'release'}
-          - {os: ubuntu-18.04,   r: 'release'}
-          - {os: ubuntu-18.04,   r: 'oldrel-1'}
-          - {os: ubuntu-18.04,   r: 'oldrel-2'}
-          - {os: ubuntu-18.04,   r: 'oldrel-3'}
-          - {os: ubuntu-18.04,   r: 'oldrel-4'}
-          - {os: ubuntu-18.04,   r: 'release',  cxx_std: 'C++14'}
-          - {os: ubuntu-18.04,   r: 'release',  cxx_std: 'C++17'}
+          - {os: ubuntu-18.04,   r: 'devel',      cxx_std: 'C++11',   http-user-agent: 'release'}
+          - {os: ubuntu-18.04,   r: 'release',    cxx_std: 'C++11'}
+          - {os: ubuntu-18.04,   r: 'oldrel-1',   cxx_std: 'C++11'}
+          - {os: ubuntu-18.04,   r: 'oldrel-2',   cxx_std: 'C++11'}
+          - {os: ubuntu-18.04,   r: 'oldrel-3',   cxx_std: 'C++11'}
+          - {os: ubuntu-18.04,   r: 'oldrel-4',   cxx_std: 'C++11'}
+          - {os: ubuntu-18.04,   r: 'release',    cxx_std: 'C++14'}
+          - {os: ubuntu-18.04,   r: 'release',    cxx_std: 'C++17'}
 
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
@@ -59,7 +57,7 @@ jobs:
           extra-packages: any::rcmdcheck
           needs: check
 
-      - if: ${{ matrix.config.cxx_std }}
+      - if: ${{ matrix.config.cxx_std != 'C++11' }}
         name: use CXX_STD = ${{ matrix.config.cxx_std }}
         run:  |
           cxx_std <- "${{ matrix.config.cxx_std }}"
