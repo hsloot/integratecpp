@@ -5,6 +5,7 @@
 #include <cassert>
 #include <cmath>
 #include <cstring>
+#include <functional>
 #include <limits>
 #include <memory>
 #include <stdexcept>
@@ -110,6 +111,11 @@ public:
    * - `double epsabs = rel.mach.acc.^.25`:  The requested absolute accuracy.
    * - `int lenw = 400`:                     A dimensioning parameter for the
    *                                         working array.
+   *
+   * Warning:  Objects of type `integratecpp::integrator::config_type` are
+   *           allowed to have states which are invalid for
+   *           `integatecpp::integrator::operator()()`. Use dedicated validity
+   *           methods to assert an object's validity.
    */
   struct config_type {
     //! \brief The maximum number of subdivisions.
