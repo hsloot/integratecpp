@@ -672,11 +672,11 @@ integrator::operator()(UnaryRealFunction_ &&fn, const double lower,
 
   auto out = return_type{};
 #if __cplusplus >= 201703L
-  auto &[value, abserr, subdivisions, neval] = out;
+  auto &[result, abserr, last, neval] = out;
 #else
-  auto &value = out.value;
+  auto &result = out.value;
   auto &abserr = out.abserr;
-  auto &subdivisions = out.subdivisions;
+  auto &last = out.subdivisions;
   auto &neval = out.neval;
 #endif
 
@@ -691,8 +691,8 @@ integrator::operator()(UnaryRealFunction_ &&fn, const double lower,
     Rdqags(details::integrand_callback<
                typename std::remove_reference<UnaryRealFunction_>::type>,
            &ex, const_cast<double *>(&lower), const_cast<double *>(&upper),
-           &epsabs, &epsrel, &value, &abserr, &neval, &ier, &limit, &lenw,
-           &subdivisions, iwork.data(), work.data());
+           &epsabs, &epsrel, &result, &abserr, &neval, &ier, &limit, &lenw,
+           &last, iwork.data(), work.data());
   } else {
     const auto translate_bounds = [](const double lower, const double upper) {
       int inf;
@@ -719,29 +719,30 @@ integrator::operator()(UnaryRealFunction_ &&fn, const double lower,
 
     Rdqagi(details::integrand_callback<
                typename std::remove_reference<UnaryRealFunction_>::type>,
-           &ex, &bound, &inf, &epsabs, &epsrel, &value, &abserr, &neval, &ier,
-           &limit, &lenw, &subdivisions, iwork.data(), work.data());
+           &ex, &bound, &inf, &epsabs, &epsrel, &result, &abserr, &neval, &ier,
+           &limit, &lenw, &last, iwork.data(), work.data());
   }
   const auto translate_error =
-      [&out](const int ier, std::unique_ptr<integration_runtime_error> &e_ptr) {
+      [&out](const int error_code,
+             std::unique_ptr<integration_runtime_error> &e_ptr) {
         if (e_ptr.get() != nullptr) {
           std::throw_with_nested(*e_ptr);
         }
-        if (ier > 0) {
+        if (error_code > 0) {
           // invalid argument errors should be caught during initialization
-          assert(ier < 6);
-          if (ier == 1) {
+          assert(error_code < 6);
+          if (error_code == 1) {
             throw max_subdivision_error(
                 "maximum number of subdivisions reached", out);
 
-          } else if (ier == 2) {
+          } else if (error_code == 2) {
             throw roundoff_error("roundoff error was detected", out);
-          } else if (ier == 3) {
+          } else if (error_code == 3) {
             throw bad_integrand_error("extremely bad integrand behaviour", out);
-          } else if (ier == 4) {
+          } else if (error_code == 4) {
             throw extrapolation_roundoff_error(
                 "roundoff error is detected in the extrapolation table", out);
-          } else if (ier == 5) {
+          } else if (error_code == 5) {
             throw divergence_error("the integral is probably divergent", out);
           } else {
             throw std::logic_error( // # nocov
