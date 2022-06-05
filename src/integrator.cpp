@@ -102,8 +102,8 @@ Rcpp::List Rcpp__integrator__integrate(Rcpp::XPtr<integratecpp::integrator> ptr,
   } catch (...) {
     Rcpp::stop("Unexcpected error"); // # nocov
   }
-  return Rcpp::List::create(Rcpp::Named("value") = result.value(),
-                            Rcpp::Named("abs.error") = result.abserr(),
-                            Rcpp::Named("subdivisions") = result.subdivisions(),
+  return Rcpp::List::create(Rcpp::Named("value") = result.value,
+                            Rcpp::Named("abs.error") = result.abserr,
+                            Rcpp::Named("subdivisions") = result.subdivisions,
                             Rcpp::Named("message") = message);
 }

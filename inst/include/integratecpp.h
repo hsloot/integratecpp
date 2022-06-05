@@ -14,30 +14,6 @@
 
 #include <R_ext/Applic.h>
 
-#ifndef INTEGRATECPP__MAYBE_UNUSED
-#if __cplusplus >= 201703L
-#define INTEGRATECPP__MAYBE_UNUSED [[maybe_unused]]
-#else
-#define INTEGRATECPP__MAYBE_UNUSED
-#endif
-#endif
-
-#ifndef INTEGRATECPP__NODISCARD
-#if __cplusplus >= 201703L
-#define INTEGRATECPP__NODISCARD [[nodiscard]]
-#else
-#define INTEGRATECPP__NODISCARD
-#endif
-#endif
-
-#ifndef INTEGRATECPP__NORETURN
-#if __cplusplus >= 201703L
-#define INTEGRATECPP__NORETURN [[noreturn]]
-#else
-#define INTEGRATECPP__NORETURN
-#endif
-#endif
-
 // TODO: comment calls to `noexcept(<cond>)` if `<cond>` is known to be `true`
 //       by `static_assert`.
 
@@ -77,14 +53,16 @@ public:
    *                            the subdivision process.
    * - `int neval = 0`:         The number of integrand evaluations.
    */
-  class return_type {
-  private:
-    double value_;
-    double abserr_;
-    int subdivisions_;
-    int neval_;
+  struct return_type {
+    //! \brief The approximated value.
+    double value;
+    //! \brief The estimated absolute error.
+    double abserr;
+    //! \brief The final number of subdivisions.
+    int subdivisions;
+    //! \brief The number of function evaluations.
+    int neval;
 
-  public:
     return_type() noexcept = default;
     /*!
      * \brief  The full constructor.
@@ -97,18 +75,6 @@ public:
     explicit constexpr return_type(const double value, const double abserr,
                                    const int subdivisions,
                                    const int neval) noexcept;
-
-    //! \brief Accessor to the approximated value.
-    constexpr auto value() const noexcept -> decltype(value_);
-
-    //! \brief Accessor to the estimated absolute error.
-    constexpr auto abserr() const noexcept -> decltype(abserr_);
-
-    //! \brief Accessor to the final number of subdivisions.
-    constexpr auto subdivisions() const noexcept -> decltype(subdivisions_);
-
-    //! \brief Accessor to the number of neval.
-    constexpr auto neval() const noexcept -> decltype(neval_);
   };
   static_assert(std::is_nothrow_default_constructible<return_type>::value,
                 "`integratecpp::integator::return_type` not nothrow "
@@ -145,15 +111,17 @@ public:
    * - `int lenw = 400`:                     A dimensioning parameter for the
    *                                         working array.
    */
-  class config_type {
-  private:
-    int limit_{100};
-    double epsrel_{std::pow(std::numeric_limits<double>::epsilon(),
-                            0.25)}; // = 0.0001220703125
-    double epsabs_{epsrel_};
-    int lenw_{400};
+  struct config_type {
+    //! \brief The maximum number of subdivisions.
+    int limit{100};
+    //! \brief The requested relative accuracy.
+    double epsrel{std::pow(std::numeric_limits<double>::epsilon(),
+                           0.25)}; // = 0.0001220703125
+    //! \brief The requested absolute accuracy.
+    double epsabs{epsrel};
+    //! \brief The dimensioning parameter of the working array.
+    int lenw{400};
 
-  public:
     // NOTE: default constructor of `config_type` is technically
     //       `noexcept(false)` since `std::pow` is `noexcept(false)` as it might
     //       throw. however, for the values used it should not throw. hence, we
@@ -202,30 +170,6 @@ public:
     explicit constexpr config_type(const int limit, const double epsrel,
                                    const double epsabs,
                                    const int lenw) noexcept;
-
-    //! \brief Accessor to the maximum number of subdivisions.
-    constexpr auto limit() const noexcept -> decltype(limit_);
-
-    //! \brief Setter to the maximum number of subdivisions.
-    void limit(const int limit) noexcept;
-
-    //! \brief Accessor to the requested relative accuracy.
-    constexpr auto epsrel() const noexcept -> decltype(epsrel_);
-
-    //! \brief Setter to the requested relative accuracy.
-    void epsrel(const double epsrel) noexcept;
-
-    //! \brief Accessor to the requested absolute accuracy.
-    constexpr auto epsabs() const noexcept -> decltype(epsabs_);
-
-    //! \brief Setter to the requested absolute accuracy.
-    void epsabs(const double epsabs) noexcept;
-
-    //! \brief Accessor to the dimensioning parameter of the working array.
-    constexpr auto lenw() const noexcept -> decltype(lenw_);
-
-    //! \brief Setter to the dimensioning parameter of the working array.
-    void lenw(const int lenw) noexcept;
 
     //! \brief Indicates whether object is in a valid state for usage in
     //!        `integratecpp::integrator::operator()()`.
@@ -327,25 +271,25 @@ public:
   void config(const config_type &config) noexcept;
 
   //! \brief Accessor to the maximum number of subdivisions.
-  constexpr auto limit() const noexcept -> decltype(config_.limit());
+  constexpr auto limit() const noexcept -> decltype(config_.limit);
 
   //! \brief Setter to the maximum number of subdivisions.
   void limit(const int limit) noexcept;
 
   //! \brief Accessor to the requested relative accuracy.
-  constexpr auto epsrel() const noexcept -> decltype(config_.epsrel());
+  constexpr auto epsrel() const noexcept -> decltype(config_.epsrel);
 
   //! \brief Setter to the requested relative accuracy.
   void epsrel(const double epsrel) noexcept;
 
   //! \brief Accessor to the requested absolute accuracy.
-  constexpr auto epsabs() const noexcept -> decltype(config_.epsabs());
+  constexpr auto epsabs() const noexcept -> decltype(config_.epsabs);
 
   //! \brief Setter to the requested absolute accuracy.
   void epsabs(const double epsabs) noexcept;
 
   //! \brief Accessor to the dimensioning parameter of the working array.
-  constexpr auto lenw() const noexcept -> decltype(config_.lenw());
+  constexpr auto lenw() const noexcept -> decltype(config_.lenw);
 
   //! \brief Setter to the dimensioning parameter of the working array.
   void lenw(const int lenw) noexcept;
@@ -687,7 +631,7 @@ inline void integrand_callback(double *x, int n, void *ex) {
       std::pair<typename std::remove_reference<UnaryRealFunction_>::type,
                 std::unique_ptr<integration_runtime_error>>;
 
-  const auto fn_integrand = (*static_cast<ex_t *>(ex)).first;
+  const auto &fn_integrand = (*static_cast<ex_t *>(ex)).first;
   auto &e_ptr = (*static_cast<ex_t *>(ex)).second;
   details::guarded_transform(cbegin(x), cend(x, n), begin(x), fn_integrand,
                              e_ptr);
@@ -711,18 +655,28 @@ integrator::operator()(UnaryRealFunction_ &&fn, const double lower,
   };
   assert_validity(lower, upper);
 
-  auto limit = config_.limit();
-  auto epsabs = config_.epsabs();
-  auto epsrel = config_.epsrel();
-  auto lenw = config_.lenw();
+#if __cplusplus >= 201703L
+  auto [limit, epsrel, epsabs, lenw] = config_;
+#else
+  auto limit = config_.limit;
+  auto epsrel = config_.epsrel;
+  auto epsabs = config_.epsabs;
+  auto lenw = config_.lenw;
+#endif
 
-  auto result = 0.;
-  auto abserr = 0.;
-  auto neval = 0;
-  auto last = 0;
+  auto out = return_type{};
+#if __cplusplus >= 201703L
+  auto &[value, abserr, subdivisions, neval] = out;
+#else
+  auto &value = out.value;
+  auto &abserr = out.abserr;
+  auto &subdivisions = out.subdivisions;
+  auto &neval = out.neval;
+#endif
+
   auto ier = 0;
-  auto iwork = std::vector<int>(config_.limit());
-  auto work = std::vector<double>(config_.lenw());
+  auto iwork = std::vector<int>(config_.limit);
+  auto work = std::vector<double>(config_.lenw);
 
   auto ex = std::make_pair(std::forward<UnaryRealFunction_>(fn),
                            std::unique_ptr<integration_runtime_error>());
@@ -731,8 +685,8 @@ integrator::operator()(UnaryRealFunction_ &&fn, const double lower,
     Rdqags(details::integrand_callback<
                typename std::remove_reference<UnaryRealFunction_>::type>,
            &ex, const_cast<double *>(&lower), const_cast<double *>(&upper),
-           &epsabs, &epsrel, &result, &abserr, &neval, &ier, &limit, &lenw,
-           &last, iwork.data(), work.data());
+           &epsabs, &epsrel, &value, &abserr, &neval, &ier, &limit, &lenw,
+           &subdivisions, iwork.data(), work.data());
   } else {
     const auto translate_bounds = [](const double lower, const double upper) {
       int inf;
@@ -749,7 +703,7 @@ integrator::operator()(UnaryRealFunction_ &&fn, const double lower,
       }
       return std::make_pair(bound, inf);
     };
-#if _cplusplus >= 201703L
+#if __cplusplus >= 201703L
     auto [bound, inf] = translate_bounds(lower, upper);
 #else
     auto bounds_info = translate_bounds(lower, upper);
@@ -759,14 +713,13 @@ integrator::operator()(UnaryRealFunction_ &&fn, const double lower,
 
     Rdqagi(details::integrand_callback<
                typename std::remove_reference<UnaryRealFunction_>::type>,
-           &ex, &bound, &inf, &epsabs, &epsrel, &result, &abserr, &neval, &ier,
-           &limit, &lenw, &last, iwork.data(), work.data());
+           &ex, &bound, &inf, &epsabs, &epsrel, &value, &abserr, &neval, &ier,
+           &limit, &lenw, &subdivisions, iwork.data(), work.data());
   }
-  auto out = return_type{result, abserr, last, neval};
   const auto translate_error =
-      [&out](const int ier, std::unique_ptr<integration_runtime_error> &&e) {
-        if (e.get() != nullptr) {
-          throw *e;
+      [&out](const int ier, std::unique_ptr<integration_runtime_error> &e_ptr) {
+        if (e_ptr.get() != nullptr) {
+          std::throw_with_nested(*e_ptr);
         }
         if (ier > 0) {
           // invalid argument errors should be caught during initialization
@@ -792,7 +745,7 @@ integrator::operator()(UnaryRealFunction_ &&fn, const double lower,
         }
         return;
       };
-  translate_error(ier, std::move(ex.second));
+  translate_error(ier, ex.second);
 
   return out;
 };
@@ -816,21 +769,7 @@ inline constexpr integrator::return_type::return_type(const double value,
                                                       const double abserr,
                                                       const int subdivisions,
                                                       const int neval) noexcept
-    : value_{value}, abserr_{abserr}, subdivisions_{subdivisions}, neval_{
-                                                                       neval} {}
-
-inline constexpr double integrator::return_type::value() const noexcept {
-  return value_;
-}
-inline constexpr double integrator::return_type::abserr() const noexcept {
-  return abserr_;
-}
-inline constexpr int integrator::return_type::subdivisions() const noexcept {
-  return subdivisions_;
-}
-inline constexpr int integrator::return_type::neval() const noexcept {
-  return neval_;
-}
+    : value{value}, abserr{abserr}, subdivisions{subdivisions}, neval{neval} {}
 
 // -------------------------------------------------------------------------------------------------
 // Implementations of integratecpp::integrator::config_type
@@ -848,52 +787,16 @@ inline constexpr integrator::config_type::config_type(const int limit,
                                                       const double epsrel,
                                                       const double epsabs,
                                                       const int lenw) noexcept
-    : limit_{limit}, epsrel_{epsrel}, epsabs_{epsabs}, lenw_{lenw} {}
-
-inline constexpr auto integrator::config_type::limit() const noexcept
-    -> decltype(limit_) {
-  return limit_;
-}
-inline void integrator::config_type::limit(const int limit) noexcept {
-  auto other = config_type{limit, this->epsrel(), this->epsabs(), this->lenw()};
-  std::swap(*this, other);
-}
-
-inline constexpr auto integrator::config_type::epsrel() const noexcept
-    -> decltype(epsrel_) {
-  return epsrel_;
-}
-inline void integrator::config_type::epsrel(const double epsrel) noexcept {
-  auto other = config_type{this->limit(), epsrel, this->epsabs(), this->lenw()};
-  std::swap(*this, other);
-}
-
-inline constexpr auto integrator::config_type::epsabs() const noexcept
-    -> decltype(epsabs_) {
-  return epsabs_;
-}
-inline void integrator::config_type::epsabs(const double epsabs) noexcept {
-  auto other = config_type{this->limit(), this->epsrel(), epsabs, this->lenw()};
-  std::swap(*this, other);
-}
-
-inline constexpr auto integrator::config_type::lenw() const noexcept
-    -> decltype(lenw_) {
-  return lenw_;
-}
-inline void integrator::config_type::lenw(const int lenw) noexcept {
-  auto other = config_type{this->limit(), this->epsrel(), this->epsabs(), lenw};
-  std::swap(*this, other);
-}
+    : limit{limit}, epsrel{epsrel}, epsabs{epsabs}, lenw{lenw} {}
 
 inline bool integrator::config_type::is_valid() const noexcept {
-  if (limit_ <= 0) {
+  if (limit <= 0) {
     return false;
-  } else if (epsabs_ <= 0. &&
-             epsrel_ < std::max(50. * std::numeric_limits<double>::epsilon(),
-                                0.5e-28)) {
+  } else if (epsabs <= 0. &&
+             epsrel < std::max(50. * std::numeric_limits<double>::epsilon(),
+                               0.5e-28)) {
     return false;
-  } else if (lenw_ < 4 * limit_) {
+  } else if (lenw < 4 * limit) {
     return false;
   } else {
     return true;
@@ -930,36 +833,34 @@ inline void integrator::config(const config_type &config) noexcept {
 }
 
 inline constexpr auto integrator::limit() const noexcept
-    -> decltype(config_.limit()) {
-  return config_.limit();
+    -> decltype(config_.limit) {
+  return config_.limit;
 }
 inline void integrator::limit(const int limit) noexcept {
-  config_.limit(limit);
+  config_.limit = limit;
 }
 
 inline constexpr auto integrator::epsrel() const noexcept
-    -> decltype(config_.epsrel()) {
-  return config_.epsrel();
+    -> decltype(config_.epsrel) {
+  return config_.epsrel;
 }
 inline void integrator::epsrel(const double epsrel) noexcept {
-  config_.epsrel(epsrel);
+  config_.epsrel = epsrel;
 }
 
 inline constexpr auto integrator::epsabs() const noexcept
-    -> decltype(config_.epsabs()) {
-  return config_.epsabs();
+    -> decltype(config_.epsabs) {
+  return config_.epsabs;
 }
 inline void integrator::epsabs(const double epsabs) noexcept {
-  config_.epsabs(epsabs);
+  config_.epsabs = epsabs;
 }
 
 inline constexpr auto integrator::lenw() const noexcept
-    -> decltype(config_.lenw()) {
-  return config_.lenw();
+    -> decltype(config_.lenw) {
+  return config_.lenw;
 }
-inline void integrator::lenw(const int lenw) noexcept {
-  return config_.lenw(lenw);
-}
+inline void integrator::lenw(const int lenw) noexcept { config_.lenw = lenw; }
 
 inline bool integrator::is_valid() const noexcept { return config_.is_valid(); }
 

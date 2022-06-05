@@ -72,10 +72,10 @@ Rcpp::List integrate_exponential_expectation(const double lambda) {
     Rcpp::stop("Unexcpected error");
   }
 
-  return Rcpp::List::create(Rcpp::Named("value") = result.value(),
-                            Rcpp::Named("abserr") = result.abserr(),
-                            Rcpp::Named("subdivisions") = result.subdivisions(),
-                            Rcpp::Named("neval") = result.neval());
+  return Rcpp::List::create(Rcpp::Named("value") = result.value,
+                            Rcpp::Named("abserr") = result.abserr,
+                            Rcpp::Named("subdivisions") = result.subdivisions,
+                            Rcpp::Named("neval") = result.neval);
 }
 ```
 
