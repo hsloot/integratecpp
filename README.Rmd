@@ -16,6 +16,7 @@ knitr::opts_chunk$set(
 # integratecpp
 
 <!-- badges: start -->
+[![Codecov test coverage](https://codecov.io/gh/hsloot/integratecpp/branch/main/graph/badge.svg)](https://app.codecov.io/gh/hsloot/integratecpp?branch=main)
 <!-- badges: end -->
 
 The package `integratecpp` provides a header-only interface to `R`'s numerical integration methods.
