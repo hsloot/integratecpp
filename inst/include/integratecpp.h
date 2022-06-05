@@ -77,7 +77,7 @@ public:
    *                            the subdivision process.
    * - `int neval = 0`:         The number of integrand evaluations.
    */
-  class result_type {
+  class return_type {
   private:
     double value_;
     double abserr_;
@@ -85,7 +85,7 @@ public:
     int neval_;
 
   public:
-    result_type() noexcept = default;
+    return_type() noexcept = default;
     /*!
      * \brief  The full constructor.
      *
@@ -94,7 +94,7 @@ public:
      * \param subdivisions  an `int` with the final number of subdivisions.
      * \param neval         an `int` with the number of neval.
      */
-    explicit constexpr result_type(const double value, const double abserr,
+    explicit constexpr return_type(const double value, const double abserr,
                                    const int subdivisions,
                                    const int neval) noexcept;
 
@@ -110,25 +110,25 @@ public:
     //! \brief Accessor to the number of neval.
     constexpr auto neval() const noexcept -> decltype(neval_);
   };
-  static_assert(std::is_nothrow_default_constructible<result_type>::value,
-                "`integratecpp::integator::result_type` not nothrow "
+  static_assert(std::is_nothrow_default_constructible<return_type>::value,
+                "`integratecpp::integator::return_type` not nothrow "
                 "default-constructible");
   static_assert(
-      std::is_nothrow_copy_constructible<result_type>::value,
-      "`integratecpp::integator::result_type` not nothrow copy-constructible");
+      std::is_nothrow_copy_constructible<return_type>::value,
+      "`integratecpp::integator::return_type` not nothrow copy-constructible");
   static_assert(
-      std::is_nothrow_copy_assignable<result_type>::value,
-      "`integratecpp::integator::result_type` not nothrow copy-assignable");
+      std::is_nothrow_copy_assignable<return_type>::value,
+      "`integratecpp::integator::return_type` not nothrow copy-assignable");
   static_assert(
-      std::is_nothrow_move_constructible<result_type>::value,
-      "`integratecpp::integator::result_type` not nothrow move-constructible");
+      std::is_nothrow_move_constructible<return_type>::value,
+      "`integratecpp::integator::return_type` not nothrow move-constructible");
   static_assert(
-      std::is_nothrow_move_assignable<result_type>::value,
-      "`integratecpp::integator::result_type` not nothrow move-assignable");
-  static_assert(std::is_trivial<result_type>::value,
-                "`integratecpp::integator::result_type` not trivial");
-  static_assert(std::is_standard_layout<result_type>::value,
-                "`integratecpp::integator::result_type` not standard layout");
+      std::is_nothrow_move_assignable<return_type>::value,
+      "`integratecpp::integator::return_type` not nothrow move-assignable");
+  static_assert(std::is_trivial<return_type>::value,
+                "`integratecpp::integator::return_type` not trivial");
+  static_assert(std::is_standard_layout<return_type>::value,
+                "`integratecpp::integator::return_type` not standard layout");
 
   /*!
    * \brief  Defines a data class for the integration configuration parameters
@@ -373,7 +373,7 @@ public:
    *               \param lower  a `double` for the lower bound.
    * \param upper  a `double` for the upper bound.
    *
-   * \return       a `integratecpp::integrator::result_type` with the
+   * \return       a `integratecpp::integrator::return_type` with the
    *               integration results.
    *
    * \exception    throws integratecpp::max_subdivision_error if the maximal
@@ -390,7 +390,7 @@ public:
    *               deemed divergence (or slowly convergent).
    */
   template <typename UnaryRealFunction_>
-  result_type operator()(UnaryRealFunction_ &&fn, const double lower,
+  return_type operator()(UnaryRealFunction_ &&fn, const double lower,
                          const double upper) const;
 };
 static_assert(std::is_nothrow_default_constructible<integrator>::value,
@@ -426,7 +426,7 @@ static_assert(std::is_standard_layout<integrator>::value,
  *                `integratecpp::integrator::config_type` configuration
  *                parameter.
  *
- * \return        a `integratecpp::integrator::result_type` with the
+ * \return        a `integratecpp::integrator::return_type` with the
  *                integration results.
  *
  * \exception     throws integratecpp::max_subdivision_error if the maximal
@@ -443,7 +443,7 @@ static_assert(std::is_standard_layout<integrator>::value,
  *                deemed divergence (or slowly convergent).
  */
 template <typename UnaryRealFunction_>
-integrator::result_type
+integrator::return_type
 integrate(UnaryRealFunction_ &&fn, const double lower, const double upper,
           const integrator::config_type config = integrator::config_type{});
 
@@ -463,11 +463,11 @@ public:
    *         `std::string`.
    *
    * \param  what     a `std::string` containing the error message.
-   * \param  result   a `integratecpp::integrator::result_type` with
+   * \param  result   a `integratecpp::integrator::return_type` with
    *                  the integration results at the time of error.
    */
   explicit integration_runtime_error(const std::string what,
-                                     const integrator::result_type &result);
+                                     const integrator::return_type &result);
 
   /*!
    * \brief  A full constructor, specifying the error message with
@@ -475,17 +475,17 @@ public:
    *
    * \param  what     a `const char *` containing a pointer a a const char array
    *                  with the error message.
-   * \param  result   a `integratecpp::integrator::result_type` with
+   * \param  result   a `integratecpp::integrator::return_type` with
    *                  the integration results at the time of error.
    */
   explicit integration_runtime_error(const char *what,
-                                     const integrator::result_type &result);
+                                     const integrator::return_type &result);
 
   //! \brief Accessor the the result at the time or error.
-  virtual integrator::result_type result() const noexcept;
+  virtual integrator::return_type result() const noexcept;
 
 private:
-  integrator::result_type result_{};
+  integrator::return_type result_{};
 };
 
 /*!
@@ -506,11 +506,11 @@ public:
    *         `std::string`.
    *
    * \param  what     a `std::string` containing the error message.
-   * \param  result   a `integratecpp::integrator::result_type` with
+   * \param  result   a `integratecpp::integrator::return_type` with
    *                  the integration results at the time of error.
    */
   explicit integration_logic_error(const std::string what,
-                                   const integrator::result_type &result);
+                                   const integrator::return_type &result);
 
   /*!
    * \brief  A full constructor, specifying the error message with
@@ -518,17 +518,17 @@ public:
    *
    * \param  what     a `const char *` containing a pointer a a const char array
    *                  with the error message.
-   * \param  result   a `integratecpp::integrator::result_type` with
+   * \param  result   a `integratecpp::integrator::return_type` with
    *                  the integration results at the time of error.
    */
   explicit integration_logic_error(const char *what,
-                                   const integrator::result_type &result);
+                                   const integrator::return_type &result);
 
   //! \brief Accessor the the result at the time or error.
-  virtual integrator::result_type result() const noexcept;
+  virtual integrator::return_type result() const noexcept;
 
 private:
-  integrator::result_type result_{};
+  integrator::return_type result_{};
 };
 
 /*!
@@ -700,7 +700,7 @@ inline void integrand_callback(double *x, int n, void *ex) {
 // -------------------------------------------------------------------------------------------------
 
 template <typename UnaryRealFunction_>
-inline integrator::result_type
+inline integrator::return_type
 integrator::operator()(UnaryRealFunction_ &&fn, const double lower,
                        const double upper) const {
   const auto assert_validity = [this](const double lower, const double upper) {
@@ -762,7 +762,7 @@ integrator::operator()(UnaryRealFunction_ &&fn, const double lower,
            &ex, &bound, &inf, &epsabs, &epsrel, &result, &abserr, &neval, &ier,
            &limit, &lenw, &last, iwork.data(), work.data());
   }
-  auto out = result_type{result, abserr, last, neval};
+  auto out = return_type{result, abserr, last, neval};
   const auto translate_error =
       [&out](const int ier, std::unique_ptr<integration_runtime_error> &&e) {
         if (e.get() != nullptr) {
@@ -802,33 +802,33 @@ integrator::operator()(UnaryRealFunction_ &&fn, const double lower,
 // -------------------------------------------------------------------------------------------------
 
 template <typename UnaryRealFunction_>
-inline integrator::result_type integrate(UnaryRealFunction_ &&fn,
+inline integrator::return_type integrate(UnaryRealFunction_ &&fn,
                                          const double lower, const double upper,
                                          const integrator::config_type config) {
   return integrator{config}(std::forward<UnaryRealFunction_>(fn), lower, upper);
 }
 
 // -------------------------------------------------------------------------------------------------
-// Implementations of integratecpp::integrator::result_type
+// Implementations of integratecpp::integrator::return_type
 // -------------------------------------------------------------------------------------------------
 
-inline constexpr integrator::result_type::result_type(const double value,
+inline constexpr integrator::return_type::return_type(const double value,
                                                       const double abserr,
                                                       const int subdivisions,
                                                       const int neval) noexcept
     : value_{value}, abserr_{abserr}, subdivisions_{subdivisions}, neval_{
                                                                        neval} {}
 
-inline constexpr double integrator::result_type::value() const noexcept {
+inline constexpr double integrator::return_type::value() const noexcept {
   return value_;
 }
-inline constexpr double integrator::result_type::abserr() const noexcept {
+inline constexpr double integrator::return_type::abserr() const noexcept {
   return abserr_;
 }
-inline constexpr int integrator::result_type::subdivisions() const noexcept {
+inline constexpr int integrator::return_type::subdivisions() const noexcept {
   return subdivisions_;
 }
-inline constexpr int integrator::result_type::neval() const noexcept {
+inline constexpr int integrator::return_type::neval() const noexcept {
   return neval_;
 }
 
@@ -970,27 +970,27 @@ inline void integrator::assert_validity() const { config_.assert_validity(); }
 // -------------------------------------------------------------------------------------------------
 
 inline integration_runtime_error::integration_runtime_error(
-    const char *what, const integrator::result_type &result)
+    const char *what, const integrator::return_type &result)
     : std::runtime_error{what}, result_{result} {}
 
 inline integration_runtime_error::integration_runtime_error(
-    const std::string what, const integrator::result_type &result)
+    const std::string what, const integrator::return_type &result)
     : std::runtime_error{what}, result_{result} {}
 
-inline integrator::result_type
+inline integrator::return_type
 integration_runtime_error::result() const noexcept {
   return result_;
 }
 
 inline integration_logic_error::integration_logic_error(
-    const char *what, const integrator::result_type &result)
+    const char *what, const integrator::return_type &result)
     : std::logic_error{what}, result_{result} {}
 
 inline integration_logic_error::integration_logic_error(
-    const std::string what, const integrator::result_type &result)
+    const std::string what, const integrator::return_type &result)
     : std::logic_error{what}, result_{result} {}
 
-inline integrator::result_type
+inline integrator::return_type
 integration_logic_error::result() const noexcept {
   return result_;
 }
