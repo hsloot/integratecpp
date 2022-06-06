@@ -916,7 +916,7 @@ inline bool integrator::is_valid() const noexcept { return config_.is_valid(); }
 inline void integrator::assert_validity() const { config_.assert_validity(); }
 
 // -------------------------------------------------------------------------------------------------
-// ## Implementations of exception classes
+// Implementations of exception classes
 // -------------------------------------------------------------------------------------------------
 
 inline integration_runtime_error::integration_runtime_error(
