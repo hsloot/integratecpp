@@ -612,8 +612,10 @@ public:
 namespace type_traits {
 
 #if __cplusplus >= 201703L
-using is_invocable = std::is_invocable;
-using is_invocable_r = std::is_invocable_r;
+template <typename Fn, typename... Args>
+using is_invocable = std::is_invocable<Fn, Args...>;
+template <typename R, typename Fn, typename... Args>
+using is_invocable_r = std::is_invocable_r<R, Fn, Args...>;
 #else
 template <typename Fn, typename... Args>
 struct is_invocable
