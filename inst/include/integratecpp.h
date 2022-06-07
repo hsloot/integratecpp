@@ -22,19 +22,29 @@
 namespace integratecpp {
 
 /*!
- * \brief  A functor wrapping `Rdqags` and `Rdqagi` declared in
- *   `     <R_ext/Applic.h>` and implemented in `src/appl/integrate.c`.
+ * \brief  A functor wrapping `C`-level functions `Rdqags` and `Rdqagi` declared
+ *         in the `R`-headers `<R_ext/Applic.h>` and implemented in
+ *         `src/appl/integrate.c`.
  *
- * - The functor is initialized by a configuration parameter with the maximal
- *   number of subdivisions, the required relative error, the required absolute
- *   error, and a dimensioning parameter for the working array.
- * - The operator is called with a Lambda-functor with signature convertible to
- *   `const double`, a lower bound, and an upper bound.
- * - The returned result consists of the approximated integral value, an
- *   estimated error, the final number of subdivisions, and the number of
- *   funcion evaluations.
- * - Issues during regarding the configuration parameter throw an exception,
- *   deriving from `integratecpp::integration_logic_error` and issues during the
+ * - Integration parameters can be configured via structs of type
+ *   `integratecpp::integrator::config_type`, holding the maximal number of
+ *   subdivisions, the required relative error, the required absolute error, and
+ *   the size of the working array. Parameter constraints are unchecked, but can
+ *   be validated using `integratecpp::integrator::config_type::is_valid()` and
+ *   `integratecpp::integrator::config_type::assert_validity()`.
+ * - The operator `integratecpp::integrator::operator()()` is called with a
+ *   `Callable` object invocable with arguments `const double` and returns
+ *   `double`, a lower bound, and an upper bound. If the `Callable` returns
+ *   infinite values, an exception is thrown. Internally, a callback function is
+ *   generated and passed to the `C`-level functions `Rdqag[is]`; exceptions in
+ *   the `Callable` are temporarily caught, stored, and rethrown after returning
+ *   to `C++` code.
+ * - Integration results are returned in structs of type
+ *   `integratecpp::integrator::return_type` with the approximated integral
+ *   value, an estimated error, the final number of subdivisions, and the number
+ *   of funcion evaluations.
+ * - Issues regarding the configuration parameter throw an exception, deriving
+ *   from `integratecpp::integration_logic_error` and issues during the
  *   integration may throw exceptions deriving from
  *   `integratecpp::integration_runtime_error`. Both have accessors to the
  *   result-state at error which can be used for error handling.
@@ -42,19 +52,19 @@ namespace integratecpp {
 class integrator {
 public:
   /*!
-   * \brief  Defines a data class for the integation results returned from
+   * \brief  Defines a struct for the integation results returned from
    *         `integratecpp::integrator::operator()()`.
    *
    * Contains the following data elements (compare `src/appl/integrate.c` in
    * R-source):
-   * - `double value = 0.`:     The approximation of the integral.
-   * - `double absolute_error = 0.`:
+   * - `double value`:          The approximation of the integral.
+   * - `double absolute_error`:
    *                            The estimate of the modules of the absolute
    *                            error, which should be equal or larger than
    *                            `abs(I-result)`.
-   * - `int subdivisions = 0`:  The final number of subintervals produced in
+   * - `int subdivisions`:      The final number of subintervals produced in
    *                            the subdivision process.
-   * - `int neval = 0`:         The number of integrand evaluations.
+   * - `int neval`:             The number of integrand evaluations.
    */
   struct return_type {
     //! \brief The approximated value.
@@ -101,8 +111,8 @@ public:
                 "`integratecpp::integator::return_type` not standard layout");
 
   /*!
-   * \brief  Defines a data class for the integration configuration parameters
-   *         used in `integratecpp::integrator::operator()()`.
+   * \brief  Defines a struct for the integration configuration parameters used
+   *         in `integratecpp::integrator::operator()()`.
    *
    * Contains the following data elements (see `src/appl/integrate.c` in
    * R-source):
@@ -111,25 +121,42 @@ public:
    *                                    interval (lower, upper).
    * - `double relative_accuracy = rel.mach.acc.^.25`:
    *                                    The requested relative accuracy.
-   * - `double absolute_accuracy = rel.mach.acc.^.25`:
+   * - `double absolute_accuracy = relative_accuracy`:
    *                                    The requested absolute accuracy.
    * - `int work_size = 400`:           A dimensioning parameter for the working
    *                                    array.
    *
-   * Warning:  Objects of type `integratecpp::integrator::config_type` are
-   *           allowed to have states which are invalid for
-   *           `integatecpp::integrator::operator()()`. Use dedicated validity
-   *           methods to assert an object's validity.
+   * \warning   Constraints for the configuration parameters are unchecked upon
+   *            construction, but can be validated using
+   *            `integratecpp::integrator::config_type::is_valid()` and
+   *            `integratecpp::integrator::config_type::assert_validity()`.
    */
   struct config_type {
-    //! \brief The maximum number of subdivisions.
+    /*!
+     * \brief The maximum number of subdivisions.
+     * \pre `max_subdivisions >= 1`.
+     * \pre `work_size >= 4 * max_subdivisions`.
+     */
     int max_subdivisions{100};
-    //! \brief The requested relative accuracy.
+
+    /*!
+     * \brief The requested relative accuracy.
+     * \pre `relative_accuracy > 0 || relative_accuracy >= max(50. *
+     *      rel.mach.acc., 0.5e-28)`.
+     */
     double relative_accuracy{std::pow(std::numeric_limits<double>::epsilon(),
                                       0.25)}; // = 0.0001220703125
-    //! \brief The requested absolute accuracy.
+    /*!
+     * \brief The requested absolute accuracy.
+     * \pre `relative_accuracy > 0 || relative_accuracy >= max(50. *
+     *      rel.mach.acc., 0.5e-28)`.
+     */
     double absolute_accuracy{relative_accuracy};
-    //! \brief The dimensioning parameter of the working array.
+
+    /*!
+     * \brief The dimensioning parameter of the working array.
+     * \pre `work_size >= 4 * max_subdivisions`.
+     */
     int work_size{400};
 
     // NOTE: default constructor of `config_type` is technically
@@ -140,14 +167,16 @@ public:
 
     /*!
      * \brief  A partial constructor for `max_subdivisions` and
-     *         `relative_accuracy`.
+     * `relative_accuracy`.
      *
      * \param max_subdivisions   an `int` for the maximum number of
      *                           subdivisions.
      * \param relative_accuracy  a `double` for the requested relative accuracy.
      *
-     * \exception     throws integratecpp::invalid_input_error if
-     *                max_subdivisions < 1.
+     * \warning   Constraints for the configuration parameters are unchecked
+     *            upon construction, but can be validated using
+     *            `integratecpp::integrator::config_type::is_valid()` and
+     *            `integratecpp::integrator::config_type::assert_validity()`.
      */
     explicit constexpr config_type(const int max_subdivisions,
                                    const double relative_accuracy) noexcept;
@@ -161,11 +190,10 @@ public:
      * \param relative_accuracy  a `double` for the requested relative accuracy.
      * \param absolute_accuracy  a `double` for the requested absolute accuracy.
      *
-     * \exception     throws integratecpp::invalid_input_error if
-     *                max_subdivisions < 1.
-     * \exception     throws integratecpp::invalid_input_error if
-     *                absolute_accuracy <= 0 and relative_accuracy <
-     *                max(50*rel.mach.acc.,0.5d-28).
+     * \warning   Constraints for the configuration parameters are unchecked
+     *            upon construction, but can be validated using
+     *            `integratecpp::integrator::config_type::is_valid()` and
+     *            `integratecpp::integrator::config_type::assert_validity()`.
      */
     explicit constexpr config_type(const int max_subdivisions,
                                    const double relative_accuracy,
@@ -180,29 +208,25 @@ public:
      * \param absolute_accuracy  a `double` for the requested absolute accuracy.
      * \param work_size          an `int` for the size of the working array.
      *
-     * \exception     throws integratecpp::invalid_input_error if
-     *                max_subdivisions < 1.
-     * \exception     throws integratecpp::invalid_input_error if
-     *                absolute_accuracy <= 0 and relative_accuracy <
-     *                max(50*rel.mach.acc.,0.5d-28).
-     * \exception     throws integratecpp::invalid_input_error if
-     *                work_size < 4 * max_subdivisions.
+     * \warning   Constraints for the configuration parameters are unchecked
+     *            upon construction, but can be validated using
+     *            `integratecpp::integrator::config_type::is_valid()` and
+     *            `integratecpp::integrator::config_type::assert_validity()`.
      */
     explicit constexpr config_type(const int max_subdivisions,
                                    const double relative_accuracy,
                                    const double absolute_accuracy,
                                    const int work_size) noexcept;
 
-    //! \brief  Indicates whether object is in a valid state for usage in
-    //!         `integratecpp::integrator::operator()()`.
+    //! \brief  Checks whether all members' preconditions are met.
     bool is_valid() const noexcept;
 
     /*!
-     * \brief   Asserts whether object is in a valid state for usage i n
-     *          `integratecpp::integrator::operator()()`, possibly with an
-     *          informative error message.
+     * \brief   Asserts whether all members' preconditions are met, possibly
+     *          with an informative error message.
      *
-     * \exception  throws integratecpp::invalid_input_error.
+     * \exception  throws integratecpp::invalid_input_error if preconditions
+     *             are not fulfilled.
      */
     void assert_validity() const;
   };
@@ -250,8 +274,10 @@ public:
    * \param max_subdivisions   an `int` for the maximum number of subdivisions.
    * \param relative_accuracy  a `double` for the requested relative accuracy.
    *
-   * \exception     throws integratecpp::invalid_input_error if
-   *                max_subdivisions < 1.
+   * \warning   Constraints for the configuration parameters are unchecked upon
+   *            construction, but can be validated using
+   *            `integratecpp::integrator::config_type::is_valid()` and
+   *            `integratecpp::integrator::config_type::assert_validity()`.
    */
   explicit constexpr integrator(const int max_subdivisions,
                                 const double relative_accuracy) noexcept;
@@ -264,11 +290,10 @@ public:
    * \param relative_accuracy  a `double` for the requested relative accuracy.
    * \param absolute_accuracy  a `double` for the requested absolute accuracy.
    *
-   * \exception     throws integratecpp::invalid_input_error if
-   *                max_subdivisions < 1.
-   * \exception     throws integratecpp::invalid_input_error if
-   *                absolute_accuracy <= 0 and
-   *                relative_accuracy < max(50*rel.mach.acc.,0.5d-28).
+   * \warning   Constraints for the configuration parameters are unchecked upon
+   *            construction, but can be validated using
+   *            `integratecpp::integrator::config_type::is_valid()` and
+   *            `integratecpp::integrator::config_type::assert_validity()`.
    */
   explicit constexpr integrator(const int max_subdivisions,
                                 const double relative_accuracy,
@@ -283,13 +308,10 @@ public:
    * \param absolute_accuracy  a `double` for the requested absolute accuracy.
    * \param work_size          an `int` for the size of the working array.
    *
-   * \exception     throws integratecpp::invalid_input_error if
-   *                max_subdivisions < 1.
-   * \exception     throws integratecpp::invalid_input_error if
-   *                absolute_accuracy <= 0 and
-   *                relative_accuracy < max(50*rel.mach.acc.,0.5d-28).
-   * \exception     throws integratecpp::invalid_input_error if
-   *                work_size < 4 * max_subdivisions.
+   * \warning   Constraints for the configuration parameters are unchecked upon
+   *            construction, but can be validated using
+   *            `integratecpp::integrator::config_type::is_valid()` and
+   *            `integratecpp::integrator::config_type::assert_validity()`.
    */
   explicit constexpr integrator(const int max_subdivisions,
                                 const double relative_accuracy,
@@ -331,16 +353,17 @@ public:
   //! \brief Setter to the dimensioning parameter of the working array.
   void work_size(const int work_size) noexcept;
 
-  //! \brief Indicates whether object is in a valid state for usage in
-  //!        `integratecpp::integrator::operator()()`.
+  /*!
+   * \brief  Checks whether all configuration parameters' preconditions are met.
+   */
   bool is_valid() const noexcept;
 
   /*!
-   * \brief   Asserts whether object is in a valid state for usage i n
-   *          `integratecpp::integrator::operator()()`, possibly with an
-   *          informative error message.
+   * \brief  Asserts whether all configuration parameters' preconditions are
+   *         met, possibly with an informative error message.
    *
-   * \exception  throws integratecpp::invalid_input_error.
+   * \exception  throws integratecpp::invalid_input_error if configuration
+   *             parameters' preconditions are not fulfilled.
    */
   void assert_validity() const;
 
@@ -357,6 +380,8 @@ public:
    * \return       a `integratecpp::integrator::return_type` with the
    *               integration results.
    *
+   * \exception    throws integratecpp::invalid_input_error if configuration
+   *               parameters' preconditions are not fulfilled.
    * \exception    throws integratecpp::max_subdivision_error if the maximal
    *               number of subdivisions is reached without fulfilling required
    *               error conditions.
@@ -369,6 +394,10 @@ public:
    *               roundoff error is detected in the extrapolation table.
    * \exception    throws integratecpp::divergence_error if the integral is
    *               deemed divergence (or slowly convergent).
+   * \exception    throws integratecpp::integration_runtime_error if the
+   *               `Callable` returns infinite values.
+   * \exception    rethrows catched exceptions that occur during the evaluation
+   *               of the `Callable`.
    */
   template <typename UnaryRealFunction_>
   return_type operator()(UnaryRealFunction_ &&fn, const double lower,
@@ -403,30 +432,36 @@ static_assert(std::is_standard_layout<integrator>::value,
  *                double` signature.
  * \param lower   a `double` for the lower bound.
  * \param upper   a `double` for the upper bound.
- * \param config  a `const` reference to a
+ * \param config  an optional  `const` reference to a
  *                `integratecpp::integrator::config_type` configuration
  *                parameter.
  *
  * \return        a `integratecpp::integrator::return_type` with the
  *                integration results.
  *
- * \exception     throws integratecpp::max_subdivision_error if the maximal
- *                number of subdivisions is reached without fulfilling required
- *                error conditions.
- * \exception     throws integratecpp::roundoff_error if a roundoff error is
- *                detected which prevents the requested accuracy from being
- *                achieved.
- * \exception     throws integratecpp::bad_integrand_error if extremely bad
- *                integrand behaviour is detected during integration.
- * \exception     throws integratecpp::extrapolation_roundoff_error if a
- *                roundoff error is detected in the extrapolation table.
- * \exception     throws integratecpp::divergence_error if the integral is
- *                deemed divergence (or slowly convergent).
+ * \exception    throws integratecpp::invalid_input_error if configuration
+ *               parameters' preconditions are not fulfilled.
+ * \exception    throws integratecpp::max_subdivision_error if the maximal
+ *               number of subdivisions is reached without fulfilling required
+ *               error conditions.
+ * \exception    throws integratecpp::roundoff_error if a roundoff error is
+ *               detected which prevents the requested accuracy from being
+ *               achieved.
+ * \exception    throws integratecpp::bad_integrand_error if extremely bad
+ *               integrand behaviour is detected during integration.
+ * \exception    throws integratecpp::extrapolation_roundoff_error if a
+ *               roundoff error is detected in the extrapolation table.
+ * \exception    throws integratecpp::divergence_error if the integral is
+ *               deemed divergence (or slowly convergent).
+ * \exception    throws integratecpp::integration_runtime_error if the
+ *               `Callable` returns infinite values.
+ * \exception    rethrows catched exceptions that occur during the evaluation
+ *               of the `Callable`.
  */
 template <typename UnaryRealFunction_>
-integrator::return_type
-integrate(UnaryRealFunction_ &&fn, const double lower, const double upper,
-          const integrator::config_type config = integrator::config_type{});
+integrator::return_type integrate(UnaryRealFunction_ &&fn, const double lower,
+                                  const double upper,
+                                  const integrator::config_type config = {});
 
 /*!
  * \brief  Defines a type of object to be thrown as exception. It reports errors
