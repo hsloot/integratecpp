@@ -1,5 +1,14 @@
+/*!
+ * \file integratecpp.h
+ *
+ * \author      Henrik Sloot
+ * \date        2022
+ * \copyright   Copyright 2022 Henrik Sloot. All rights reserved.
+ *              This file is licensed under the terms of the MIT license.
+ */
+
 #pragma once
-//! \file integratecpp.h
+//!
 
 #include <algorithm>
 #include <cassert>
