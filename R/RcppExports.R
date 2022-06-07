@@ -77,8 +77,8 @@ Rcpp__integrator__is_valid <- function(ptr) {
     .Call(`_integratecpp_Rcpp__integrator__is_valid`, ptr)
 }
 
-Rcpp__integrator__assert_validity <- function(ptr) {
-    invisible(.Call(`_integratecpp_Rcpp__integrator__assert_validity`, ptr))
+Rcpp__integrator__throw_if_invalid <- function(ptr) {
+    invisible(.Call(`_integratecpp_Rcpp__integrator__throw_if_invalid`, ptr))
 }
 
 Rcpp__integrator__integrate <- function(ptr, fn, lower, upper) {

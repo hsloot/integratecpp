@@ -17,7 +17,7 @@ setValidity("Integrator", function(object) {
         return("dangling pointer")
     } else {
         return(tryCatch(
-            Rcpp__integrator__assert_validity(object@pointer),
+            Rcpp__integrator__throw_if_invalid(object@pointer),
             error = function(cond) {
                 return(as.character(cond))
             }

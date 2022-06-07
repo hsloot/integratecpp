@@ -210,12 +210,12 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// Rcpp__integrator__assert_validity
-void Rcpp__integrator__assert_validity(Rcpp::XPtr<integratecpp::integrator> ptr);
-RcppExport SEXP _integratecpp_Rcpp__integrator__assert_validity(SEXP ptrSEXP) {
+// Rcpp__integrator__throw_if_invalid
+void Rcpp__integrator__throw_if_invalid(Rcpp::XPtr<integratecpp::integrator> ptr);
+RcppExport SEXP _integratecpp_Rcpp__integrator__throw_if_invalid(SEXP ptrSEXP) {
 BEGIN_RCPP
     Rcpp::traits::input_parameter< Rcpp::XPtr<integratecpp::integrator> >::type ptr(ptrSEXP);
-    Rcpp__integrator__assert_validity(ptr);
+    Rcpp__integrator__throw_if_invalid(ptr);
     return R_NilValue;
 END_RCPP
 }
@@ -253,7 +253,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_integratecpp_Rcpp__integrator__get_work_size", (DL_FUNC) &_integratecpp_Rcpp__integrator__get_work_size, 1},
     {"_integratecpp_Rcpp__integrator__set_work_size", (DL_FUNC) &_integratecpp_Rcpp__integrator__set_work_size, 2},
     {"_integratecpp_Rcpp__integrator__is_valid", (DL_FUNC) &_integratecpp_Rcpp__integrator__is_valid, 1},
-    {"_integratecpp_Rcpp__integrator__assert_validity", (DL_FUNC) &_integratecpp_Rcpp__integrator__assert_validity, 1},
+    {"_integratecpp_Rcpp__integrator__throw_if_invalid", (DL_FUNC) &_integratecpp_Rcpp__integrator__throw_if_invalid, 1},
     {"_integratecpp_Rcpp__integrator__integrate", (DL_FUNC) &_integratecpp_Rcpp__integrator__integrate, 4},
     {NULL, NULL, 0}
 };

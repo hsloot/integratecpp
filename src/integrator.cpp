@@ -71,10 +71,10 @@ bool Rcpp__integrator__is_valid(Rcpp::XPtr<integratecpp::integrator> ptr) {
 }
 
 // [[Rcpp::export(rng=false)]]
-void Rcpp__integrator__assert_validity(
+void Rcpp__integrator__throw_if_invalid(
     Rcpp::XPtr<integratecpp::integrator> ptr) {
   try {
-    (*ptr).assert_validity();
+    (*ptr).throw_if_invalid();
   } catch (::Rcpp::exception &e) {                       // # nocov
     Rcpp::stop("Not initialized");                       // # nocov
   } catch (const integratecpp::invalid_input_error &e) { // # nocov
