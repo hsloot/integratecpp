@@ -4,6 +4,9 @@
 # integratecpp
 
 <!-- badges: start -->
+
+[![Codecov test
+coverage](https://codecov.io/gh/hsloot/integratecpp/branch/main/graph/badge.svg)](https://app.codecov.io/gh/hsloot/integratecpp?branch=main)
 <!-- badges: end -->
 
 The package `integratecpp` provides a header-only interface to `R`’s
@@ -54,23 +57,28 @@ Rcpp::List integrate_exponential_expectation(const double lambda) {
   };
 
   decltype(integratecpp::integrate(fn, 0., 1.)) result;
+  std::string message;
   try {
     result =
         integratecpp::integrate(fn, 0., std::numeric_limits<double>::infinity());
+  } catch (const Rcpp::exception &e) {
+      Rcpp::stop(e.what());
   } catch (const integratecpp::integration_runtime_error &e) {
-    result = e.result();
+      result = e.result();
+      message = e.what();
   } catch (const integratecpp::integration_logic_error &e) {
-    result = e.result();
+      result = e.result();
+      message = e.what();
   } catch (const std::exception &e) {
-    Rcpp::stop(e.what());
+      Rcpp::stop(e.what()); // # nocov
   } catch (...) {
-    Rcpp::stop("Unexcpected error");
+      Rcpp::stop("Unexcpected error"); // # nocov
   }
 
   return Rcpp::List::create(Rcpp::Named("value") = result.value,
-                            Rcpp::Named("abserr") = result.abserr,
+                            Rcpp::Named("abs.error") = result.absolute_error,
                             Rcpp::Named("subdivisions") = result.subdivisions,
-                            Rcpp::Named("neval") = result.neval);
+                            Rcpp::Named("message") = message);
 }
 ```
 
@@ -81,51 +89,51 @@ integrate_exponential_expectation(1)
 #> $value
 #> [1] 1
 #> 
-#> $abserr
+#> $abs.error
 #> [1] 6.357144e-06
 #> 
 #> $subdivisions
 #> [1] 4
 #> 
-#> $neval
-#> [1] 105
+#> $message
+#> [1] ""
 integrate_exponential_expectation(2)
 #> $value
 #> [1] 0.5
 #> 
-#> $abserr
+#> $abs.error
 #> [1] 8.604832e-06
 #> 
 #> $subdivisions
 #> [1] 3
 #> 
-#> $neval
-#> [1] 75
+#> $message
+#> [1] ""
 integrate_exponential_expectation(3)
 #> $value
 #> [1] 0.3333333
 #> 
-#> $abserr
+#> $abs.error
 #> [1] 8.06807e-08
 #> 
 #> $subdivisions
 #> [1] 3
 #> 
-#> $neval
-#> [1] 75
+#> $message
+#> [1] ""
 
 integrate_exponential_expectation(-1)
 #> $value
-#> [1] -Inf
+#> [1] 0
 #> 
-#> $abserr
-#> [1] NaN
+#> $abs.error
+#> [1] 0
 #> 
 #> $subdivisions
-#> [1] 41
+#> [1] 0
 #> 
-#> $neval
-#> [1] 1215
+#> $message
+#> [1] "non-finite function value"
 ```
 
 ## Code of Conduct

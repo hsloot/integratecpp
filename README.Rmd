@@ -60,23 +60,28 @@ Rcpp::List integrate_exponential_expectation(const double lambda) {
   };
 
   decltype(integratecpp::integrate(fn, 0., 1.)) result;
+  std::string message;
   try {
     result =
         integratecpp::integrate(fn, 0., std::numeric_limits<double>::infinity());
+  } catch (const Rcpp::exception &e) {
+      Rcpp::stop(e.what());
   } catch (const integratecpp::integration_runtime_error &e) {
-    result = e.result();
+      result = e.result();
+      message = e.what();
   } catch (const integratecpp::integration_logic_error &e) {
-    result = e.result();
+      result = e.result();
+      message = e.what();
   } catch (const std::exception &e) {
-    Rcpp::stop(e.what());
+      Rcpp::stop(e.what()); // # nocov
   } catch (...) {
-    Rcpp::stop("Unexcpected error");
+      Rcpp::stop("Unexcpected error"); // # nocov
   }
 
   return Rcpp::List::create(Rcpp::Named("value") = result.value,
-                            Rcpp::Named("abserr") = result.abserr,
+                            Rcpp::Named("abs.error") = result.absolute_error,
                             Rcpp::Named("subdivisions") = result.subdivisions,
-                            Rcpp::Named("neval") = result.neval);
+                            Rcpp::Named("message") = message);
 }
 ```
 
