@@ -21,6 +21,8 @@ Rcpp::List Rcpp__integrate(Rcpp::Function fn, const double lower,
         max_subdivisions, relative_accuracy, absolute_accuracy, work_size};
     result = integratecpp::integrate(fn_, lower, upper, std::move(cfg));
     message = "OK";
+  } catch (const Rcpp::exception &e) {
+    Rcpp::stop(e.what());
   } catch (const integratecpp::integration_runtime_error &e) {
     result = e.result();
     message = e.what();

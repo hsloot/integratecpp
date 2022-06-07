@@ -94,6 +94,8 @@ Rcpp::List Rcpp__integrator__integrate(Rcpp::XPtr<integratecpp::integrator> ptr,
   try {
     result = (*ptr)(fn_, lower, upper);
     message = "OK";
+  } catch (const Rcpp::exception &e) {
+    Rcpp::stop(e.what());
   } catch (const integratecpp::integration_runtime_error &e) {
     result = e.result();
     message = e.what();

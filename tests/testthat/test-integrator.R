@@ -342,3 +342,19 @@ test_that("`divergence_error` is thrown", {
         "the integral is probably divergent"
     )
 })
+
+test_that("function evaluation error is thrown", {
+    integrator <- Integrator()
+    expect_error(
+        integrator$integrate(function(x) stop("stop on purpose"), 0, 1),
+        "Evaluation error: stop on purpose."
+    )
+})
+
+test_that("non-finite values error is thrown", {
+    integrator <- Integrator()
+    expect_error(
+        integrator$integrate(function(x) ifelse(x < 0.3, 1 / (1 - 0.3), ifelse(x > 0.7, 1 / (1 - 0.7), Inf)), 0, 1),
+        "non-finite function value"
+    )
+})

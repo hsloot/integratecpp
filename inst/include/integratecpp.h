@@ -5,6 +5,7 @@
 #include <cassert>
 #include <cmath>
 #include <cstring>
+#include <exception>
 #include <functional>
 #include <limits>
 #include <memory>
@@ -435,6 +436,9 @@ integrate(UnaryRealFunction_ &&fn, const double lower, const double upper,
  *         the program and not easily predicted.
  */
 class integration_runtime_error : public std::runtime_error {
+private:
+  integrator::return_type result_{};
+
 public:
   using std::runtime_error::runtime_error;
 
@@ -463,9 +467,6 @@ public:
 
   //! \brief Accessor the the result at the time or error.
   virtual integrator::return_type result() const noexcept;
-
-private:
-  integrator::return_type result_{};
 };
 
 /*!
@@ -477,6 +478,8 @@ private:
  *         class invariants and may be preventable.
  */
 class integration_logic_error : public std::logic_error {
+private:
+  integrator::return_type result_{};
 
 public:
   using std::logic_error::logic_error;
@@ -506,9 +509,6 @@ public:
 
   //! \brief Accessor the the result at the time or error.
   virtual integrator::return_type result() const noexcept;
-
-private:
-  integrator::return_type result_{};
 };
 
 /*!
@@ -606,7 +606,7 @@ public:
 };
 
 // -------------------------------------------------------------------------------------------------
-// Implementations of aux-functions in integratecpp::details
+// Implementations of internal type_traits in integratecpp::type_traits
 // -------------------------------------------------------------------------------------------------
 
 namespace type_traits {
@@ -696,18 +696,20 @@ inline integrator::return_type integrator::operator()(UnaryRealFunction_ &&fn,
     const auto begin = [](double *x) { return static_cast<iterator>(&x[0]); };
     using ex_t =
         std::pair<typename std::remove_reference<UnaryRealFunction_>::type,
-                  std::unique_ptr<integration_runtime_error>>;
+                  std::exception_ptr>;
 
     auto &fn_integrand = (*static_cast<ex_t *>(ex)).first;
     auto &e_ptr = (*static_cast<ex_t *>(ex)).second;
 
-    // NOTE: `details::guarded_transform` is a wrapper arround `std::transform`,
+    // NOTE: `guarded_transform` is a wrapper arround `std::transform`,
     // catching all exceptions appart `std::bad_alloc` and storing them in the
     // provided `std::unique_ptr`.
+    // an additional check is performed whether all results are finite.
+    // in case of errors, all function values are set to zero.
     const auto guarded_transform =
         [](const_iterator first, const_iterator last, iterator d_first,
            typename std::remove_reference<UnaryRealFunction_>::type &fn,
-           std::unique_ptr<integration_runtime_error> &e_ptr) {
+           std::exception_ptr &e_ptr) {
           const auto cleanup = [](iterator first, std::size_t size) {
             try {
               std::fill_n(first, size, 0.);
@@ -717,21 +719,29 @@ inline integrator::return_type integrator::operator()(UnaryRealFunction_ &&fn,
           try {
             std::transform(first, last, d_first, fn);
           } catch (const std::bad_alloc &e) {
-            // memory allocation issues inside std::transform must not be
+            // NOTE: memory allocation issues inside std::transform must not be
             // ignored
-            std::throw_with_nested(e);
+            std::rethrow_exception(std::current_exception());
           } catch (const std::exception &e) {
             cleanup(d_first, std::distance(first, last));
-            e_ptr.reset(new integration_runtime_error(e.what()));
+            e_ptr = std::current_exception();
           } catch (...) {
             cleanup(d_first, std::distance(first, last));
-            e_ptr.reset(new integration_runtime_error("Unknown error"));
+            e_ptr = std::make_exception_ptr(
+                integration_runtime_error("Unknown error"));
+          }
+
+          if (!std::all_of(d_first, d_first + std::distance(first, last),
+                           [](const double x) { return std::isfinite(x); })) {
+            cleanup(d_first, std::distance(first, last));
+            e_ptr = std::make_exception_ptr(
+                integration_runtime_error("non-finite function value"));
           }
         };
     guarded_transform(cbegin(x), cend(x, n), begin(x), fn_integrand, e_ptr);
   };
   auto ex = std::make_pair(std::forward<UnaryRealFunction_>(fn),
-                           std::unique_ptr<integration_runtime_error>());
+                           std::exception_ptr());
 
   if (std::isfinite(lower) && std::isfinite(upper)) {
     Rdqags(integrand_callback, &ex, &lower, &upper, &epsabs, &epsrel, &result,
@@ -766,14 +776,14 @@ inline integrator::return_type integrator::operator()(UnaryRealFunction_ &&fn,
   // NOTE: translate error codes from `Rdqag[is]` and evaluation errors from
   // `fn` to suitable exceptions
   const auto translate_error = [](const int error_code,
-                                  std::unique_ptr<integration_runtime_error>
-                                      &e_ptr,
+                                  std::exception_ptr e_ptr,
                                   const return_type result) {
-    if (e_ptr.get() != nullptr) {
-      std::throw_with_nested(*e_ptr);
+    if (e_ptr) {
+      std::rethrow_exception(e_ptr);
     }
     if (error_code > 0) {
-      // NOTE: invalid argument errors should be caught during initialization
+      // NOTE: invalid argument errors should be caught during
+      // initialization
       assert(error_code < 6);
       if (error_code == 1) {
         throw max_subdivision_error("maximum number of subdivisions reached",

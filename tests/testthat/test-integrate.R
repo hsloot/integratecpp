@@ -299,9 +299,16 @@ test_that("`divergence_error` is thrown", {
     )
 })
 
-test_that("`function evaluation error` is thrown", {
+test_that("function evaluation error is thrown", {
     expect_error(
-        integrate(function(x) stop("function evaluation error"), 0, 1),
-        "function evaluation error"
+        integrate(function(x) stop("stop on purpose"), 0, 1),
+        "Evaluation error: stop on purpose."
+    )
+})
+
+test_that("non-finite values error is thrown", {
+    expect_error(
+        integrate(function(x) ifelse(x < 0.3, 1 / (1 - 0.3), ifelse(x > 0.7, 1 / (1 - 0.7), Inf)), 0, 1),
+        "non-finite function value"
     )
 })
