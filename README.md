@@ -141,13 +141,13 @@ The key part for adhering to the interface of `Rdqags` is creating the
 callback functor `fn_callback`, taking a `void *` pointer to the
 original function, which is than internally casted to the correct type
 and which overwrites an array of double with corresponding function
-evaluations. This is rather complicated and requires familiarity with
-pointers. Additionally, this snippet is missing a translation of the
-error code into a proper error message To make it worse, without
-guarding the callback functions from `C++` exceptions, we introduce
-possible undefined behavior.
+evaluations. This is rather complicated and requires being more
+familiarity with pointers. Additionally, this snippet is missing a
+translation of the error code into a proper error message. To make it
+worse, without guarding the callback functions from `C++` exceptions, we
+introduce possible undefined behavior.
 
-Using our header simplifies numerical integration in `Rcpp`
+Using our wrapper simplifies numerical integration in `Rcpp`
 considerably:
 
 ``` cpp
