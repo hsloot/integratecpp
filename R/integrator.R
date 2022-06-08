@@ -34,7 +34,7 @@ setValidity("Integrator", function(object) {
 #' @importFrom methods setMethod validObject
 #' @keywords internal
 setMethod("initialize", "Integrator", function(.Object, max_subdivisions = 100, relative_accuracy = .Machine$double.eps^0.25, absolute_accuracy = relative_accuracy, work_size = 4 * max_subdivisions) { # nolint
-    .Object@pointer <- Rcpp__integrator__new(max_subdivisions, relative_accuracy, absolute_accuracy, work_size)
+    .Object@pointer <- Rcpp__integrator__new(max_subdivisions, relative_accuracy, absolute_accuracy, work_size) # nolint
     validObject(.Object)
 
     .Object
@@ -42,8 +42,8 @@ setMethod("initialize", "Integrator", function(.Object, max_subdivisions = 100, 
 
 #' @describeIn Integrator-class
 #'   Either access configuration parameters
-#'   `max_subdivisions`, `relative_accuracy`, `absolute_accuracy`, or `work_size` or get the
-#'   integration routine with signature
+#'   `max_subdivisions`, `relative_accuracy`, `absolute_accuracy`, or
+#'   `work_size` or get the integration routine with signature
 #'   `function(f, lower, upper, ..., stop.on.error = TRUE)`.
 #'
 #' @include RcppExports.R
@@ -51,7 +51,7 @@ setMethod("initialize", "Integrator", function(.Object, max_subdivisions = 100, 
 #'
 #' @keywords internal
 setMethod("$", "Integrator", function(x, name) {
-    if (name %in% c("max_subdivisions", "relative_accuracy", "absolute_accuracy", "work_size")) {
+    if (name %in% c("max_subdivisions", "relative_accuracy", "absolute_accuracy", "work_size")) { # nolint
         get(paste("Rcpp__integrator__get", name, sep = "_"))(x@pointer)
     } else if (name == "integrate") {
         function(f, lower, upper, ..., stop_on_error = TRUE) { # nolint
@@ -75,14 +75,15 @@ setMethod("$", "Integrator", function(x, name) {
 
 #' @describeIn Integrator-class
 #'   Set any of the configuration parameters
-#'   `max_subdivisions`, `relative_accuracy`, `absolute_accuracy`, or `work_size`.
+#'   `max_subdivisions`, `relative_accuracy`, `absolute_accuracy`,
+#'   or `work_size`.
 #'
 #' @include RcppExports.R
 #' @importFrom methods setMethod validObject
 #'
 #' @keywords internal
 setMethod("$<-", "Integrator", function(x, name, value) {
-    if (name %in% c("max_subdivisions", "relative_accuracy", "absolute_accuracy", "work_size")) {
+    if (name %in% c("max_subdivisions", "relative_accuracy", "absolute_accuracy", "work_size")) { # nolint
         get(paste("Rcpp__integrator__set", name, sep = "_"))(x@pointer, value)
         validObject(x)
 
@@ -93,6 +94,7 @@ setMethod("$<-", "Integrator", function(x, name, value) {
 })
 
 # nocov start
+# nolint start
 
 #' @describeIn Integrator-class
 #'   print an object of class `Integrator`.
@@ -117,4 +119,5 @@ setMethod("show", "Integrator", function(object) {
     invisible(NULL)
 })
 
+# nolint end
 # nocov end

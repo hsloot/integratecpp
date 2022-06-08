@@ -29,12 +29,13 @@ A class for numerical integration
 \item \code{initialize,Integrator-method}: Construct an object of class \code{Integrator}.
 
 \item \code{$,Integrator-method}: Either access configuration parameters
-\code{max_subdivisions}, \code{relative_accuracy}, \code{absolute_accuracy}, or \code{work_size} or get the
-integration routine with signature
+\code{max_subdivisions}, \code{relative_accuracy}, \code{absolute_accuracy}, or
+\code{work_size} or get the integration routine with signature
 \verb{function(f, lower, upper, ..., stop.on.error = TRUE)}.
 
 \item \code{$<-,Integrator-method}: Set any of the configuration parameters
-\code{max_subdivisions}, \code{relative_accuracy}, \code{absolute_accuracy}, or \code{work_size}.
+\code{max_subdivisions}, \code{relative_accuracy}, \code{absolute_accuracy},
+or \code{work_size}.
 }}
 
 \section{Slots}{

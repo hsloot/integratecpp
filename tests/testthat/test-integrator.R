@@ -354,7 +354,12 @@ test_that("function evaluation error is thrown", {
 test_that("non-finite values error is thrown", {
     integrator <- Integrator()
     expect_error(
-        integrator$integrate(function(x) ifelse(x < 0.3, 1 / (1 - 0.3), ifelse(x > 0.7, 1 / (1 - 0.7), Inf)), 0, 1),
+        integrator$integrate(
+            function(x) {
+                ifelse(x < 0.3, 1 / (1 - 0.3), ifelse(x > 0.7, 1 / (1 - 0.7), Inf)) # nolint
+            },
+            0, 1
+        ),
         "non-finite function value"
     )
 })

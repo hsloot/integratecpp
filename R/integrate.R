@@ -17,7 +17,14 @@ integrate <- function(f, lower, upper, ..., max_subdivisions = 100L,
                       stop.on.error = TRUE # nolint
 ) {
     out <- Rcpp__integrate(
-        function(x) f(x, ...), lower, upper, max_subdivisions, relative_accuracy, absolute_accuracy, work_size
+        function(x) {
+            f(x, ...)
+        },
+        lower, upper,
+        max_subdivisions,
+        relative_accuracy,
+        absolute_accuracy,
+        work_size
     )
     out$call <- match.call()
     class(out) <- "integrate"

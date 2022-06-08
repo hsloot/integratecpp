@@ -189,14 +189,26 @@ test_that("Set required abs. tol. to zero for normal distribution's variance", {
     }
 
     expect_equal(
-        remove_call(integrate(fn, -Inf, Inf, mean = 0, sd = 2, absolute_accuracy = 0)),
-        remove_call(stats::integrate(fn, 0, Inf, mean = 0, sd = 2, abs.tol = 0))
+        remove_call(integrate(fn, -Inf, Inf,
+            mean = 0, sd = 2,
+            absolute_accuracy = 0
+        )),
+        remove_call(stats::integrate(fn, 0, Inf,
+            mean = 0, sd = 2,
+            abs.tol = 0
+        ))
     )
 
     expect_equal(
-        remove_call(integrate(fn, -Inf, Inf, mean = 0, sd = 0.5, absolute_accuracy = 0)),
+        remove_call(integrate(fn, -Inf, Inf,
+            mean = 0, sd = 0.5,
+            absolute_accuracy = 0
+        )),
         remove_call(
-            stats::integrate(fn, -Inf, Inf, mean = 0, sd = 0.5, abs.tol = 0)
+            stats::integrate(fn, -Inf, Inf,
+                mean = 0, sd = 0.5,
+                abs.tol = 0
+            )
         )
     )
 })
@@ -230,7 +242,8 @@ test_that("`eps.abs <= 0 && eps.rel < max(50*.Machine$double.eps, 0.5e-28)` prod
         integrate(
             fn, 0, Inf,
             rate = 1,
-            absolute_accuracy = 0, relative_accuracy = 0.5 * max(50 * .Machine$double.eps, 0.5e-28)
+            absolute_accuracy = 0,
+            relative_accuracy = 0.5 * max(50 * .Machine$double.eps, 0.5e-28)
         ),
         "the input is invalid"
     )
@@ -240,7 +253,10 @@ test_that("`work_size < 4 * max_subdivisions` produces `invalid_input_error`", {
     fn <- function(x, rate = 1) (x - 1 / rate)^2 * dexp(x, rate = rate)
 
     expect_error(
-        integrate(fn, 0, Inf, rate = 1, max_subdivisions = 100, work_size = 399),
+        integrate(fn, 0, Inf,
+            rate = 1,
+            max_subdivisions = 100, work_size = 399
+        ),
         "the input is invalid"
     )
 })
@@ -308,7 +324,12 @@ test_that("function evaluation error is thrown", {
 
 test_that("non-finite values error is thrown", {
     expect_error(
-        integrate(function(x) ifelse(x < 0.3, 1 / (1 - 0.3), ifelse(x > 0.7, 1 / (1 - 0.7), Inf)), 0, 1),
+        integrate(
+            function(x) {
+                ifelse(x < 0.3, 1 / (1 - 0.3), ifelse(x > 0.7, 1 / (1 - 0.7), Inf)) # nolint
+            },
+            0, 1
+        ),
         "non-finite function value"
     )
 })
