@@ -30,9 +30,12 @@
 namespace integratecpp {
 
 /*!
- * \brief  A functor wrapping `C`-level functions `Rdqags` and `Rdqagi` declared
- *         in the `R`-headers `<R_ext/Applic.h>` and implemented in
- *         `src/appl/integrate.c`.
+ * \brief  Defines a functor wrapping the `C`-level functions `Rdqags` and
+ *         `Rdqagi` for the numerical integration of univariate real functions
+ *         declared in the `R`-header
+ *         [`<R_ext/Applic.h>`](https://github.com/wch/r-source/blob/trunk/src/include/R_ext/Applic.h)
+ *         and implemented in
+ *         [`src/appl/integrate.c`](https://github.com/wch/r-source/blob/trunk/src/appl/integrate.c).
  *
  * - Integration parameters can be configured via structs of type
  *   `integratecpp::integrator::config_type`, holding the maximal number of
@@ -61,18 +64,9 @@ class integrator {
 public:
   /*!
    * \brief  Defines a struct for the integation results returned from
-   *         `integratecpp::integrator::operator()()`.
-   *
-   * Contains the following data elements (compare `src/appl/integrate.c` in
-   * R-source):
-   * - `double value`:          The approximation of the integral.
-   * - `double absolute_error`:
-   *                            The estimate of the modules of the absolute
-   *                            error, which should be equal or larger than
-   *                            `abs(I-result)`.
-   * - `int subdivisions`:      The final number of subintervals produced in
-   *                            the subdivision process.
-   * - `int neval`:             The number of integrand evaluations.
+   *         `integratecpp::integrator::operator()()`. Compare
+   *         [`src/appl/integrate.c`](https://github.com/wch/r-source/blob/trunk/src/appl/integrate.c)
+   *         in R-source):
    */
   struct return_type {
     //! \brief The approximated value.
@@ -99,40 +93,30 @@ public:
                                    const int neval) noexcept;
   };
   static_assert(std::is_nothrow_default_constructible<return_type>::value,
-                "`integratecpp::integator::return_type` not nothrow "
+                "`integratecpp::integrator::return_type` not nothrow "
                 "default-constructible");
   static_assert(
       std::is_nothrow_copy_constructible<return_type>::value,
-      "`integratecpp::integator::return_type` not nothrow copy-constructible");
+      "`integratecpp::integrator::return_type` not nothrow copy-constructible");
   static_assert(
       std::is_nothrow_copy_assignable<return_type>::value,
-      "`integratecpp::integator::return_type` not nothrow copy-assignable");
+      "`integratecpp::integrator::return_type` not nothrow copy-assignable");
   static_assert(
       std::is_nothrow_move_constructible<return_type>::value,
-      "`integratecpp::integator::return_type` not nothrow move-constructible");
+      "`integratecpp::integrator::return_type` not nothrow move-constructible");
   static_assert(
       std::is_nothrow_move_assignable<return_type>::value,
-      "`integratecpp::integator::return_type` not nothrow move-assignable");
+      "`integratecpp::integrator::return_type` not nothrow move-assignable");
   static_assert(std::is_trivial<return_type>::value,
-                "`integratecpp::integator::return_type` not trivial");
+                "`integratecpp::integrator::return_type` not trivial");
   static_assert(std::is_standard_layout<return_type>::value,
-                "`integratecpp::integator::return_type` not standard layout");
+                "`integratecpp::integrator::return_type` not standard layout");
 
   /*!
    * \brief  Defines a struct for the integration configuration parameters used
-   *         in `integratecpp::integrator::operator()()`.
-   *
-   * Contains the following data elements (see `src/appl/integrate.c` in
-   * R-source):
-   * - `int max_subdivisions = 100`:    The maximum number of subintervals in
-   *                                    the partition of the given integration
-   *                                    interval (lower, upper).
-   * - `double relative_accuracy = rel.mach.acc.^.25`:
-   *                                    The requested relative accuracy.
-   * - `double absolute_accuracy = relative_accuracy`:
-   *                                    The requested absolute accuracy.
-   * - `int work_size = 400`:           A dimensioning parameter for the working
-   *                                    array.
+   *         in `integratecpp::integrator::operator()()`. Compare
+   *         [`src/appl/integrate.c`](https://github.com/wch/r-source/blob/trunk/src/appl/integrate.c)
+   *         in R-source.
    *
    * \warning   Constraints for the configuration parameters are unchecked upon
    *            construction, but can be validated using
@@ -181,7 +165,7 @@ public:
      *                           subdivisions.
      * \param relative_accuracy  a `double` for the requested relative accuracy.
      *
-     * \warning   Constraints for the configuration parameters are unchecked
+     * \warning   Preconditions for the configuration parameters are unchecked
      *            upon construction, but can be validated using
      *            `integratecpp::integrator::config_type::is_valid()` and
      *            `integratecpp::integrator::config_type::throw_if_invalid()`.
@@ -198,7 +182,7 @@ public:
      * \param relative_accuracy  a `double` for the requested relative accuracy.
      * \param absolute_accuracy  a `double` for the requested absolute accuracy.
      *
-     * \warning   Constraints for the configuration parameters are unchecked
+     * \warning   Preconditions for the configuration parameters are unchecked
      *            upon construction, but can be validated using
      *            `integratecpp::integrator::config_type::is_valid()` and
      *            `integratecpp::integrator::config_type::throw_if_invalid()`.
@@ -216,7 +200,7 @@ public:
      * \param absolute_accuracy  a `double` for the requested absolute accuracy.
      * \param work_size          an `int` for the size of the working array.
      *
-     * \warning   Constraints for the configuration parameters are unchecked
+     * \warning   Preconditions for the configuration parameters are unchecked
      *            upon construction, but can be validated using
      *            `integratecpp::integrator::config_type::is_valid()` and
      *            `integratecpp::integrator::config_type::throw_if_invalid()`.
@@ -226,10 +210,19 @@ public:
                                    const double absolute_accuracy,
                                    const int work_size) noexcept;
 
+    //! \cond INTERNAL
+
+    // REVIEW: consider removing `is_valid` and `throw_if_invalid` from class
+    // and provide them as free functions to declutter public interface. They
+    // are only used by `integratecpp::integrator::opreator()()` and for test
+    // purposes.
+
+    //! \internal
     //! \brief  Checks whether all members' preconditions are met.
     bool is_valid() const noexcept;
 
     /*!
+     * \internal
      * \brief   Asserts whether all members' preconditions are met, possibly
      *          with an informative error message.
      *
@@ -237,30 +230,34 @@ public:
      *             are not fulfilled.
      */
     void throw_if_invalid() const;
+
+    //! \endcond
   };
   static_assert(std::is_nothrow_default_constructible<config_type>::value,
-                "`integratecpp::integator::config_type` not nothrow "
+                "`integratecpp::integrator::config_type` not nothrow "
                 "default-constructible");
   static_assert(
       std::is_nothrow_copy_constructible<config_type>::value,
-      "`integratecpp::integator::config_type` not nothrow copy-constructible");
+      "`integratecpp::integrator::config_type` not nothrow copy-constructible");
   static_assert(
       std::is_nothrow_copy_assignable<config_type>::value,
-      "`integratecpp::integator::config_type` not nothrow copy-assignable");
+      "`integratecpp::integrator::config_type` not nothrow copy-assignable");
   static_assert(
       std::is_nothrow_move_constructible<config_type>::value,
-      "`integratecpp::integator::config_type` not nothrow move-constructible");
+      "`integratecpp::integrator::config_type` not nothrow move-constructible");
   static_assert(
       std::is_nothrow_move_assignable<config_type>::value,
-      "`integratecpp::integator::config_type` not nothrow move-assignable");
+      "`integratecpp::integrator::config_type` not nothrow move-assignable");
   // NOTE: `integratecpp::integrator::config_type` is not trivial as it has
   //        non-trivial member intializations.
   // static_assert(std::is_trivial<config_type>::value,
-  //               "`integratecpp::integator::config_type` not trivial");
+  //               "`integratecpp::integrator::config_type` not trivial");
   static_assert(std::is_standard_layout<config_type>::value,
-                "`integratecpp::integator::config_type` not standard layout");
+                "`integratecpp::integrator::config_type` not standard layout");
 
 private:
+  //! \internal
+  //! \brief Configuration parameter for numerical integration.
   config_type config_{};
 
 public:
@@ -282,8 +279,8 @@ public:
    * \param max_subdivisions   an `int` for the maximum number of subdivisions.
    * \param relative_accuracy  a `double` for the requested relative accuracy.
    *
-   * \warning   Constraints for the configuration parameters are unchecked upon
-   *            construction, but can be validated using
+   * \warning   Preconditions for the configuration parameters are unchecked
+   *            upon construction, but can be validated using
    *            `integratecpp::integrator::config_type::is_valid()` and
    *            `integratecpp::integrator::config_type::throw_if_invalid()`.
    */
@@ -298,8 +295,8 @@ public:
    * \param relative_accuracy  a `double` for the requested relative accuracy.
    * \param absolute_accuracy  a `double` for the requested absolute accuracy.
    *
-   * \warning   Constraints for the configuration parameters are unchecked upon
-   *            construction, but can be validated using
+   * \warning   Preconditions for the configuration parameters are unchecked
+   *            upon construction, but can be validated using
    *            `integratecpp::integrator::config_type::is_valid()` and
    *            `integratecpp::integrator::config_type::throw_if_invalid()`.
    */
@@ -316,8 +313,8 @@ public:
    * \param absolute_accuracy  a `double` for the requested absolute accuracy.
    * \param work_size          an `int` for the size of the working array.
    *
-   * \warning   Constraints for the configuration parameters are unchecked upon
-   *            construction, but can be validated using
+   * \warning   Preconditions for the configuration parameters are unchecked
+   *            upon construction, but can be validated using
    *            `integratecpp::integrator::config_type::is_valid()` and
    *            `integratecpp::integrator::config_type::throw_if_invalid()`.
    */
@@ -326,47 +323,61 @@ public:
                                 const double absolute_accuracy,
                                 const int work_size) noexcept;
 
+  //! \cond INTERNAL
+
+  //! \internal
   //! \brief Accessor for the configuration parameters.
   constexpr auto config() const
       noexcept(std::is_nothrow_copy_assignable<config_type>::value)
           -> decltype(config_);
 
+  //! \internal
   //! \brief Setter for the configuration parameters.
   void config(const config_type &config) noexcept;
 
+  //! \internal
   //! \brief Accessor to the maximum number of subdivisions.
   constexpr auto max_subdivisions() const noexcept
       -> decltype(config_.max_subdivisions);
 
+  //! \internal
   //! \brief Setter to the maximum number of subdivisions.
   void max_subdivisions(const int max_subdivisions) noexcept;
 
+  //! \internal
   //! \brief Accessor to the requested relative accuracy.
   constexpr auto relative_accuracy() const noexcept
       -> decltype(config_.relative_accuracy);
 
+  //! \internal
   //! \brief Setter to the requested relative accuracy.
   void relative_accuracy(const double relative_accuracy) noexcept;
 
+  //! \internal
   //! \brief Accessor to the requested absolute accuracy.
   constexpr auto absolute_accuracy() const noexcept
       -> decltype(config_.absolute_accuracy);
 
+  //! \internal
   //! \brief Setter to the requested absolute accuracy.
   void absolute_accuracy(const double absolute_accuracy) noexcept;
 
+  //! \internal
   //! \brief Accessor to the dimensioning parameter of the working array.
   constexpr auto work_size() const noexcept -> decltype(config_.work_size);
 
+  //! \internal
   //! \brief Setter to the dimensioning parameter of the working array.
   void work_size(const int work_size) noexcept;
 
   /*!
+   * \internal
    * \brief  Checks whether all configuration parameters' preconditions are met.
    */
   bool is_valid() const noexcept;
 
   /*!
+   * \internal
    * \brief  Asserts whether all configuration parameters' preconditions are
    *         met, possibly with an informative error message.
    *
@@ -375,10 +386,15 @@ public:
    */
   void throw_if_invalid() const;
 
+  //! \endcond
+
   /*!
-   * \brief  Approximates an integratal numerically for a Lambda-functor, lower,
-   *         and upper bound, using `Rdqags` if both bounds are are finite and
+   * \brief  Approximates an integratal numerically for a functor, lower, and
+   *         upper bound, using `Rdqags` if both bounds are are finite and
    *         `Rdqagi` of at least one of the bounds is infinite.
+   *
+   * \tparam UnaryRealFunction_  A `Callable` type invocable with `const double`
+   *                             and returning `double`.
    *
    * \param fn     a `UnaryRealFunction_` functor compatible with a
    *               `const double` signature.
@@ -412,29 +428,31 @@ public:
                          const double upper) const;
 };
 static_assert(std::is_nothrow_default_constructible<integrator>::value,
-              "`integratecpp::integator::integrator` not nothrow "
+              "`integratecpp::integrator::integrator` not nothrow "
               "default-constructible");
 static_assert(std::is_nothrow_copy_constructible<integrator>::value,
-              "`integratecpp::integator` not nothrow copy-constructible");
+              "`integratecpp::integrator` not nothrow copy-constructible");
 static_assert(std::is_nothrow_copy_assignable<integrator>::value,
-              "`integratecpp::integator` not nothrow copy-assignable");
+              "`integratecpp::integrator` not nothrow copy-assignable");
 static_assert(std::is_nothrow_move_constructible<integrator>::value,
-              "`integratecpp::integator` not nothrow move-constructible");
+              "`integratecpp::integrator` not nothrow move-constructible");
 static_assert(std::is_nothrow_move_assignable<integrator>::value,
-              "`integratecpp::integator` not nothrow move-assignable");
+              "`integratecpp::integrator` not nothrow move-assignable");
 // NOTE: `integratecpp::integrator` is not trivial as it has
 //        non-trivial member intializations.
 // static_assert(std::is_trivial<integrator>::value,
-//               "`integratecpp::integator` not trivial");
+//               "`integratecpp::integrator` not trivial");
 static_assert(std::is_standard_layout<integrator>::value,
-              "`integratecpp::integator` not standard layout");
+              "`integratecpp::integrator` not standard layout");
 
 /*!
  * \brief  A drop-in replacement of `integratecpp::integrator` for numerical
- *         integration. Approximates an integratal numerically for a
- *         Lambda-functor, lower, and upper bound, using `Rdqags` if both bounds
- *         are are finite and `Rdqagi` of at least one of the bounds is
- *         infinite.
+ *         integration. Approximates an integratal numerically for a functor,
+ *         lower, and upper bound, using `Rdqags` if both bounds are are finite
+ *         and `Rdqagi` of at least one of the bounds is infinite.
+ *
+ * \tparam UnaryRealFunction_  A `Callable` type invocable with `const double`
+ *                             and returning `double`.
  *
  * \param fn      a `UnaryRealFunction_` functor compatible with a `const
  *                double` signature.
@@ -474,9 +492,8 @@ integrator::return_type integrate(UnaryRealFunction_ &&fn, const double lower,
 /*!
  * \brief  Defines a type of object to be thrown as exception. It reports errors
  *         that occur during the integration routine of
- *         `integratecpp::integator::operator()()` or
- *         `integratecpp::integrate()` and are due to events beyond the scope of
- *         the program and not easily predicted.
+ *         `integratecpp::integrator::operator()()` and are due to events beyond
+ *         the scope of the program and not easily predicted.
  */
 class integration_runtime_error : public std::runtime_error {
 private:
@@ -515,10 +532,9 @@ public:
 /*!
  * \brief  Defines a type of object to be thrown as exception. It reports errors
  *         that occur during the integration routine of
- *         `integratecpp::integator::operator()()` or
- *         `integratecpp::integrate()` and that are a consequence of faulty
- *         logic within the program such as violating logical preconditions or
- *         class invariants and may be preventable.
+ *         `integratecpp::integrator::operator()()` and that are a consequence
+ *         of faulty logic within the program such as violating logical
+ *         preconditions or class invariants and may be preventable.
  */
 class integration_logic_error : public std::logic_error {
 private:
@@ -557,9 +573,8 @@ public:
 /*!
  * \brief  Defines a type of object to be thrown as exception. It reports errors
  *         that occur during the integration routine of
- *         `integratecpp::integator::operator()()` or
- *         `integratecpp::integrate()` if the maximum number of subdivisions
- *         allowed has been achieved.
+ *         `integratecpp::integrator::operator()()` if the maximum number of
+ *         subdivisions allowed has been achieved.
  *
  * One can allow more subdivisions by increasing the value of `max_subdivisions`
  * (and taking the according dimension adjustments into account). However, if
@@ -579,7 +594,7 @@ public:
 /*!
  * \brief  Defines a type of object to be thrown as exception. It reports errors
  *         that occur during the integration routine of
- *         `integratecpp::integator::operator()()` or
+ *         `integratecpp::integrator::operator()()` or
  *         `integratecpp::integrate()` if the occurrence of roundoff error is
  *         detected, which prevents the requested tolerance from being achieved.
  *
@@ -593,9 +608,8 @@ public:
 /*!
  * \brief  Defines a type of object to be thrown as exception. It reports errors
  *         that occur during the integration routine of
- *         `integratecpp::integator::operator()()` or
- *         `integratecpp::integrate()` if extremely bad integrand behaviour
- *         occurs at some points of the integration interval.
+ *         `integratecpp::integrator::operator()()` if extremely bad integrand
+ *         behaviour occurs at some points of the integration interval.
  */
 class bad_integrand_error : public integration_runtime_error {
 public:
@@ -605,9 +619,8 @@ public:
 /*!
  * \brief  Defines a type of object to be thrown as exception. It reports errors
  *         that occur during the integration routine of
- *         `integratecpp::integator::operator()()` or
- *         `integratecpp::integrate()` if the algorithm does not converge.
- *         roundoff error is detected in the extrapolation table.
+ *         `integratecpp::integrator::operator()()` if the algorithm does not
+ *         converge. roundoff error is detected in the extrapolation table.
  *
  * It is assumed that the requested tolerance cannot be achieved, and that the
  * returned result is the best which can be obtained.
@@ -620,9 +633,8 @@ public:
 /*!
  * \brief  Defines a type of object to be thrown as exception. It reports errors
  *         that occur during the integration routine of
- *         `integratecpp::integator::operator()()` or
- *         `integratecpp::integrate()` if the integral is probably divergent, or
- *         slowly convergent.
+ *         `integratecpp::integrator::operator()()` if the integral is probably
+ *         divergent, or slowly convergent.
  *
  * It must be noted that divergence can occur with any other value of ier.
  */
@@ -634,9 +646,8 @@ public:
 /*!
  * \brief  Defines a type of object to be thrown as exception. It reports errors
  *         that occur during the integration routine of
- *         `integratecpp::integator::operator()()` or
- *         `integratecpp::integrate()` if the integral is probably divergent, or
- *         slowly convergent. if the input is invalid.
+ *         `integratecpp::integrator::operator()()` if the integral is probably
+ *         divergent, or slowly convergent. if the input is invalid.
  *
  * This could be because (`absolute_accuracy <= 0` and
  * `relative_accuracy < max(50*rel.mach.acc.,0.5d-28)`) or
@@ -652,27 +663,54 @@ public:
 // Implementations of internal type_traits in integratecpp::type_traits
 // -------------------------------------------------------------------------------------------------
 
+//! \cond INTERNAL
 namespace type_traits {
 
+/*!
+ * \internal
+ *
+ * \brief    Emulation of `std::is_invocable`: Determines whether `Fn` can be
+ *           invoked with the arguments `ArgTypes...`.
+ *
+ * \tparam   Fn      `Callable` type.
+ * \tparam   Args    Argument types.
+ */
+template <typename Fn, typename... ArgTypes>
 #if __cplusplus >= 201703L
-template <typename Fn, typename... Args>
-using is_invocable = std::is_invocable<Fn, Args...>;
-template <typename R, typename Fn, typename... Args>
-using is_invocable_r = std::is_invocable_r<R, Fn, Args...>;
+using is_invocable = std::is_invocable<Fn, ArgTypes...>;
 #else
-template <typename Fn, typename... Args>
 struct is_invocable
     : std::is_constructible<
-          std::function<void(Args...)>,
-          std::reference_wrapper<typename std::remove_reference<Fn>::type>> {};
-template <typename R, typename Fn, typename... Args>
+          std::function<void(ArgTypes...)>,
+          std::reference_wrapper<typename std::remove_reference<Fn>::type>> {
+};
+#endif
+
+/*!
+ * \internal
+ *
+ * \brief    Emulation of `std::is_invocable_r`: Determines whether `Fn` can be
+ *           invoked with the arguments `ArgTypes...` to yield a result that is
+ *           convertible to `R`.
+ *
+ * \tparam   R       return type.
+ * \tparam   Fn      `Callable` type.
+ * \tparam   Args    Argument types.
+ */
+template <typename R, typename Fn, typename... ArgTypes>
+#if __cplusplus >= 201703L
+using is_invocable_r = std::is_invocable_r<R, Fn, ArgTypes...>;
+#else
 struct is_invocable_r
     : std::is_constructible<
-          std::function<R(Args...)>,
-          std::reference_wrapper<typename std::remove_reference<Fn>::type>> {};
+          std::function<R(ArgTypes...)>,
+          std::reference_wrapper<typename std::remove_reference<Fn>::type>> {
+};
 #endif
 
 } // namespace type_traits
+
+//! \endcond
 
 // -------------------------------------------------------------------------------------------------
 // Implementations of integratecpp::integrator::operator()(...)
@@ -686,7 +724,7 @@ inline integrator::return_type integrator::operator()(UnaryRealFunction_ &&fn,
       type_traits::is_invocable_r<
           double, typename std::remove_reference<UnaryRealFunction_>::type,
           const double>::value,
-      "UnaryRealFunction_ is not invocable with `const double` and return "
+      "`UnaryRealFunction_` is not invocable with `const double` and return "
       "value `double`");
 
   // NOTE: check validity of `this->config_` and arguments `lower` and `upper`
@@ -700,15 +738,15 @@ inline integrator::return_type integrator::operator()(UnaryRealFunction_ &&fn,
   };
   throw_if_invalid(lower, upper);
 
-  // NOTE: create local copies for input variables (as `Rdqag[si]` interface
-  // requires pointers to non-const variables)
+  // NOTE: create local copies for input variables and references to an
+  // instance of output variables (as `Rdqag[si]` interface requires pointers to
+  // non-const variables). use names as described in the API of `Rdqag[is]`.
   auto limit = config_.max_subdivisions;
   auto epsrel = config_.relative_accuracy;
   auto epsabs = config_.absolute_accuracy;
   auto lenw = config_.work_size;
 
-  // NOTE: create output and local references
-  auto out = return_type{};
+  auto out = return_type{}; // NOTE: construct returned object
   auto &result = out.value;
   auto &abserr = out.absolute_error;
   auto &last = out.subdivisions;
@@ -746,7 +784,7 @@ inline integrator::return_type integrator::operator()(UnaryRealFunction_ &&fn,
 
     // NOTE: `guarded_transform` is a wrapper arround `std::transform`,
     // catching all exceptions appart `std::bad_alloc` and storing them in the
-    // provided `std::unique_ptr`.
+    // provided `std::exception_ptr`.
     // an additional check is performed whether all results are finite.
     // in case of errors, all function values are set to zero.
     const auto guarded_transform =
@@ -785,6 +823,7 @@ inline integrator::return_type integrator::operator()(UnaryRealFunction_ &&fn,
   };
   auto ex = std::make_pair(std::forward<UnaryRealFunction_>(fn),
                            std::exception_ptr());
+  auto &e_ptr = ex.second;
 
   if (std::isfinite(lower) && std::isfinite(upper)) {
     Rdqags(integrand_callback, &ex, &lower, &upper, &epsabs, &epsrel, &result,
@@ -818,9 +857,8 @@ inline integrator::return_type integrator::operator()(UnaryRealFunction_ &&fn,
 
   // NOTE: translate error codes from `Rdqag[is]` and evaluation errors from
   // `fn` to suitable exceptions
-  const auto translate_error = [](const int error_code,
-                                  std::exception_ptr e_ptr,
-                                  const return_type result) {
+  const auto throw_if_error = [](const int error_code, std::exception_ptr e_ptr,
+                                 const return_type result) {
     if (e_ptr) {
       std::rethrow_exception(e_ptr);
     }
@@ -849,7 +887,7 @@ inline integrator::return_type integrator::operator()(UnaryRealFunction_ &&fn,
     }
     return;
   };
-  translate_error(ier, ex.second, out);
+  throw_if_error(ier, e_ptr, out);
 
   return out;
 };
