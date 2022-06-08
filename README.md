@@ -14,27 +14,49 @@ numerical integration methods.
 
 ## Installation
 
-You can install the development version of integratecpp like so:
+You can install the development version of `integratecpp` like so:
 
 ``` r
 remotes::install_github("hsloot/integratecpp")
 ```
 
-## Example
+To include the header into your `C++` source files for building with
+`Rcpp`, use
 
-This is a basic example which shows you how to solve a common problem:
-We want to calculate the expectation of an exponential distribution with
-rate
-![\\lambda](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;%5Clambda "\lambda")
-by numerical integration. The theoretical expectation is
+``` cpp
+// C++
+// [[Rcpp::plugins(cpp11)]]
+// [[Rcpp::depends(integratecpp)]]
 
-![
-  \\int\_{0}^{\\infty}{ x \\lambda \\exp{\\{ -\\lambda x \\}} } \\mathrm{d}x
-    = \\frac{1}{\\lambda} .
-](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;%0A%20%20%5Cint_%7B0%7D%5E%7B%5Cinfty%7D%7B%20x%20%5Clambda%20%5Cexp%7B%5C%7B%20-%5Clambda%20x%20%5C%7D%7D%20%7D%20%5Cmathrm%7Bd%7Dx%0A%20%20%20%20%3D%20%5Cfrac%7B1%7D%7B%5Clambda%7D%20.%0A "
-  \int_{0}^{\infty}{ x \lambda \exp{\{ -\lambda x \}} } \mathrm{d}x
-    = \frac{1}{\lambda} .
-")
+#include <integratecpp.h>
+
+// your code
+```
+
+If you intend including the header in source files of an `R`-package,
+you should drop the `Rcpp` attributes and include the following line in
+your `DESCRIPTION` file:
+
+``` batch
+LinkingTo: integratecpp
+```
+
+Note that the header does includes only C++ standard library headers and
+[`<R_ext/Applic.h>`](https://github.com/wch/r-source/blob/trunk/src/include/R_ext/Applic.h).
+
+## Why is this useful?
+
+Many `R` package authors implement critical parts in `C`, `Fortran` or
+`C++` to improve performance. However, while `R` provides an [API for
+`C`](https://cran.r-project.org/doc/manuals/r-release/R-exts.html#The-R-API)
+and it is possible to [mix `C` and
+`C++`](https://isocpp.org/wiki/faq/mixing-c-and-cpp), doing this can
+pose a higher burden for those more familiar with `R` and `Rcpp` than
+`C++` or `C`. Consider the following example, approximating the integral
+of the identity function
+![x \\mapsto x](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;x%20%5Cmapsto%20x "x \mapsto x")
+over the interval
+![\[0, 1\]](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;%5B0%2C%201%5D "[0, 1]"):
 
 ``` cpp
 // C++
@@ -42,98 +64,125 @@ by numerical integration. The theoretical expectation is
 // [[Rcpp::plugins(cpp11)]]
 // [[Rcpp::depends(integratecpp)]]
 
-#include <cmath>
-#include <limits>
-#include <stdexcept>
+#include <algorithm> // for std::transform
 
 #include <Rcpp.h>
-
-#include "integratecpp.h"
+#include <R_ext/Applic.h>
 
 // [[Rcpp::export(rng=false)]]
-Rcpp::List integrate_exponential_expectation(const double lambda) {
-  auto fn = [lambda](const double x) {
-    return x * lambda * std::exp(-lambda * x);
+void integrate_identity() {
+  // define function as lambda
+  auto fn = [](const double x) {
+    return x;
   };
 
-  decltype(integratecpp::integrate(fn, 0., 1.)) result;
-  std::string message;
-  try {
-    result =
-        integratecpp::integrate(fn, 0., std::numeric_limits<double>::infinity());
-  } catch (const Rcpp::exception &e) {
-      Rcpp::stop(e.what());
-  } catch (const integratecpp::integration_runtime_error &e) {
-      result = e.result();
-      message = e.what();
-  } catch (const integratecpp::integration_logic_error &e) {
-      result = e.result();
-      message = e.what();
-  } catch (const std::exception &e) {
-      Rcpp::stop(e.what()); // # nocov
-  } catch (...) {
-      Rcpp::stop("Unexcpected error"); // # nocov
-  }
+  // define bounds
+  double lower = 0.;
+  double upper = 1.;
 
-  return Rcpp::List::create(Rcpp::Named("value") = result.value,
-                            Rcpp::Named("abs.error") = result.absolute_error,
-                            Rcpp::Named("subdivisions") = result.subdivisions,
-                            Rcpp::Named("message") = message);
+  // initialize output variables for integration results
+  double result;
+  double abserr;
+  int last;
+  int neval;
+
+  // initialize configuration parameters
+  int limit = 100;
+  double epsrel = 0.0001220703125;
+  double epsabs = epsrel;
+  int lenw = 4 * limit;
+
+  // initialize working array
+  auto iwork = std::vector<int>(limit);
+  auto work = std::vector<double>(lenw);
+
+  // initialize variable for error code
+  int ier = 0;
+
+  // `Rdqagi` requires a function pointer with signature
+  // `void(*)(double *, int, void *)` and a void pointer
+  // `void *` for the last argument.
+  const auto fn_callback = [](double *x, int n, void *ex) {
+    auto& fn_integrand = *static_cast<decltype(&fn)>(ex);
+    std::transform(&x[0], &x[n], &x[0], fn_integrand);
+    return;
+  };
+
+  // NOTE: finite bounds can be integrated with the `C`-method `Rdqags`,
+  // requiring no extra boundary transformation.
+  Rdqags(fn_callback, &fn, &lower, &upper, &epsabs, &epsrel, &result,
+         &abserr, &neval, &ier, &limit, &lenw, &last, iwork.data(),
+         work.data());
+
+  Rcpp::Rcout << result << "\t" << abserr << "\t" << last << "\t" << neval << "\t" << ier << std::endl;
 }
 ```
 
 ``` r
-## R
+integrate_identity()
+#> 0.5  5.55112e-15 1   21  0
+```
 
-integrate_exponential_expectation(1)
-#> $value
-#> [1] 1
-#> 
-#> $abs.error
-#> [1] 6.357144e-06
-#> 
-#> $subdivisions
-#> [1] 4
-#> 
-#> $message
-#> [1] ""
-integrate_exponential_expectation(2)
-#> $value
-#> [1] 0.5
-#> 
-#> $abs.error
-#> [1] 8.604832e-06
-#> 
-#> $subdivisions
-#> [1] 3
-#> 
-#> $message
-#> [1] ""
-integrate_exponential_expectation(3)
-#> $value
-#> [1] 0.3333333
-#> 
-#> $abs.error
-#> [1] 8.06807e-08
-#> 
-#> $subdivisions
-#> [1] 3
-#> 
-#> $message
-#> [1] ""
+The key part for adhering to the interface of `Rdqags` is creating the
+callback functor `fn_callback`, taking a `void *` pointer to the
+original function, which is than internally casted to the correct type
+and which overwrites an array of double with corresponding function
+evaluations. This is rather complicated and requires familiarity with
+pointers. Additionally, this snippet is missing a translation of the
+error code into a proper error message To make it worse, without
+guarding the callback functions from `C++` exceptions, we introduce
+possible undefined behavior.
 
-integrate_exponential_expectation(-1)
-#> $value
-#> [1] 0
-#> 
-#> $abs.error
-#> [1] 0
-#> 
-#> $subdivisions
-#> [1] 0
-#> 
-#> $message
-#> [1] "non-finite function value"
+Using our header simplifies numerical integration in `Rcpp`
+considerably:
+
+``` cpp
+// C++
+
+// [[Rcpp::plugins(cpp11)]]
+// [[Rcpp::depends(integratecpp)]]
+
+#include <stdexcept>
+#include <exception>
+
+#include <Rcpp.h>
+#include <integratecpp.h>
+
+// [[Rcpp::export(rng=false)]]
+void integrate_identity_improved() {
+  auto fn = [](const double x) {
+    return x;
+  };
+  
+  try {
+    const auto result = integratecpp::integrate(fn, 0., 1.);
+    Rcpp::Rcout << result.value << "\t" << result.absolute_error << "\t" << result.subdivisions << "\t" << result.neval << std::endl;
+  } catch (const std::exception& e) {
+    Rcpp::Rcout << "Error:\t" << e.what() << std::endl;
+  }
+}
+
+// [[Rcpp::export(rng=false)]]
+void integrate_identity_error() {
+  auto fn = [](const double x) {
+    throw std::runtime_error("stop on purpose");
+    return x;
+  };
+  
+  try {
+    const auto result = integratecpp::integrate(fn, 0., 1.);
+    Rcpp::Rcout << result.value << "\t" << result.absolute_error << "\t" << result.subdivisions << "\t" << result.neval << std::endl;
+  } catch (const std::exception& e) {
+    Rcpp::Rcout << "Error:\t" << e.what() << std::endl;
+  }
+}
+```
+
+``` r
+integrate_identity_improved()
+#> 0.5  5.55112e-15 1   21
+integrate_identity_error()
+#> Error:   stop on purpose
 ```
 
 ## Code of Conduct
