@@ -70,7 +70,7 @@ over the interval
 #include <R_ext/Applic.h>
 
 // [[Rcpp::export(rng=false)]]
-void integrate_identity() {
+Rcpp::List integrate_identity() {
   // define function as lambda
   auto fn = [](const double x) {
     return x;
@@ -114,13 +114,27 @@ void integrate_identity() {
          &abserr, &neval, &ier, &limit, &lenw, &last, iwork.data(),
          work.data());
 
-  Rcpp::Rcout << result << "\t" << abserr << "\t" << last << "\t" << neval << "\t" << ier << std::endl;
+  return Rcpp::List::create(
+      Rcpp::Named("value") = result,
+      Rcpp::Named("absolute_error") = abserr,
+      Rcpp::Named("subdivisions") = last,
+      Rcpp::Named("neval") = neval);
 }
 ```
 
 ``` r
 integrate_identity()
-#> 0.5  5.55112e-15 1   21  0
+#> $value
+#> [1] 0.5
+#> 
+#> $absolute_error
+#> [1] 5.551115e-15
+#> 
+#> $subdivisions
+#> [1] 1
+#> 
+#> $neval
+#> [1] 21
 ```
 
 The key part for adhering to the interface of `Rdqags` is creating the
@@ -149,40 +163,58 @@ considerably:
 #include <integratecpp.h>
 
 // [[Rcpp::export(rng=false)]]
-void integrate_identity_improved() {
+Rcpp::List integrate_identity_improved() {
   auto fn = [](const double x) {
     return x;
   };
-  
+
   try {
     const auto result = integratecpp::integrate(fn, 0., 1.);
-    Rcpp::Rcout << result.value << "\t" << result.absolute_error << "\t" << result.subdivisions << "\t" << result.neval << std::endl;
+    return Rcpp::List::create(
+        Rcpp::Named("value") = result.value,
+        Rcpp::Named("absolute_error") = result.absolute_error,
+        Rcpp::Named("subdivisions") = result.subdivisions,
+        Rcpp::Named("neval") = result.neval);
   } catch (const std::exception& e) {
-    Rcpp::Rcout << "Error:\t" << e.what() << std::endl;
+    Rcpp::stop(e.what());
   }
 }
 
 // [[Rcpp::export(rng=false)]]
-void integrate_identity_error() {
+Rcpp::List integrate_identity_error() {
   auto fn = [](const double x) {
     throw std::runtime_error("stop on purpose");
     return x;
   };
-  
+
   try {
     const auto result = integratecpp::integrate(fn, 0., 1.);
-    Rcpp::Rcout << result.value << "\t" << result.absolute_error << "\t" << result.subdivisions << "\t" << result.neval << std::endl;
+    return Rcpp::List::create(
+        Rcpp::Named("value") = result.value,
+        Rcpp::Named("absolute_error") = result.absolute_error,
+        Rcpp::Named("subdivisions") = result.subdivisions,
+        Rcpp::Named("neval") = result.neval);
   } catch (const std::exception& e) {
-    Rcpp::Rcout << "Error:\t" << e.what() << std::endl;
+    Rcpp::stop(e.what());
   }
 }
 ```
 
 ``` r
 integrate_identity_improved()
-#> 0.5  5.55112e-15 1   21
-integrate_identity_error()
-#> Error:   stop on purpose
+#> $value
+#> [1] 0.5
+#> 
+#> $absolute_error
+#> [1] 5.551115e-15
+#> 
+#> $subdivisions
+#> [1] 1
+#> 
+#> $neval
+#> [1] 21
+tryCatch(integrate_identity_error(), error = function(cond) print(cond))
+#> <Rcpp::exception in integrate_identity_error(): stop on purpose>
 ```
 
 ## Code of Conduct

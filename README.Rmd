@@ -71,7 +71,7 @@ Consider the following example, approximating the integral of the identity funct
 #include <R_ext/Applic.h>
 
 // [[Rcpp::export(rng=false)]]
-void integrate_identity() {
+Rcpp::List integrate_identity() {
   // define function as lambda
   auto fn = [](const double x) {
     return x;
@@ -115,7 +115,11 @@ void integrate_identity() {
          &abserr, &neval, &ier, &limit, &lenw, &last, iwork.data(),
          work.data());
 
-  Rcpp::Rcout << result << "\t" << abserr << "\t" << last << "\t" << neval << "\t" << ier << std::endl;
+  return Rcpp::List::create(
+      Rcpp::Named("value") = result,
+      Rcpp::Named("absolute_error") = abserr,
+      Rcpp::Named("subdivisions") = last,
+      Rcpp::Named("neval") = neval);
 }
 ```
 
@@ -125,7 +129,7 @@ integrate_identity()
 
 The key part for adhering to the interface of `Rdqags` is creating the callback functor
 `fn_callback`, taking a `void *` pointer to the original function, which is than internally casted
-to the correct type and which overwrites an array of double with corresponding function evaluations. 
+to the correct type and which overwrites an array of double with corresponding function evaluations.
 This is rather complicated and requires familiarity with pointers.
 Additionally, this snippet is missing a translation of the error code into a proper error message To
 make it worse, without guarding the callback functions from `C++` exceptions, we introduce possible
@@ -147,38 +151,46 @@ Using our header simplifies numerical integration in `Rcpp` considerably:
 #include <integratecpp.h>
 
 // [[Rcpp::export(rng=false)]]
-void integrate_identity_improved() {
+Rcpp::List integrate_identity_improved() {
   auto fn = [](const double x) {
     return x;
   };
-  
+
   try {
     const auto result = integratecpp::integrate(fn, 0., 1.);
-    Rcpp::Rcout << result.value << "\t" << result.absolute_error << "\t" << result.subdivisions << "\t" << result.neval << std::endl;
+    return Rcpp::List::create(
+        Rcpp::Named("value") = result.value,
+        Rcpp::Named("absolute_error") = result.absolute_error,
+        Rcpp::Named("subdivisions") = result.subdivisions,
+        Rcpp::Named("neval") = result.neval);
   } catch (const std::exception& e) {
-    Rcpp::Rcout << "Error:\t" << e.what() << std::endl;
+    Rcpp::stop(e.what());
   }
 }
 
 // [[Rcpp::export(rng=false)]]
-void integrate_identity_error() {
+Rcpp::List integrate_identity_error() {
   auto fn = [](const double x) {
     throw std::runtime_error("stop on purpose");
     return x;
   };
-  
+
   try {
     const auto result = integratecpp::integrate(fn, 0., 1.);
-    Rcpp::Rcout << result.value << "\t" << result.absolute_error << "\t" << result.subdivisions << "\t" << result.neval << std::endl;
+    return Rcpp::List::create(
+        Rcpp::Named("value") = result.value,
+        Rcpp::Named("absolute_error") = result.absolute_error,
+        Rcpp::Named("subdivisions") = result.subdivisions,
+        Rcpp::Named("neval") = result.neval);
   } catch (const std::exception& e) {
-    Rcpp::Rcout << "Error:\t" << e.what() << std::endl;
+    Rcpp::stop(e.what());
   }
 }
 ```
 
 ```{r}
 integrate_identity_improved()
-integrate_identity_error()
+tryCatch(integrate_identity_error(), error = function(cond) print(cond))
 ```
 
 ## Code of Conduct

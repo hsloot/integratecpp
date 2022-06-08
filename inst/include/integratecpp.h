@@ -853,7 +853,7 @@ inline integrator::return_type integrator::operator()(UnaryRealFunction_ &&fn,
     }
     return;
   };
-  throw_if_error(ier, e_ptr, out);
+  throw_if_error(ier, std::move(e_ptr), out);
 
   return out;
 };
