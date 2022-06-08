@@ -60,21 +60,13 @@ void Rcpp__integrator__set_work_size(Rcpp::XPtr<integratecpp::integrator> ptr,
 }
 
 // [[Rcpp::export(rng=false)]]
-bool Rcpp__integrator__is_valid(Rcpp::XPtr<integratecpp::integrator> ptr) {
-  try {
-    return (*ptr).is_valid();
-  } catch (::Rcpp::exception &e) { // # nocov
-    return false;                  // # nocov
-  } catch (...) {                  // # nocov
-    Rcpp::stop("Unknown error");   // # nocov
-  }
-}
-
-// [[Rcpp::export(rng=false)]]
 void Rcpp__integrator__throw_if_invalid(
     Rcpp::XPtr<integratecpp::integrator> ptr) {
   try {
-    (*ptr).throw_if_invalid();
+    // NOTE: avoid code duplication using a dummy integration. the integration
+    // itself should not fail under any circumstances if configuration
+    // parameters are valid.
+    (*ptr)([](const double) { return 0.; }, 0., 1.);
   } catch (::Rcpp::exception &e) {                       // # nocov
     Rcpp::stop("Not initialized");                       // # nocov
   } catch (const integratecpp::invalid_input_error &e) { // # nocov

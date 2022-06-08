@@ -5,6 +5,11 @@
  * \date        2022
  * \copyright   Copyright 2022 Henrik Sloot. All rights reserved.
  *              This file is licensed under the terms of the MIT license.
+ *
+ * \note        *API* consists of all public classes, types and methods in the
+ *              namespace `integratecpp` which are not contained in
+ *              sub-namespaces and/or marked as internal. Do not rely on the
+ *              stability of implementation details, e.g., exception-messages.
  */
 
 #pragma once
@@ -40,9 +45,7 @@ namespace integratecpp {
  * - Integration parameters can be configured via structs of type
  *   `integratecpp::integrator::config_type`, holding the maximal number of
  *   subdivisions, the required relative error, the required absolute error, and
- *   the size of the working array. Parameter constraints are unchecked, but can
- *   be validated using `integratecpp::integrator::config_type::is_valid()` and
- *   `integratecpp::integrator::config_type::throw_if_invalid()`.
+ *   the size of the working array. Parameter preconditions are unchecked.
  * - The operator `integratecpp::integrator::operator()()` is called with a
  *   `Callable` object invocable with arguments `const double` and returns
  *   `double`, a lower bound, and an upper bound. If the `Callable` returns
@@ -118,10 +121,8 @@ public:
    *         [`src/appl/integrate.c`](https://github.com/wch/r-source/blob/trunk/src/appl/integrate.c)
    *         in R-source.
    *
-   * \warning   Constraints for the configuration parameters are unchecked upon
-   *            construction, but can be validated using
-   *            `integratecpp::integrator::config_type::is_valid()` and
-   *            `integratecpp::integrator::config_type::throw_if_invalid()`.
+   * \warning   Preconditions for the configuration parameters are unchecked
+   *            upon construction.
    */
   struct config_type {
     /*!
@@ -166,9 +167,7 @@ public:
      * \param relative_accuracy  a `double` for the requested relative accuracy.
      *
      * \warning   Preconditions for the configuration parameters are unchecked
-     *            upon construction, but can be validated using
-     *            `integratecpp::integrator::config_type::is_valid()` and
-     *            `integratecpp::integrator::config_type::throw_if_invalid()`.
+     *            upon construction.
      */
     explicit constexpr config_type(const int max_subdivisions,
                                    const double relative_accuracy) noexcept;
@@ -183,9 +182,7 @@ public:
      * \param absolute_accuracy  a `double` for the requested absolute accuracy.
      *
      * \warning   Preconditions for the configuration parameters are unchecked
-     *            upon construction, but can be validated using
-     *            `integratecpp::integrator::config_type::is_valid()` and
-     *            `integratecpp::integrator::config_type::throw_if_invalid()`.
+     *            upon construction.
      */
     explicit constexpr config_type(const int max_subdivisions,
                                    const double relative_accuracy,
@@ -201,37 +198,12 @@ public:
      * \param work_size          an `int` for the size of the working array.
      *
      * \warning   Preconditions for the configuration parameters are unchecked
-     *            upon construction, but can be validated using
-     *            `integratecpp::integrator::config_type::is_valid()` and
-     *            `integratecpp::integrator::config_type::throw_if_invalid()`.
+     *            upon construction.
      */
     explicit constexpr config_type(const int max_subdivisions,
                                    const double relative_accuracy,
                                    const double absolute_accuracy,
                                    const int work_size) noexcept;
-
-    //! \cond INTERNAL
-
-    // REVIEW: consider removing `is_valid` and `throw_if_invalid` from class
-    // and provide them as free functions to declutter public interface. They
-    // are only used by `integratecpp::integrator::opreator()()` and for test
-    // purposes.
-
-    //! \internal
-    //! \brief  Checks whether all members' preconditions are met.
-    bool is_valid() const noexcept;
-
-    /*!
-     * \internal
-     * \brief   Asserts whether all members' preconditions are met, possibly
-     *          with an informative error message.
-     *
-     * \exception  throws integratecpp::invalid_input_error if preconditions
-     *             are not fulfilled.
-     */
-    void throw_if_invalid() const;
-
-    //! \endcond
   };
   static_assert(std::is_nothrow_default_constructible<config_type>::value,
                 "`integratecpp::integrator::config_type` not nothrow "
@@ -280,9 +252,7 @@ public:
    * \param relative_accuracy  a `double` for the requested relative accuracy.
    *
    * \warning   Preconditions for the configuration parameters are unchecked
-   *            upon construction, but can be validated using
-   *            `integratecpp::integrator::config_type::is_valid()` and
-   *            `integratecpp::integrator::config_type::throw_if_invalid()`.
+   *            upon construction.
    */
   explicit constexpr integrator(const int max_subdivisions,
                                 const double relative_accuracy) noexcept;
@@ -296,9 +266,7 @@ public:
    * \param absolute_accuracy  a `double` for the requested absolute accuracy.
    *
    * \warning   Preconditions for the configuration parameters are unchecked
-   *            upon construction, but can be validated using
-   *            `integratecpp::integrator::config_type::is_valid()` and
-   *            `integratecpp::integrator::config_type::throw_if_invalid()`.
+   *            upon construction.
    */
   explicit constexpr integrator(const int max_subdivisions,
                                 const double relative_accuracy,
@@ -314,9 +282,7 @@ public:
    * \param work_size          an `int` for the size of the working array.
    *
    * \warning   Preconditions for the configuration parameters are unchecked
-   *            upon construction, but can be validated using
-   *            `integratecpp::integrator::config_type::is_valid()` and
-   *            `integratecpp::integrator::config_type::throw_if_invalid()`.
+   *            upon construction.
    */
   explicit constexpr integrator(const int max_subdivisions,
                                 const double relative_accuracy,
@@ -369,22 +335,6 @@ public:
   //! \internal
   //! \brief Setter to the dimensioning parameter of the working array.
   void work_size(const int work_size) noexcept;
-
-  /*!
-   * \internal
-   * \brief  Checks whether all configuration parameters' preconditions are met.
-   */
-  bool is_valid() const noexcept;
-
-  /*!
-   * \internal
-   * \brief  Asserts whether all configuration parameters' preconditions are
-   *         met, possibly with an informative error message.
-   *
-   * \exception  throws integratecpp::invalid_input_error if configuration
-   *             parameters' preconditions are not fulfilled.
-   */
-  void throw_if_invalid() const;
 
   //! \endcond
 
@@ -727,16 +677,32 @@ inline integrator::return_type integrator::operator()(UnaryRealFunction_ &&fn,
       "`UnaryRealFunction_` is not invocable with `const double` and return "
       "value `double`");
 
-  // NOTE: check validity of `this->config_` and arguments `lower` and `upper`
-  const auto throw_if_invalid = [this](const double lower, const double upper) {
-    this->throw_if_invalid();
+  // NOTE: check validity of configuration parameters
+  const auto throw_if_invalid_config = [](const config_type config) {
+    if (config.max_subdivisions <= 0) {
+      throw invalid_input_error("the input is invalid");
+    } else if (config.absolute_accuracy <= 0. &&
+               config.relative_accuracy <
+                   std::max(50. * std::numeric_limits<double>::epsilon(),
+                            0.5e-28)) {
+      throw invalid_input_error("the input is invalid");
+    } else if (config.work_size < 4 * config.max_subdivisions) {
+      throw invalid_input_error("the input is invalid");
+    } else {
+      return;
+    }
+  };
+  throw_if_invalid_config(config_);
+  // NOTE: check validity of bounds
+  const auto throw_if_invalid_bounds = [](const double lower,
+                                          const double upper) {
     if (std::isnan(lower) || std::isnan(upper)) {
       throw invalid_input_error("the input is invalid");
     } else {
       return;
     }
   };
-  throw_if_invalid(lower, upper);
+  throw_if_invalid_bounds(lower, upper);
 
   // NOTE: create local copies for input variables and references to an
   // instance of output variables (as `Rdqag[si]` interface requires pointers to
@@ -934,26 +900,6 @@ inline constexpr integrator::config_type::config_type(
     : max_subdivisions{max_subdivisions}, relative_accuracy{relative_accuracy},
       absolute_accuracy{absolute_accuracy}, work_size{work_size} {}
 
-inline bool integrator::config_type::is_valid() const noexcept {
-  if (max_subdivisions <= 0) {
-    return false;
-  } else if (absolute_accuracy <= 0. &&
-             relative_accuracy <
-                 std::max(50. * std::numeric_limits<double>::epsilon(),
-                          0.5e-28)) {
-    return false;
-  } else if (work_size < 4 * max_subdivisions) {
-    return false;
-  } else {
-    return true;
-  }
-}
-
-inline void integrator::config_type::throw_if_invalid() const {
-  if (!is_valid())
-    throw invalid_input_error("the input is invalid");
-}
-
 // -------------------------------------------------------------------------------------------------
 // Implementations of integratecpp::integrator
 // -------------------------------------------------------------------------------------------------
@@ -1014,10 +960,6 @@ inline constexpr auto integrator::work_size() const noexcept
 inline void integrator::work_size(const int work_size) noexcept {
   config_.work_size = work_size;
 }
-
-inline bool integrator::is_valid() const noexcept { return config_.is_valid(); }
-
-inline void integrator::throw_if_invalid() const { config_.throw_if_invalid(); }
 
 // -------------------------------------------------------------------------------------------------
 // Implementations of exception classes
