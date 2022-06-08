@@ -19,7 +19,7 @@ knitr::opts_chunk$set(
 [![Codecov test coverage](https://codecov.io/gh/hsloot/integratecpp/branch/main/graph/badge.svg)](https://app.codecov.io/gh/hsloot/integratecpp?branch=main)
 <!-- badges: end -->
 
-The package `integratecpp` provides a header-only interface to `R`'s numerical integration methods.
+The package `integratecpp` provides a header-only `C++11` interface to `R`'s `C`-API for numerical integration.
 
 ## Installation
 
@@ -54,9 +54,11 @@ Note that the header does includes only C++ standard library headers and [`<R_ex
 ## Why is this useful?
 
 Many `R` package authors implement critical parts in `C`, `Fortran` or `C++` to improve performance.
-However, while `R` provides an [API for `C`](https://cran.r-project.org/doc/manuals/r-release/R-exts.html#The-R-API) and it is possible to
-[mix `C` and `C++`](https://isocpp.org/wiki/faq/mixing-c-and-cpp), doing this can pose a higher
-burden for those more familiar with `R` and `Rcpp` than `C++` or `C`.
+However, while `R` provides an [API for `C`](https://cran.r-project.org/doc/manuals/r-release/R-exts.html#The-R-API)
+and it is possible to [mix `C` and `C++`](https://isocpp.org/wiki/faq/mixing-c-and-cpp), using the
+`C`-API in `C++` code can pose a higher burden for those more familiar with `R` and `Rcpp` than
+`C++` or `C`.
+
 Consider the following example, approximating the integral of the identity function $x \mapsto x$ over the interval $[0, 1]$:
 
 ```{Rcpp}
@@ -135,7 +137,7 @@ Additionally, this snippet is missing a translation of the error code into a pro
 To make it worse, without guarding the callback functions from `C++` exceptions, we introduce
 possible undefined behavior.
 
-Using our wrapper simplifies numerical integration in `Rcpp` considerably:
+Using the wrapper simplifies numerical integration in `Rcpp` considerably:
 
 ```{Rcpp}
 // C++

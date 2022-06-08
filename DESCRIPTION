@@ -9,8 +9,7 @@ Authors@R:
     email = "henrik.sloot@gmail.com",
     comment = c(ORCID = "0000-0001-8582-7776"))
 Description:
-  The package contains a header-only API for the numerical integration methods Rdqagi and Rdqags
-  in <R_Ext/Applic.h.
+  The package integratecpp provides a header-only C++11 interface to R's C-API for numerical integration.
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)

@@ -9,8 +9,8 @@
 coverage](https://codecov.io/gh/hsloot/integratecpp/branch/main/graph/badge.svg)](https://app.codecov.io/gh/hsloot/integratecpp?branch=main)
 <!-- badges: end -->
 
-The package `integratecpp` provides a header-only interface to `R`’s
-numerical integration methods.
+The package `integratecpp` provides a header-only `C++11` interface to
+`R`’s `C`-API for numerical integration.
 
 ## Installation
 
@@ -50,10 +50,12 @@ Many `R` package authors implement critical parts in `C`, `Fortran` or
 `C++` to improve performance. However, while `R` provides an [API for
 `C`](https://cran.r-project.org/doc/manuals/r-release/R-exts.html#The-R-API)
 and it is possible to [mix `C` and
-`C++`](https://isocpp.org/wiki/faq/mixing-c-and-cpp), doing this can
-pose a higher burden for those more familiar with `R` and `Rcpp` than
-`C++` or `C`. Consider the following example, approximating the integral
-of the identity function
+`C++`](https://isocpp.org/wiki/faq/mixing-c-and-cpp), using the `C`-API
+in `C++` code can pose a higher burden for those more familiar with `R`
+and `Rcpp` than `C++` or `C`.
+
+Consider the following example, approximating the integral of the
+identity function
 ![x \\mapsto x](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;x%20%5Cmapsto%20x "x \mapsto x")
 over the interval
 ![\[0, 1\]](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;%5B0%2C%201%5D "[0, 1]"):
@@ -147,7 +149,7 @@ translation of the error code into a proper error message. To make it
 worse, without guarding the callback functions from `C++` exceptions, we
 introduce possible undefined behavior.
 
-Using our wrapper simplifies numerical integration in `Rcpp`
+Using the wrapper simplifies numerical integration in `Rcpp`
 considerably:
 
 ``` cpp
