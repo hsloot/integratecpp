@@ -136,3 +136,6 @@ rsconnect/
 .vscode
 .clang_complete
 .DS_Store
+inst/doc
+/doc/
+/Meta/

@@ -23,6 +23,8 @@ Imports:
 SystemRequirements: C++11
 Suggests:
     covr,
+    knitr,
+    rmarkdown,
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
 Collate:
@@ -31,3 +33,4 @@ Collate:
     'integrate.R'
     'integratecpp-package.R'
     'integrator.R'
+VignetteBuilder: knitr

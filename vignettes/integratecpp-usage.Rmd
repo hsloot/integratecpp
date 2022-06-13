@@ -1,0 +1,227 @@
+---
+title: "Using `integratecpp`"
+output:
+  rmarkdown::html_vignette:
+    code_folding: hide
+vignette: >
+  %\VignetteIndexEntry{Using `integratecpp`}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  class.source = "fold-none"
+)
+```
+
+The following vignette demonstrates how using `integratecpp` simplifies and improves using numerical
+integration in `Rcpp`. [^1]
+We use a somewhat simplified problem to hint possible use-cases for `integratecpp` and demonstrate
+its usage.
+Suppose, we want need to evaluate the [*upper incomplete Gamma function*](https://en.wikipedia.org/wiki/Incomplete_gamma_function)
+$$
+    \Gamma{(\alpha, x)}
+        = \int_{x}^{\infty}{
+            \exp{\{ - u \}}  u^{\alpha-1}
+            {\mathrm{d}u}
+        } ,
+        \quad x > 0 ,
+$$
+for values $\alpha \in \mathbb{R}$, $x \geq 0$.[^2][^3]
+
+## An implementation with `integratecpp`
+
+```{Rcpp run-all-C++,eval=TRUE, echo=FALSE, ref.label=knitr::all_rcpp_labels(), class.source = 'fold-hide'}
+```
+
+As `integratecpp` requires `C++11`, we use the `Rcpp` plugin `cpp11` and link to the
+includes directory of `integratecpp` using the depends attribute `integratecpp`.
+
+```{Rcpp attributes, eval=FALSE, echo=TRUE, class.source = 'fold-none'}
+// [[Rcpp::plugins(cpp11)]]
+// [[Rcpp::depends(integratecpp)]]
+```
+
+Next, we include the STL header `<cmath>` for using `std::pow` and we include the header
+`<integratecpp.h>`.
+
+```{Rcpp includes, echo=TRUE, eval=FALSE}
+#include <cmath>
+#include <integratecpp.h>
+```
+
+Finally, we implement our function using the `integratecpp` interface to `Rdagi`:
+
+```{Rcpp demo-Rcpp, echo=TRUE, eval=FALSE}
+// [[Rcpp::export]]
+double gamma_inc(const double alpha, const double x) {
+    // NOTE: integrand implemented as capturing lambda
+    const auto fn = [alpha](const double u) {
+        return std::exp(-u) * std::pow(u, alpha - 1.);
+    };
+
+    // NOTE: throws if integration error occurs
+    const auto result = integratecpp::integrate(
+        fn, x, std::numeric_limits<double>::infinity());
+
+    return result.value;
+}
+```
+
+```{r demo-r}
+## demo with sane input
+gamma_inc(-0.5, 1)
+
+## demo with not so sane input
+tryCatch(gamma_inc(0, 0), error = function(cond) print(cond))
+tryCatch(gamma_inc(0, -1), error = function(cond) print(cond))
+```
+
+Note, that in this basic form, using `integratecpp`'s wrapper requires only the
+following two things:
+
+- A [`Callable`](https://en.cppreference.com/w/cpp/named_req/Callable)
+  object which is [invocable](https://en.cppreference.com/w/cpp/types/is_invocable)
+  with type `const double` and yields a result convertible to `double`.
+  Roughly, an object that can be used to construct `std::function<double(const double)>`,
+  e.g., a suitable
+  [lambda expression](https://en.cppreference.com/w/cpp/language/lambda).
+- A call to `integratecpp::integrate`.
+
+Optionally, integration parameters can be changed,
+exceptions can be captured and handled,
+and the integration error estimate can be further examined.
+
+## An implementation without `integratecpp`
+
+The following example does not use the `integratecpp` wrapper, but hints how the wrapper works
+internally.
+First, we need to include the header for `R`'s `C` entry-points for the integration routines `Rdqags` 
+and `Rdqagi`:
+
+```{Rcpp included-additional-1, echo=TRUE, eval=FALSE}
+#include <R_ext/Applic.h>
+```
+
+Then, we require some STL headers for handling data:
+
+```{Rcpp includes-additional-2, echo=TRUE, eval=FALSE}
+#include <algorithm> // std::transform
+#include <utility>   // std::make_pair, std::pair
+#include <vector>    // std::vector
+```
+
+Also, we need more STL headers and the `Rcpp` header for exception and error handling:
+
+```{Rcpp includes-additional-3, echo=TRUE, eval=FALSE}
+#include <exception>  // std::exception_ptr, std::make_exception_ptr, 
+                      // std::rethrow_exception, std::current_exception
+#include <stdexcept>  // std::exception, std::runtime_error
+#include <Rcpp.h>     // Rcpp::stop
+```
+
+Finally, we can implement the *upper incomplete Gamma function*:
+
+```{Rcpp demo-Rcpp-direct, echo=TRUE, eval=FALSE}
+// [[Rcpp::export]]
+double gamma_inc_direct(const double alpha, const double x) {
+    // NOTE: integrand implemented as capturing lambda
+    const auto fn = [alpha](const double u) {
+        return std::exp(-u) * std::pow(u, alpha - 1.);
+    };
+
+    // create bounds parameters for `Rdqagi`
+    double bound = x;
+    int inf = 1.;
+
+    // initialize output variables for integration results
+    double result;
+    double abserr;
+    int last;
+    int neval;
+
+    // initialize configuration parameters
+    int limit = 100;
+    double epsrel = 0.0001220703125;
+    double epsabs = epsrel;
+    int lenw = 4 * limit;
+
+    // initialize working array
+    auto iwork = std::vector<int>(limit);
+    auto work = std::vector<double>(lenw);
+
+    // initialize variable for error code
+    int ier = 0;
+
+    // NOTE: `Rdqagi` requires a function pointer with signature
+    // `void(*)(double *, int, void *)` and a void pointer
+    // `void *` passed to the callback as the last argument
+    const auto fn_callback = [](double *x, int n, void *ex) {
+        // cast `void *` to original type and create references
+        // to the `Callable` and the exception pointer
+        using ex_t = std::pair<decltype(fn), std::exception_ptr>;
+        auto &fn_integrand = (*static_cast<ex_t *>(ex)).first;
+        auto &e_ptr = (*static_cast<ex_t *>(ex)).second;
+        
+        // evaluate `Callable` at *inout* pointer-to-arry `x`
+        // and catch possible exceptions in exception pointer
+        try {
+            std::transform(&x[0], &x[n], &x[0], fn_integrand);
+        } catch (const std::exception& e) {
+            e_ptr = std::current_exception();
+        }
+        
+        // store a runtime exception in the exception pointer 
+        // if any results are infinite 
+        if (!std::all_of(&x[0], &x[n], 
+                         [](const double x) { 
+                             return std::isfinite(x); 
+                         })) {
+            e_ptr = std::make_exception_ptr(
+                std::runtime_error("non-finite function value"));
+          }
+    };
+
+    // create pair with `Callable` and exception pointer 
+    // (`nullptr` on initialization) as external data for 
+    // callback function
+    auto ex = std::make_pair(fn, std::exception_ptr());
+    
+    // call `C`-method `Rdqagi`
+    Rdqagi(fn_callback, &ex, &bound, &inf, &epsabs, &epsrel, &result,
+           &abserr, &neval, &ier, &limit, &lenw, &last, iwork.data(),
+           work.data());
+    
+    // rethrow possible exceptions during function evaluation
+    if (ex.second) std::rethrow_exception(ex.second);
+    
+    // throw `Rcpp::exception` if integration error occured
+    if (ier > 0) Rcpp::stop("Integration error");
+
+    return result;
+}
+```
+
+```{r demo-r-direct}
+## demo with sane input
+gamma_inc_direct(-0.5, 1)
+
+## demo with not so sane input
+tryCatch(gamma_inc_direct(0, 0), error = function(cond) print(cond))
+tryCatch(gamma_inc_direct(0, -1), error = function(cond) print(cond))
+```
+
+
+[^1]: We use `Rcpp` for simplicity. There no inherent requirement to use `Rcpp` with `integratecpp`.
+Using `cpp11` or writing your own wrapper is also possible.
+
+[^2]: The *upper incomplete Gamma function* can be indirectly evaluated for non-negative $\alpha$
+with the `pgamma`-function, which even is provided as a
+[entry-point in `R`s `C`-API](https://cran.r-project.org/doc/manuals/r-release/R-exts.html#Distribution-functions).
+In contrast, this is not possible for negative $\alpha$ as of `R 4.2-0`.
+
+[^3]: The package `gsl` provides a function and entry-points for `C` code to evaluate the
+*upper incomplete Gamma function* for negative values.

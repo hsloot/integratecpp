@@ -25,6 +25,7 @@ To include the header into your `C++` source files for building with
 
 ``` cpp
 // C++
+
 // [[Rcpp::plugins(cpp11)]]
 // [[Rcpp::depends(integratecpp)]]
 
@@ -66,14 +67,14 @@ over the interval
 // [[Rcpp::plugins(cpp11)]]
 // [[Rcpp::depends(integratecpp)]]
 
-#include <algorithm> // for std::transform
+#include <algorithm> // std::transform
 
 #include <Rcpp.h>
 #include <R_ext/Applic.h>
 
 // [[Rcpp::export(rng=false)]]
 Rcpp::List integrate_identity() {
-  // define function as lambda
+  // define integrand as lambda
   auto fn = [](const double x) {
     return x;
   };
@@ -101,17 +102,16 @@ Rcpp::List integrate_identity() {
   // initialize variable for error code
   int ier = 0;
 
-  // `Rdqagi` requires a function pointer with signature
+  // NOTE: `Rdqags` requires a function pointer with signature
   // `void(*)(double *, int, void *)` and a void pointer
-  // `void *` for the last argument.
+  // `void *` passed to the callback as the last argument
   const auto fn_callback = [](double *x, int n, void *ex) {
     auto& fn_integrand = *static_cast<decltype(&fn)>(ex);
     std::transform(&x[0], &x[n], &x[0], fn_integrand);
     return;
   };
 
-  // NOTE: finite bounds can be integrated with the `C`-method `Rdqags`,
-  // requiring no extra boundary transformation.
+  // NOTE: finite bounds can be integrated with the `C`-method `Rdqags`
   Rdqags(fn_callback, &fn, &lower, &upper, &epsabs, &epsrel, &result,
          &abserr, &neval, &ier, &limit, &lenw, &last, iwork.data(),
          work.data());
@@ -142,7 +142,7 @@ integrate_identity()
 The key part for adhering to the interface of `Rdqags` is creating the
 callback functor `fn_callback`, taking a `void *` pointer to the
 original function, which is than internally casted to the correct type
-and which overwrites an array of double with corresponding function
+and is used to overwrite an array of double with corresponding function
 evaluations. This is rather complicated and requires being more
 familiarity with pointers. Additionally, this snippet is missing a
 translation of the error code into a proper error message. To make it
