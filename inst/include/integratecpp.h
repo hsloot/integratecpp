@@ -778,7 +778,8 @@ inline integrator::return_type integrator::operator()(UnaryRealFunction_ &&fn,
                 integration_runtime_error("Unknown error"));
           }
 
-          if (!std::all_of(d_first, d_first + std::distance(first, last),
+          if (!static_cast<bool>(e_ptr) &&
+              !std::all_of(d_first, d_first + std::distance(first, last),
                            [](const double x) { return std::isfinite(x); })) {
             cleanup(d_first, std::distance(first, last));
             e_ptr = std::make_exception_ptr(
