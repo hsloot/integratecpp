@@ -34,3 +34,4 @@ Collate:
     'integratecpp-package.R'
     'integrator.R'
 VignetteBuilder: knitr
+URL: https://hsloot.github.io/integratecpp/

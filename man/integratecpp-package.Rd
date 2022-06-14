@@ -9,6 +9,13 @@
 The package contains a header-only API for the numerical integration
 methods \code{Rdqagi} and \code{Rdqags} in \verb{<R_Ext/Applic.h}.
 }
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://hsloot.github.io/integratecpp/}
+}
+
+}
 \author{
 \strong{Maintainer}: Henrik Sloot \email{henrik.sloot@gmail.com} (\href{https://orcid.org/0000-0001-8582-7776}{ORCID})
 
