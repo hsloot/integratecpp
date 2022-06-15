@@ -4,10 +4,9 @@
 \name{integratecpp-package}
 \alias{integratecpp}
 \alias{integratecpp-package}
-\title{integratecpp}
+\title{integratecpp: C++ API for R integration routines}
 \description{
-The package contains a header-only API for the numerical integration
-methods \code{Rdqagi} and \code{Rdqags} in \verb{<R_Ext/Applic.h}.
+The package integratecpp provides a header-only C++11 interface to R's C-API for numerical integration.
 }
 \seealso{
 Useful links:
