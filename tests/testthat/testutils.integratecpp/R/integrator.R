@@ -20,7 +20,8 @@
 #' @slot pointer An external pointer to a C++ object.
 #'
 #' @importFrom methods setClass
-#' @keywords internal
+#'
+#' @export Integrator
 Integrator <- setClass("Integrator", slots = c("pointer" = "externalptr")) # nolint
 
 #' @importFrom methods setValidity new
@@ -44,9 +45,16 @@ setValidity("Integrator", function(object) {
 #' @describeIn Integrator-class
 #'   Construct an object of class `Integrator`.
 #'
+#' @inheritParams methods::initialize
+#' @param max_subdivisions The maximum number of subdivisions.
+#' @param relative_accuracy The requested relative accuracy.
+#' @param absolute_accuracy The requested absolute accuracy.
+#' @param work_size The dimensioning parameter of the working array.
+#'
 #' @include RcppExports.R
 #' @importFrom methods setMethod validObject
-#' @keywords internal
+#'
+#' @export
 setMethod("initialize", "Integrator", function(.Object, max_subdivisions = 100, relative_accuracy = .Machine$double.eps^0.25, absolute_accuracy = relative_accuracy, work_size = 4 * max_subdivisions) { # nolint
     .Object@pointer <- Rcpp__integrator__new(max_subdivisions, relative_accuracy, absolute_accuracy, work_size) # nolint
     validObject(.Object)
@@ -60,10 +68,13 @@ setMethod("initialize", "Integrator", function(.Object, max_subdivisions = 100, 
 #'   `work_size` or get the integration routine with signature
 #'   `function(f, lower, upper, ..., stop.on.error = TRUE)`.
 #'
+#' @inheritParams base::`$`
+#' @param x object from which to extract element(s) or in which to replace element(s).
+#'
 #' @include RcppExports.R
 #' @importFrom methods setMethod
 #'
-#' @keywords internal
+#' @export
 setMethod("$", "Integrator", function(x, name) {
     if (name %in% c("max_subdivisions", "relative_accuracy", "absolute_accuracy", "work_size")) { # nolint
         get(paste("Rcpp__integrator__get", name, sep = "_"))(x@pointer)
@@ -92,10 +103,13 @@ setMethod("$", "Integrator", function(x, name) {
 #'   `max_subdivisions`, `relative_accuracy`, `absolute_accuracy`,
 #'   or `work_size`.
 #'
+#' @inheritParams base::`$<-`
+#' @param x object from which to extract element(s) or in which to replace element(s).
+#'
 #' @include RcppExports.R
 #' @importFrom methods setMethod validObject
 #'
-#' @keywords internal
+#' @export
 setMethod("$<-", "Integrator", function(x, name, value) {
     if (name %in% c("max_subdivisions", "relative_accuracy", "absolute_accuracy", "work_size")) { # nolint
         get(paste("Rcpp__integrator__set", name, sep = "_"))(x@pointer, value)
