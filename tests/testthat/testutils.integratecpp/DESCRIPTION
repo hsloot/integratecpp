@@ -1,0 +1,24 @@
+Package: testutils.integratecpp
+Title: Testutils for the package `integratecpp`
+Version: 0.1
+Authors@R:
+    person(given = "Henrik",
+           family = "Sloot", ,
+           email = "henrik.sloot@gmail.com",
+           role = c("aut", "cre"),
+           comment = c(ORCID = "0000-0001-8582-7776"))
+Description: Contains test utilities for the unit tests of the `integratecpp` package.
+License: GPL (>= 3)
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.2.1
+Depends: R (>= 3.1)
+Imports: methods, Rcpp
+LinkingTo: Rcpp, integratecpp
+SystemRequirements: C++11
+Collate:
+    'RcppExports.R'
+    'exceptions.R'
+    'integrate.R'
+    'integrator.R'
+    'package.R'

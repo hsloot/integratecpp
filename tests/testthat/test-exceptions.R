@@ -15,6 +15,10 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+skip_if_not_installed("testutils.integratecpp")
+catch_what <- testutils.integratecpp::catch_what
+
+
 test_that("`integration_logic_error` works as expected", {
     expect_equal(
         catch_what("integration_logic_error", ""),

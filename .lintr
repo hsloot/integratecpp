@@ -2,5 +2,6 @@ linters: linters_with_defaults(
     line_length_linter(100)
   )
 exclusions: list(
-    "vignettes/articles/comparison_cache"
+    "vignettes/articles/comparison_cache",
+    "tests/testthat/testutils.integratecpp/R/RcppExports.R"
   )

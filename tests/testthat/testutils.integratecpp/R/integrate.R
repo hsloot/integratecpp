@@ -18,12 +18,11 @@
 #' A method for numerical integration
 #'
 #' @inheritParams stats::integrate
-#' @param max_subdivisions the maximum number of subintervals.
-#' @param relative_accuracy relative accuracy requested.
-#' @param absolute_accuracy absolute accuracy requested.
+#' @inheritParams initialize,Integrator-method
 #'
 #' @include RcppExports.R
-#' @keywords internal
+#'
+#' @export
 integrate <- function(f, lower, upper, ..., max_subdivisions = 100L,
                       relative_accuracy = .Machine$double.eps^0.25,
                       absolute_accuracy = relative_accuracy,

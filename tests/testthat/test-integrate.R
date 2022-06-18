@@ -15,6 +15,10 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+skip_if_not_installed("testutils.integratecpp")
+integrate <- testutils.integratecpp::integrate
+
+
 remove_call <- function(x) {
     x <- x[-match(x, "call")]
 }
