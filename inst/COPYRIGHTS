@@ -1,0 +1,3 @@
+Files: tests/testthat/setup.R tests/testthat/helper.R
+Copyright: 2020 usethis authors
+License: MIT
