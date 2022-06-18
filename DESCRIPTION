@@ -15,24 +15,18 @@ Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.0
 Depends: R (>= 3.1.0)
-LinkingTo:
-    Rcpp
-Imports:
-    methods,
-    Rcpp
 SystemRequirements: C++11
 Suggests:
     covr,
+    remotes,
     knitr,
     rmarkdown,
-    testthat (>= 3.0.0)
+    testthat (>= 3.0.0),
+    cli,
+    withr,
+    Rcpp,
+    methods
 Config/testthat/edition: 3
 Config/Needs/website: Rcpp, RcppGSL, RcppNumerical, bench
-Collate:
-    'RcppExports.R'
-    'exceptions.R'
-    'integrate.R'
-    'integratecpp-package.R'
-    'integrator.R'
 VignetteBuilder: knitr
 URL: https://hsloot.github.io/integratecpp/
