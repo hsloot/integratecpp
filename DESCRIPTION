@@ -10,7 +10,8 @@ Authors@R:
     comment = c(ORCID = "0000-0001-8582-7776"))
 Description:
   The package integratecpp provides a header-only C++11 interface to R's C-API for numerical integration.
-License: GPL (>= 3)
+Copyright: See the file COPYRIGHTS for copyright details
+License: GPL (>= 3) + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.0
@@ -23,9 +24,16 @@ Imports:
 SystemRequirements: C++11
 Suggests:
     covr,
+    desc,
+    fs,
     knitr,
+    mockery,
+    rlang,
     rmarkdown,
-    testthat (>= 3.0.0)
+    rprojroot,
+    testthat (>= 3.0.0),
+    usethis,
+    withr
 Config/testthat/edition: 3
 Collate:
     'RcppExports.R'
@@ -33,5 +41,6 @@ Collate:
     'integrate.R'
     'integratecpp-package.R'
     'integrator.R'
+    'use_integratecpp.R'
 VignetteBuilder: knitr
 URL: https://hsloot.github.io/integratecpp/
