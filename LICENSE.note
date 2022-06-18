@@ -3,6 +3,9 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/> or
 <https://www.r-project.org/Licenses/>.
 
+See file inst/COPYRIGHTS for detailed information about copyright and license
+information about included code from other projects.
+
 --------------------------------------------------------------------------------
 
 The following public header files, if present, are distributed under LGPL,

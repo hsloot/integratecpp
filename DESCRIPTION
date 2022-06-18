@@ -5,24 +5,32 @@ Version: 0.2-2
 Authors@R:
     person("Henrik", "Sloot", , "henrik.sloot@gmail.com", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0001-8582-7776"))
-Description: 
+Description:
     Provides a header-only C++11 interface to R's C-API for numerical integration.
-License: GPL (>= 3)
+Copyright: See the file COPYRIGHTS for copyright details
+License: GPL (>= 3) + file LICENSE
 URL: https://hsloot.github.io/integratecpp/
-Depends: 
+Depends:
     R (>= 3.1.0)
 Imports:
     methods,
     Rcpp
 Suggests:
     bench,
+    desc,
+    fs,
     knitr,
+    mockery,
+    rlang,
     rmarkdown,
+    rprojroot,
     stats,
-    testthat (>= 3.0.0)
+    testthat (>= 3.0.0),
+    usethis,
+    withr
 LinkingTo:
     Rcpp
-VignetteBuilder: 
+VignetteBuilder:
     knitr
 Config/Needs/coverage: covr
 Config/Needs/website: Rcpp, RcppGSL, RcppNumerical, bench
@@ -37,3 +45,4 @@ Collate:
     'integrate.R'
     'integratecpp-package.R'
     'integrator.R'
+    'use_integratecpp.R'
