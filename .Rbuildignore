@@ -16,3 +16,4 @@
 ^docs$
 ^pkgdown$
 ^cran-comments\.md$
+^COPYING$
