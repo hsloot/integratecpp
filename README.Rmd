@@ -17,6 +17,8 @@ knitr::opts_chunk$set(
 
 <!-- badges: start -->
 [![Codecov test coverage](https://codecov.io/gh/hsloot/integratecpp/branch/main/graph/badge.svg)](https://app.codecov.io/gh/hsloot/integratecpp?branch=main)
+[![](https://img.shields.io/badge/pkgdown-integratecpp-blue.svg)](https://hsloot.github.io/integratecpp/)
+[![](https://img.shields.io/badge/Doxygen-integratecpp-blue.svg)](https://hsloot.github.io/integratecpp/html/index.html)
 <!-- badges: end -->
 
 The package `integratecpp` provides a header-only `C++11` interface to `R`'s `C`-API for numerical integration.

@@ -2,3 +2,17 @@ url: https://hsloot.github.io/integratecpp/
 template:
   bootstrap: 5
 
+navbar:
+  structure:
+    left:  [intro, cppreference, reference, articles, tutorials, news]
+    right: [search, github]
+  components:
+    cppreference:
+      text: C++ Reference
+      href: html/index.html
+
+reference:
+- title: Package
+  desc: ~
+  contents:
+  - "`integratecpp-package`"
