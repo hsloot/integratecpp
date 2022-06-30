@@ -207,7 +207,7 @@ There are alternatives to using `integratecpp` or `R`'s `C`-API for numerical in
 Two examples are:
 
 - Linking to the [GNU scientific library](https://www.gnu.org/software/gsl/), possibly using [`RcppGSL`](https://github.com/eddelbuettel/rcppgsl).
-- Using [`RcppNumeric`](https://github.com/yixuan/RcppNumerical), which provides a similar approach to ours.
+- Using [`RcppNumerical`](https://github.com/yixuan/RcppNumerical), which provides a similar approach to ours.
 
 Both approaches provide a finer control over the specific integration algorithms than `R` does.
 The following table provides a summary.
@@ -217,7 +217,7 @@ The following table provides a summary.
 | `integratecpp` | `R >= 3.1`  | (`Rcpp`[^1])  | (`Rcpp`)            | `C++11`                |                        | &#10060;                |
 | `C`-API        |             |               |                     |                        |                        | &#10060;                |
 | `gsl`          |             | (`Rcpp`)      | (`Rcpp`, `RcppGSL`) |                        | `gsl`                  | &#9989;                 |
-| `RcppNumeric`  |             | `Rcpp`        | `Rcpp, RcppEigen`   |                        |                        | &#9989;                 |
+| `RcppNumerical`  |             | `Rcpp`        | `Rcpp, RcppEigen`   |                        |                        | &#9989;                 |
 
 What separates our approach are zero additional dependencies (if vendored) and an intuitive pure `C++` API which does not rely on `Rcpp` itself.
 Hence, as `Rdqags` and `Rdqagi` are not using longjumps, it can be used in a pure `C++` back-end.

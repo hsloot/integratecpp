@@ -27,6 +27,7 @@ Suggests:
     rmarkdown,
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
+Config/Needs/website: Rcpp, RcppGSL, RcppNumerical, bench
 Collate:
     'RcppExports.R'
     'exceptions.R'
