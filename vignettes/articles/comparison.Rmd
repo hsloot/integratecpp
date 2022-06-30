@@ -1,0 +1,288 @@
+---
+title: "Comparing numerical integration packages"
+references:
+- id: Piessens1983a
+  title: Quadpack
+  author:
+  - given: Robert
+    family: Piessens
+  - given: Elise
+    family: Doncker-Kapenga
+  - given: Christoph W.
+    family: Überhuber
+  - given: David K.
+    family: Kahaner
+  DOI: 10.1007/978-3-642-61786-7
+  publisher: Springer Berlin, Heidelberg
+  type: book
+  issued:
+    year: 1983
+nocite: |
+  @Piessens1983a
+---
+
+```{r knitr-setup, include = FALSE}
+knitr::opts_chunk$set(
+    collapse = TRUE,
+    comment = "#>",
+    cache = TRUE
+)
+```
+
+## The Problem
+
+We are using the following simple integral to compare various numerical integration options:
+
+$$
+    \int_{0}^{1} 1 / x^{0.7} \mathrm{d}x .
+$$
+
+
+## Using base `R`
+
+First, we calculate the integral using base-`R`.
+
+- Finite-interval integration uses a 21-point *Gauss-Kronrod* rule on equally-spaced subintervals.
+- Infinite-interval integration uses a 15-point *Gauss-Kronrod* rule on equally-spaced subintervals after transforming the integrand to the interval $[0, 1]$.
+- Both use *Wynn's $\epsilon$ algorithm* for limit-extrapolation.
+
+It is possible to configure the integration algorithms by changing the requested relative and absolute accuracies and the maximum number of subintervals.
+All of these features are shared by the following approaches.
+However, some have additional features.
+
+```{r base-R}
+integrate_R <- function() {
+    integrate(
+        function(x) 1 / x^0.7,
+        lower = 0, upper = 1
+    ) |>
+    (function(x) {
+        list(
+            "value" = x$value,
+            "abserr" = x$abs.err,
+            "subdivisions" = x$subdivisions)
+    })()
+}
+
+integrate_R()
+```
+
+
+## Using `R`'s `C`-API
+
+We can calculate the same integral using `R`'s `C`-API
+
+```{Rcpp C-API}
+#include <math.h>
+
+#include <R_ext/Applic.h>
+#include <Rcpp.h>
+
+void fn(double *x, int n, void* ex) {
+    for (int i = 0; i < n; ++i) {
+        x[i] = 1. / pow(x[i], 0.7);
+    }
+    return;
+}
+
+// [[Rcpp::export(rng=false)]]
+Rcpp::List integrate_Cish() {
+    double lower = 0.;
+    double upper = 1.;
+
+    double result;
+    double abserr;
+    int last;
+    int neval;
+
+    int limit = 100;
+    double epsrel = 0.0001220703125;
+    double epsabs = epsrel;
+    int lenw = 4 * limit;
+
+    #pragma GCC diagnostic push
+    #pragma GCC diagnostic ignored "-Wvla-extension"
+    int iwork[limit];  // C99
+    double work[lenw]; // C99
+    #pragma GCC diagnostic pop
+
+    int ier = 0;
+
+    Rdqags(&fn, nullptr, &lower, &upper, &epsabs, &epsrel, &result,
+           &abserr, &neval, &ier, &limit, &lenw, &last, iwork, work
+    );
+
+    return Rcpp::List::create(
+        Rcpp::Named("value") = result,
+        Rcpp::Named("abserr") = abserr,
+        Rcpp::Named("subdivisions") = last
+    );
+}
+```
+
+```{r C-API-eval}
+integrate_Cish()
+```
+
+
+## Using `integratecpp`
+
+Using our `C++11` wrapper, numerical integration can be done seamlessly in `Rcpp`:
+
+```{Rcpp integratecpp}
+// [[Rcpp::plugins(cpp11)]]
+// [[Rcpp::depends(integratecpp)]]
+
+#include <cmath>
+
+#include <Rcpp.h>
+#include <integratecpp.h>
+
+// [[Rcpp::export(rng=false)]]
+Rcpp::List integrate_integratecpp() {
+    const auto fn = [](const double x) {
+        return 1. / std::pow(x, 0.7);
+    };
+
+    const auto result = integratecpp::integrate(fn, 0., 1.);
+
+    return Rcpp::List::create(
+        Rcpp::Named("value") = result.value,
+        Rcpp::Named("abserr") = result.absolute_error,
+        Rcpp::Named("subdivisions") = result.subdivisions
+    );
+}
+```
+
+```{r integratecpp-eval}
+integrate_integratecpp()
+```
+
+
+## Using `RcppGSL`
+
+With `RcppGSL`, we can use `gsl` in a similar way as `R`s `C`-API:
+
+```{Rcpp RcppGSL}
+// [[Rcpp::depends(RcppGSL)]]
+
+#include <math.h>
+
+#include <Rcpp.h>
+#include <RcppGSL.h>
+#include <gsl/gsl_integration.h>
+
+double fn(double x, void* params) {
+    return 1. / pow(x, 0.7);
+}
+
+// [[Rcpp::export(rng=false)]]
+Rcpp::List integrate_RcppGSL() {
+    double lower = 0.;
+    double upper = 1.;
+
+    double result;
+    double abserr;
+
+    size_t limit = 100;
+    double epsrel = 0.0001220703125;
+    double epsabs = epsrel;
+
+    gsl_function f;
+    f.function = &fn;
+    f.params = nullptr;
+
+    gsl_integration_workspace *w =
+      gsl_integration_workspace_alloc(limit);
+
+    gsl_integration_qags(
+        &f, lower, upper, epsabs, epsrel, limit, w, &result, &abserr
+    );
+    int subintervals = w->size;
+
+    gsl_integration_workspace_free(w);
+
+    return Rcpp::List::create(
+        Rcpp::Named("value") = result,
+        Rcpp::Named("abserr") = abserr,
+        Rcpp::Named("subdivisions") = subintervals
+    );
+}
+```
+
+```{r RcppGSL-eval}
+integrate_RcppGSL()
+```
+
+
+## Using `RcppNumerical`
+
+With `RcppNumerical`, we must define the integrator in the `Numer` namespace:
+
+```{Rcpp RcppNumerical}
+// [[Rcpp::depends(RcppEigen)]]
+// [[Rcpp::depends(RcppNumerical)]]
+
+#include <cmath>
+
+#include <RcppNumerical.h>
+
+namespace Numer {
+
+class Fn : public Func {
+    double operator()(const double& x) const {
+        return 1. / std::pow(x, 0.7);
+    }
+
+};
+
+} // Numer
+
+// [[Rcpp::export]]
+Rcpp::List integrate_RcppNumerical() {
+    double lower = 0.;
+    double upper = 1.;
+
+    size_t limit = 100;
+    double epsrel = 0.0001220703125;
+    double epsabs = epsrel;
+
+    Numer::Fn fn;
+
+    double abserr;
+    int ier;
+
+    const double res = Numer::integrate(
+        fn, lower, upper, abserr, ier, limit, epsabs, epsrel,
+        Numer::Integrator<double>::GaussKronrod21
+    );
+
+    return Rcpp::List::create(
+        Rcpp::Named("value") = res,
+        Rcpp::Named("abserr") = abserr
+    );
+}
+```
+
+```{r RcppNumerical-eval}
+integrate_RcppNumerical()
+```
+
+
+## Benchmark
+
+A benchmarks shows that our wrapper is almost as fast as the native `C`-API.
+
+```{r bench}
+bench::mark(
+    integrate_R(),
+    integrate_integratecpp(),
+    integrate_Cish(),
+    integrate_RcppGSL(),
+    integrate_RcppNumerical(),
+    check = FALSE
+)
+```
+
+
+## References

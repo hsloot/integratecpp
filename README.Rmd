@@ -13,6 +13,7 @@ knitr::opts_chunk$set(
 )
 ```
 
+
 # integratecpp
 
 <!-- badges: start -->
@@ -23,11 +24,12 @@ knitr::opts_chunk$set(
 
 The package `integratecpp` provides a header-only `C++11` interface to `R`'s `C`-API for numerical integration.
 
+
 ## Installation
 
 You can install the development version of `integratecpp` like so:
 
-``` r
+```{r, eval=FALSE}
 remotes::install_github("hsloot/integratecpp")
 ```
 
@@ -45,10 +47,17 @@ To include the header into your `C++` source files for building with `Rcpp`, use
 ```
 
 If you intend including the header in source files of an `R`-package, you should drop the `Rcpp`
-attributes and include the following line in your `DESCRIPTION` file:
+attributes and include the following lines in your `DESCRIPTION` file:
 
-```batch
+```deb-control
 LinkingTo: integratecpp
+SystemRequirements: C++11
+```
+
+Addtionally, if you are using an `Makevars` or `Makevars.win` file, [*WRE*](https://cran.r-project.org/doc/manuals/r-release/R-exts.html#Using-C_002b_002b-code) suggests adding the following:
+
+```Makefile
+CXX_STD = CXX11
 ```
 
 Note that the header does includes only C++ standard library headers and [`<R_ext/Applic.h>`](https://github.com/wch/r-source/blob/trunk/src/include/R_ext/Applic.h).
@@ -77,53 +86,54 @@ Consider the following example, approximating the integral of the identity funct
 
 // [[Rcpp::export(rng=false)]]
 Rcpp::List integrate_identity() {
-  // define integrand as lambda
-  auto fn = [](const double x) {
-    return x;
-  };
+    // define integrand as lambda
+    auto fn = [](const double x) {
+        return x;
+    };
 
-  // define bounds
-  double lower = 0.;
-  double upper = 1.;
+    // define bounds
+    double lower = 0.;
+    double upper = 1.;
 
-  // initialize output variables for integration results
-  double result;
-  double abserr;
-  int last;
-  int neval;
+    // initialize output variables for integration results
+    double result;
+    double abserr;
+    int last;
+    int neval;
 
-  // initialize configuration parameters
-  int limit = 100;
-  double epsrel = 0.0001220703125;
-  double epsabs = epsrel;
-  int lenw = 4 * limit;
+    // initialize configuration parameters
+    int limit = 100;
+    double epsrel = 0.0001220703125;
+    double epsabs = epsrel;
+    int lenw = 4 * limit;
 
-  // initialize working array
-  auto iwork = std::vector<int>(limit);
-  auto work = std::vector<double>(lenw);
+    // initialize working array
+    auto iwork = std::vector<int>(limit);
+    auto work = std::vector<double>(lenw);
 
-  // initialize variable for error code
-  int ier = 0;
+    // initialize variable for error code
+    int ier = 0;
 
-  // NOTE: `Rdqags` requires a function pointer with signature
-  // `void(*)(double *, int, void *)` and a void pointer
-  // `void *` passed to the callback as the last argument
-  const auto fn_callback = [](double *x, int n, void *ex) {
-    auto& fn_integrand = *static_cast<decltype(&fn)>(ex);
-    std::transform(&x[0], &x[n], &x[0], fn_integrand);
-    return;
-  };
+    // NOTE: `Rdqags` requires a function pointer with signature
+    // `void(*)(double *, int, void *)` and a void pointer
+    // `void *` passed to the callback as the last argument
+    const auto fn_callback = [](double *x, int n, void *ex) {
+        auto& fn_integrand = *static_cast<decltype(&fn)>(ex);
+        std::transform(&x[0], &x[n], &x[0], fn_integrand);
+        return;
+    };
 
-  // NOTE: finite bounds can be integrated with the `C`-method `Rdqags`
-  Rdqags(fn_callback, &fn, &lower, &upper, &epsabs, &epsrel, &result,
+    // NOTE: finite bounds can be integrated with the `C`-method `Rdqags`
+    Rdqags(fn_callback, &fn, &lower, &upper, &epsabs, &epsrel, &result,
          &abserr, &neval, &ier, &limit, &lenw, &last, iwork.data(),
          work.data());
 
-  return Rcpp::List::create(
-      Rcpp::Named("value") = result,
-      Rcpp::Named("absolute_error") = abserr,
-      Rcpp::Named("subdivisions") = last,
-      Rcpp::Named("neval") = neval);
+    return Rcpp::List::create(
+        Rcpp::Named("value") = result,
+        Rcpp::Named("absolute_error") = abserr,
+        Rcpp::Named("subdivisions") = last,
+        Rcpp::Named("neval") = neval
+    );
 }
 ```
 
@@ -139,7 +149,7 @@ Additionally, this snippet is missing a translation of the error code into a pro
 To make it worse, without guarding the callback functions from `C++` exceptions, we introduce
 possible undefined behavior.
 
-Using the wrapper simplifies numerical integration in `Rcpp` considerably:
+Using the wrapper solves these problems and simplifies numerical integration in `Rcpp` considerably:
 
 ```{Rcpp}
 // C++
@@ -155,39 +165,33 @@ Using the wrapper simplifies numerical integration in `Rcpp` considerably:
 
 // [[Rcpp::export(rng=false)]]
 Rcpp::List integrate_identity_improved() {
-  auto fn = [](const double x) {
-    return x;
-  };
+    auto fn = [](const double x) {
+        return x;
+    };
 
-  try {
     const auto result = integratecpp::integrate(fn, 0., 1.);
     return Rcpp::List::create(
         Rcpp::Named("value") = result.value,
         Rcpp::Named("absolute_error") = result.absolute_error,
         Rcpp::Named("subdivisions") = result.subdivisions,
-        Rcpp::Named("neval") = result.neval);
-  } catch (const std::exception& e) {
-    Rcpp::stop(e.what());
-  }
+        Rcpp::Named("neval") = result.neval
+    );
 }
 
 // [[Rcpp::export(rng=false)]]
 Rcpp::List integrate_identity_error() {
-  auto fn = [](const double x) {
-    throw std::runtime_error("stop on purpose");
-    return x;
-  };
+    auto fn = [](const double x) {
+        throw std::runtime_error("stop on purpose");
+        return x;
+    };
 
-  try {
     const auto result = integratecpp::integrate(fn, 0., 1.);
     return Rcpp::List::create(
         Rcpp::Named("value") = result.value,
         Rcpp::Named("absolute_error") = result.absolute_error,
         Rcpp::Named("subdivisions") = result.subdivisions,
-        Rcpp::Named("neval") = result.neval);
-  } catch (const std::exception& e) {
-    Rcpp::stop(e.what());
-  }
+        Rcpp::Named("neval") = result.neval
+    );
 }
 ```
 
@@ -196,6 +200,55 @@ integrate_identity_improved()
 tryCatch(integrate_identity_error(), error = function(cond) print(cond))
 ```
 
+
+## Alternatives
+
+There are alternatives to using `integratecpp` or `R`'s `C`-API for numerical integration in `C++` code of `R` packages.
+Two examples are:
+
+- Linking to the [GNU scientific library](https://www.gnu.org/software/gsl/), possibly using [`RcppGSL`](https://github.com/eddelbuettel/rcppgsl).
+- Using [`RcppNumeric`](https://github.com/yixuan/RcppNumerical), which provides a similar approach to ours.
+
+Both approaches provide a finer control over the specific integration algorithms than `R` does.
+The following table provides a summary.
+
+| __Approach__   | __Depends__ | __Imports__   | __LinkingTo__       | __SystemRequirements__ | __External dependency__| __Additional features__ |
+|:---------------|-------------|---------------|---------------------|------------------------|------------------------|-------------------------|
+| `integratecpp` | `R >= 3.1`  | (`Rcpp`[^1])  | (`Rcpp`)            | `C++11`                |                        | &#10060;                |
+| `C`-API        |             |               |                     |                        |                        | &#10060;                |
+| `gsl`          |             | (`Rcpp`)      | (`Rcpp`, `RcppGSL`) |                        | `gsl`                  | &#9989;                 |
+| `RcppNumeric`  |             | `Rcpp`        | `Rcpp, RcppEigen`   |                        |                        | &#9989;                 |
+
+What separates our approach are zero additional dependencies (if vendored) and an intuitive pure `C++` API which does not rely on `Rcpp` itself.
+Hence, as `Rdqags` and `Rdqagi` are not using longjumps, it can be used in a pure `C++` back-end.
+A comparison of different numerical integration approaches in `C++` is summarized in the article ["Comparing numerical integration packages"](articles/comparison.html).
+
+
+## Outlook
+
+The current version of `integratecpp` has the following shortcommings which could be adressed in future versions:
+
+- The current version of `integratecpp` imports and links to `Rcpp` to generate test functions which are not exported.
+  Future versions might remove this dependency.
+
+- `R`'s `C`-API allows reusing workspace variables. This feature is currently not implemented by our wrapper, i.e., each call to `integratecpp::integrate(...)` or `integratecpp::integrator::operator()(...)` will create a `std::vector<int>` and a `std::vector<double>` of length `limit` and `4 * limit`, respectively.
+  Future versions might make workspace variables class members of the `integratecpp::integrator` or allow to provide them externally.
+
+- The current version of `integratecpp` is licenced under `GPL (>=3)` due to its dependence and linking to `Rcpp`.
+  The provided header-only library depends only on STL headers and [`<R_ext/Applic.h>`](https://github.com/wch/r-source/blob/trunk/src/include/R_ext/Applic.h).
+  The latter is licensed under `LGPL (>= 2.1)` (see [`doc/COPYRIGHTS`](https://github.com/wch/r-source/blob/trunk/doc/COPYRIGHTS)).
+  Hence, future versions might relicense the header-only library under `LGPL (>= 3)` for permissive linking to `integratecpp`.
+
+Apart from internal improvements, `integratecpp` could provide convinience functions à la [`usethis`](https://github.com/r-lib/usethis) to integrate `integratecpp` into package developement.
+Also a function to vendor the header into a package under development could be created.
+
+Some of these enhancements can be found in various feature branches on [github.com/hsloot/integratecpp](https://github.com/hsloot/integratecpp).
+
+
 ## Code of Conduct
 
-Please note that the integratecpp project is released with a [Contributor Code of Conduct](https://contributor-covenant.org/version/2/0/CODE_OF_CONDUCT.html). By contributing to this project, you agree to abide by its terms.
+Please note that the `integratecpp` project is released with a [Contributor Code of Conduct](https://contributor-covenant.org/version/2/0/CODE_OF_CONDUCT.html). By contributing to this project, you agree to abide by its terms.
+
+[^1]: The current version of `integratecpp` imports and links to `Rcpp` for internal testing. This
+depency might be removed in future versions and can be avoided if the header is vendored into the
+project.
