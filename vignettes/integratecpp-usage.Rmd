@@ -41,6 +41,8 @@ As `integratecpp` requires `C++11`, we use the `Rcpp` plugin `cpp11` and link to
 includes directory of `integratecpp` using the depends attribute `integratecpp`.
 
 ```{Rcpp attributes, eval=FALSE, echo=TRUE, class.source = 'fold-none'}
+// C++11
+
 // [[Rcpp::plugins(cpp11)]]
 // [[Rcpp::depends(integratecpp)]]
 ```
@@ -72,6 +74,8 @@ double gamma_inc(const double alpha, const double x) {
 ```
 
 ```{r demo-r}
+# R
+
 ## demo with sane input
 gamma_inc(-0.5, 1)
 
@@ -103,6 +107,8 @@ First, we need to include the header for `R`'s `C` entry-points for the integrat
 and `Rdqagi`:
 
 ```{Rcpp included-additional-1, echo=TRUE, eval=FALSE}
+// C++11
+
 #include <R_ext/Applic.h>
 ```
 
@@ -206,6 +212,8 @@ double gamma_inc_direct(const double alpha, const double x) {
 ```
 
 ```{r demo-r-direct}
+# R
+
 ## demo with sane input
 gamma_inc_direct(-0.5, 1)
 

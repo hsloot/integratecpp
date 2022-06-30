@@ -51,6 +51,8 @@ All of these features are shared by the following approaches.
 However, some have additional features.
 
 ```{r base-R}
+# R
+
 integrate_R <- function() {
     integrate(
         function(x) 1 / x^0.7,
@@ -73,6 +75,8 @@ integrate_R()
 We can calculate the same integral using `R`'s `C`-API
 
 ```{Rcpp C-API}
+// C++11 
+
 #include <math.h>
 
 #include <R_ext/Applic.h>
@@ -121,6 +125,8 @@ Rcpp::List integrate_Cish() {
 ```
 
 ```{r C-API-eval}
+# R
+
 integrate_Cish()
 ```
 
@@ -130,6 +136,8 @@ integrate_Cish()
 Using our `C++11` wrapper, numerical integration can be done seamlessly in `Rcpp`:
 
 ```{Rcpp integratecpp}
+// C++11 
+
 // [[Rcpp::plugins(cpp11)]]
 // [[Rcpp::depends(integratecpp)]]
 
@@ -155,6 +163,8 @@ Rcpp::List integrate_integratecpp() {
 ```
 
 ```{r integratecpp-eval}
+# R
+
 integrate_integratecpp()
 ```
 
@@ -164,6 +174,8 @@ integrate_integratecpp()
 With `RcppGSL`, we can use `gsl` in a similar way as `R`s `C`-API:
 
 ```{Rcpp RcppGSL}
+// C++11 
+
 // [[Rcpp::depends(RcppGSL)]]
 
 #include <math.h>
@@ -211,6 +223,8 @@ Rcpp::List integrate_RcppGSL() {
 ```
 
 ```{r RcppGSL-eval}
+# R
+
 integrate_RcppGSL()
 ```
 
@@ -220,6 +234,8 @@ integrate_RcppGSL()
 With `RcppNumerical`, we must define the integrator in the `Numer` namespace:
 
 ```{Rcpp RcppNumerical}
+// C++11
+
 // [[Rcpp::depends(RcppEigen)]]
 // [[Rcpp::depends(RcppNumerical)]]
 
@@ -265,6 +281,8 @@ Rcpp::List integrate_RcppNumerical() {
 ```
 
 ```{r RcppNumerical-eval}
+# R
+
 integrate_RcppNumerical()
 ```
 
@@ -274,6 +292,8 @@ integrate_RcppNumerical()
 A benchmarks shows that our wrapper is almost as fast as the native `C`-API.
 
 ```{r bench}
+# R
+
 bench::mark(
     integrate_R(),
     integrate_integratecpp(),

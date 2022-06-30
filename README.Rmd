@@ -30,6 +30,8 @@ The package `integratecpp` provides a header-only `C++11` interface to `R`'s `C`
 You can install the development version of `integratecpp` like so:
 
 ```{r, eval=FALSE}
+# R
+ 
 remotes::install_github("hsloot/integratecpp")
 ```
 
@@ -138,6 +140,8 @@ Rcpp::List integrate_identity() {
 ```
 
 ```{r}
+# R
+
 integrate_identity()
 ```
 
@@ -196,6 +200,8 @@ Rcpp::List integrate_identity_error() {
 ```
 
 ```{r}
+# R
+
 integrate_identity_improved()
 tryCatch(integrate_identity_error(), error = function(cond) print(cond))
 ```

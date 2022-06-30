@@ -19,6 +19,8 @@ The package `integratecpp` provides a header-only `C++11` interface to
 You can install the development version of `integratecpp` like so:
 
 ``` r
+# R
+ 
 remotes::install_github("hsloot/integratecpp")
 ```
 
@@ -137,6 +139,8 @@ Rcpp::List integrate_identity() {
 ```
 
 ``` r
+# R
+
 integrate_identity()
 #> $value
 #> [1] 0.5
@@ -209,6 +213,8 @@ Rcpp::List integrate_identity_error() {
 ```
 
 ``` r
+# R
+
 integrate_identity_improved()
 #> $value
 #> [1] 0.5
@@ -233,18 +239,18 @@ numerical integration in `C++` code of `R` packages. Two examples are:
 -   Linking to the [GNU scientific
     library](https://www.gnu.org/software/gsl/), possibly using
     [`RcppGSL`](https://github.com/eddelbuettel/rcppgsl).
--   Using [`RcppNumeric`](https://github.com/yixuan/RcppNumerical),
+-   Using [`RcppNumerical`](https://github.com/yixuan/RcppNumerical),
     which provides a similar approach to ours.
 
 Both approaches provide a finer control over the specific integration
 algorithms than `R` does. The following table provides a summary.
 
-| **Approach**   | **Depends** | **Imports**  | **LinkingTo**       | **SystemRequirements** | **External dependency** | **Additional features** |
-|:---------------|-------------|--------------|---------------------|------------------------|-------------------------|-------------------------|
-| `integratecpp` | `R >= 3.1`  | (`Rcpp`[^1]) | (`Rcpp`)            | `C++11`                |                         | ❌                      |
-| `C`-API        |             |              |                     |                        |                         | ❌                      |
-| `gsl`          |             | (`Rcpp`)     | (`Rcpp`, `RcppGSL`) |                        | `gsl`                   | ✅                      |
-| `RcppNumeric`  |             | `Rcpp`       | `Rcpp, RcppEigen`   |                        |                         | ✅                      |
+| **Approach**    | **Depends** | **Imports**  | **LinkingTo**       | **SystemRequirements** | **External dependency** | **Additional features** |
+|:----------------|-------------|--------------|---------------------|------------------------|-------------------------|-------------------------|
+| `integratecpp`  | `R >= 3.1`  | (`Rcpp`[^1]) | (`Rcpp`)            | `C++11`                |                         | ❌                      |
+| `C`-API         |             |              |                     |                        |                         | ❌                      |
+| `gsl`           |             | (`Rcpp`)     | (`Rcpp`, `RcppGSL`) |                        | `gsl`                   | ✅                      |
+| `RcppNumerical` |             | `Rcpp`       | `Rcpp, RcppEigen`   |                        |                         | ✅                      |
 
 What separates our approach are zero additional dependencies (if
 vendored) and an intuitive pure `C++` API which does not rely on `Rcpp`
