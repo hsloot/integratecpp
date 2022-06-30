@@ -75,7 +75,9 @@
 </h2>
 <p>You can install the development version of <code>integratecpp</code> like so:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"hsloot/integratecpp"</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="co"># R</span></span>
+<span> </span>
+<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"hsloot/integratecpp"</span><span class="op">)</span></span></code></pre></div>
 <p>To include the header into your <code>C++</code> source files for building with <code>Rcpp</code>, use</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">// C++</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -159,7 +161,9 @@
 <span id="cb5-60"><a href="#cb5-60" aria-hidden="true" tabindex="-1"></a>    <span class="op">);</span></span>
 <span id="cb5-61"><a href="#cb5-61" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">integrate_identity</span><span class="op">(</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="co"># R</span></span>
+<span></span>
+<span><span class="fu">integrate_identity</span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; $value</span></span>
 <span><span class="co">#&gt; [1] 0.5</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -215,7 +219,9 @@
 <span id="cb7-40"><a href="#cb7-40" aria-hidden="true" tabindex="-1"></a>    <span class="op">);</span></span>
 <span id="cb7-41"><a href="#cb7-41" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">integrate_identity_improved</span><span class="op">(</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="co"># R</span></span>
+<span></span>
+<span><span class="fu">integrate_identity_improved</span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; $value</span></span>
 <span><span class="co">#&gt; [1] 0.5</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -236,18 +242,18 @@
 <p>There are alternatives to using <code>integratecpp</code> or <code>R</code>’s <code>C</code>-API for numerical integration in <code>C++</code> code of <code>R</code> packages. Two examples are:</p>
 <ul>
 <li>Linking to the <a href="https://www.gnu.org/software/gsl/" class="external-link">GNU scientific library</a>, possibly using <a href="https://github.com/eddelbuettel/rcppgsl" class="external-link"><code>RcppGSL</code></a>.</li>
-<li>Using <a href="https://github.com/yixuan/RcppNumerical" class="external-link"><code>RcppNumeric</code></a>, which provides a similar approach to ours.</li>
+<li>Using <a href="https://github.com/yixuan/RcppNumerical" class="external-link"><code>RcppNumerical</code></a>, which provides a similar approach to ours.</li>
 </ul>
 <p>Both approaches provide a finer control over the specific integration algorithms than <code>R</code> does. The following table provides a summary.</p>
 <table class="table">
 <colgroup>
-<col width="11%">
+<col width="12%">
 <col width="9%">
 <col width="10%">
 <col width="15%">
 <col width="17%">
-<col width="18%">
-<col width="18%">
+<col width="17%">
+<col width="17%">
 </colgroup>
 <thead><tr class="header">
 <th align="left"><strong>Approach</strong></th>
@@ -288,7 +294,7 @@
 <td>✅</td>
 </tr>
 <tr class="even">
-<td align="left"><code>RcppNumeric</code></td>
+<td align="left"><code>RcppNumerical</code></td>
 <td></td>
 <td><code>Rcpp</code></td>
 <td><code>Rcpp, RcppEigen</code></td>

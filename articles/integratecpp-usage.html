@@ -89,8 +89,10 @@
 <h2 id="an-implementation-with-integratecpp">An implementation with <code>integratecpp</code><a class="anchor" aria-label="anchor" href="#an-implementation-with-integratecpp"></a>
 </h2>
 <p>As <code>integratecpp</code> requires <code>C++11</code>, we use the <code>Rcpp</code> plugin <code>cpp11</code> and link to the includes directory of <code>integratecpp</code> using the depends attribute <code>integratecpp</code>.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode cpp fold-none"><code class="sourceCode cpp"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">// [[Rcpp::plugins(cpp11)]]</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co">// [[Rcpp::depends(integratecpp)]]</span></span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode cpp fold-none"><code class="sourceCode cpp"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">// C++11</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co">// [[Rcpp::plugins(cpp11)]]</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co">// [[Rcpp::depends(integratecpp)]]</span></span></code></pre></div>
 <p>Next, we include the STL header <code>&lt;cmath&gt;</code> for using <code>std::pow</code> and we include the header <code>&lt;integratecpp.h&gt;</code>.</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode cpp fold-none"><code class="sourceCode cpp"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;cmath&gt;</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;integratecpp.h&gt;</span></span></code></pre></div>
@@ -109,7 +111,9 @@
 <span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> result<span class="op">.</span>value<span class="op">;</span></span>
 <span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co">## demo with sane input</span></span>
+<code class="sourceCode R"><span><span class="co"># R</span></span>
+<span></span>
+<span><span class="co">## demo with sane input</span></span>
 <span><span class="fu">gamma_inc</span><span class="op">(</span><span class="op">-</span><span class="fl">0.5</span>, <span class="fl">1</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] 0.1781477</span></span>
 <span></span>
@@ -129,7 +133,9 @@
 <h2 id="an-implementation-without-integratecpp">An implementation without <code>integratecpp</code><a class="anchor" aria-label="anchor" href="#an-implementation-without-integratecpp"></a>
 </h2>
 <p>The following example does not use the <code>integratecpp</code> wrapper, but hints how the wrapper works internally. First, we need to include the header for <code>R</code>’s <code>C</code> entry-points for the integration routines <code>Rdqags</code> and <code>Rdqagi</code>:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode cpp fold-none"><code class="sourceCode cpp"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;R_ext/Applic.h&gt;</span></span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode cpp fold-none"><code class="sourceCode cpp"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co">// C++11</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;R_ext/Applic.h&gt;</span></span></code></pre></div>
 <p>Then, we require some STL headers for handling data:</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode cpp fold-none"><code class="sourceCode cpp"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;algorithm&gt;</span><span class="pp"> </span><span class="co">// std::transform</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;utility&gt;</span><span class="pp">   </span><span class="co">// std::make_pair, std::pair</span></span>
@@ -218,7 +224,9 @@
 <span id="cb8-76"><a href="#cb8-76" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> result<span class="op">;</span></span>
 <span id="cb8-77"><a href="#cb8-77" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co">## demo with sane input</span></span>
+<code class="sourceCode R"><span><span class="co"># R</span></span>
+<span></span>
+<span><span class="co">## demo with sane input</span></span>
 <span><span class="fu">gamma_inc_direct</span><span class="op">(</span><span class="op">-</span><span class="fl">0.5</span>, <span class="fl">1</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] 0.1781477</span></span>
 <span></span>
