@@ -31,7 +31,6 @@ You can install the development version of `integratecpp` like so:
 
 ```{r, eval=FALSE}
 # R
- 
 remotes::install_github("hsloot/integratecpp")
 ```
 
@@ -39,12 +38,10 @@ To include the header into your `C++` source files for building with `Rcpp`, use
 
 ```{Rcpp, eval=FALSE}
 // C++
-
 // [[Rcpp::plugins(cpp11)]]
 // [[Rcpp::depends(integratecpp)]]
 
 #include <integratecpp.h>
-
 // your code
 ```
 
@@ -56,7 +53,7 @@ LinkingTo: integratecpp
 SystemRequirements: C++11
 ```
 
-Addtionally, if you are using an `Makevars` or `Makevars.win` file, [*WRE*](https://cran.r-project.org/doc/manuals/r-release/R-exts.html#Using-C_002b_002b-code) suggests adding the following:
+Additionally, if you are using an `Makevars` or `Makevars.win` file, [*WRE*](https://cran.r-project.org/doc/manuals/r-release/R-exts.html#Using-C_002b_002b-code) suggests adding the following:
 
 ```Makefile
 CXX_STD = CXX11

@@ -20,7 +20,6 @@ You can install the development version of `integratecpp` like so:
 
 ``` r
 # R
- 
 remotes::install_github("hsloot/integratecpp")
 ```
 
@@ -29,12 +28,10 @@ To include the header into your `C++` source files for building with
 
 ``` cpp
 // C++
-
 // [[Rcpp::plugins(cpp11)]]
 // [[Rcpp::depends(integratecpp)]]
 
 #include <integratecpp.h>
-
 // your code
 ```
 
@@ -47,7 +44,7 @@ LinkingTo: integratecpp
 SystemRequirements: C++11
 ```
 
-Addtionally, if you are using an `Makevars` or `Makevars.win` file,
+Additionally, if you are using an `Makevars` or `Makevars.win` file,
 [*WRE*](https://cran.r-project.org/doc/manuals/r-release/R-exts.html#Using-C_002b_002b-code)
 suggests adding the following:
 
@@ -69,10 +66,7 @@ in `C++` code can pose a higher burden for those more familiar with `R`
 and `Rcpp` than `C++` or `C`.
 
 Consider the following example, approximating the integral of the
-identity function
-![x \mapsto x](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;x%20%5Cmapsto%20x "x \mapsto x")
-over the interval
-![\[0, 1\]](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;%5B0%2C%201%5D "[0, 1]"):
+identity function $x \mapsto x$ over the interval $[0, 1]$:
 
 ``` cpp
 // C++
