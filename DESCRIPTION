@@ -1,38 +1,39 @@
-Package: integratecpp
 Type: Package
+Package: integratecpp
 Title: C++ API for R integration routines
 Version: 0.2
 Authors@R:
-  person(given = "Henrik",
-    family = "Sloot",
-    role = c("aut", "cre"),
-    email = "henrik.sloot@gmail.com",
-    comment = c(ORCID = "0000-0001-8582-7776"))
-Description:
-  The package integratecpp provides a header-only C++11 interface to R's C-API for numerical integration.
+    person("Henrik", "Sloot", , "henrik.sloot@gmail.com", role = c("aut", "cre"),
+           comment = c(ORCID = "0000-0001-8582-7776"))
+Description: The package integratecpp provides a header-only C++11
+    interface to R's C-API for numerical integration.
 License: GPL (>= 3)
-Encoding: UTF-8
-Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.2.1
-Depends: R (>= 3.1.0)
-LinkingTo:
-    Rcpp
+URL: https://hsloot.github.io/integratecpp/
+Depends: 
+    R (>= 3.1.0)
 Imports:
     methods,
     Rcpp
-SystemRequirements: C++11
 Suggests:
-    covr,
+    bench,
     knitr,
     rmarkdown,
+    stats,
     testthat (>= 3.0.0)
-Config/testthat/edition: 3
+LinkingTo:
+    Rcpp
+VignetteBuilder: 
+    knitr
+Config/Needs/coverage: covr
 Config/Needs/website: Rcpp, RcppGSL, RcppNumerical, bench
+Config/testthat/edition: 3
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.2.1
+SystemRequirements: C++11
 Collate:
     'RcppExports.R'
     'exceptions.R'
     'integrate.R'
     'integratecpp-package.R'
     'integrator.R'
-VignetteBuilder: knitr
-URL: https://hsloot.github.io/integratecpp/
