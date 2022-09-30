@@ -151,8 +151,8 @@ integrate_identity()
 
 The key part for adhering to the interface of `Rdqags` is creating the
 callback functor `fn_callback`, taking a `void *` pointer to the
-original function, which is than internally casted to the correct type
-and is used to overwrite an array of double with corresponding function
+original function, which is than internally cast to the correct type and
+is used to overwrite an array of double with corresponding function
 evaluations. This is rather complicated and requires being more
 familiarity with pointers. Additionally, this snippet is missing a
 translation of the error code into a proper error message. To make it
@@ -230,11 +230,11 @@ tryCatch(integrate_identity_error(), error = function(cond) print(cond))
 There are alternatives to using `integratecpp` or `R`’s `C`-API for
 numerical integration in `C++` code of `R` packages. Two examples are:
 
--   Linking to the [GNU scientific
-    library](https://www.gnu.org/software/gsl/), possibly using
-    [`RcppGSL`](https://github.com/eddelbuettel/rcppgsl).
--   Using [`RcppNumerical`](https://github.com/yixuan/RcppNumerical),
-    which provides a similar approach to ours.
+- Linking to the [GNU scientific
+  library](https://www.gnu.org/software/gsl/), possibly using
+  [`RcppGSL`](https://github.com/eddelbuettel/rcppgsl).
+- Using [`RcppNumerical`](https://github.com/yixuan/RcppNumerical),
+  which provides a similar approach to ours.
 
 Both approaches provide a finer control over the specific integration
 algorithms than `R` does. The following table provides a summary.
@@ -255,35 +255,35 @@ numerical integration packages”](articles/comparison.html).
 
 ## Outlook
 
-The current version of `integratecpp` has the following shortcommings
-which could be adressed in future versions:
+The current version of `integratecpp` has the following shortcomings
+which could be addressed in future versions:
 
--   The current version of `integratecpp` imports and links to `Rcpp` to
-    generate test functions which are not exported. Future versions
-    might remove this dependency.
+- The current version of `integratecpp` imports and links to `Rcpp` to
+  generate test functions which are not exported. Future versions might
+  remove this dependency.
 
--   `R`’s `C`-API allows reusing workspace variables. This feature is
-    currently not implemented by our wrapper, i.e., each call to
-    `integratecpp::integrate(...)` or
-    `integratecpp::integrator::operator()(...)` will create a
-    `std::vector<int>` and a `std::vector<double>` of length `limit` and
-    `4 * limit`, respectively. Future versions might make workspace
-    variables class members of the `integratecpp::integrator` or allow
-    to provide them externally.
+- `R`’s `C`-API allows reusing workspace variables. This feature is
+  currently not implemented by our wrapper, i.e., each call to
+  `integratecpp::integrate(...)` or
+  `integratecpp::integrator::operator()(...)` will create a
+  `std::vector<int>` and a `std::vector<double>` of length `limit` and
+  `4 * limit`, respectively. Future versions might make workspace
+  variables class members of the `integratecpp::integrator` or allow to
+  provide them externally.
 
--   The current version of `integratecpp` is licenced under `GPL (>=3)`
-    due to its dependence and linking to `Rcpp`. The provided
-    header-only library depends only on STL headers and
-    [`<R_ext/Applic.h>`](https://github.com/wch/r-source/blob/trunk/src/include/R_ext/Applic.h).
-    The latter is licensed under `LGPL (>= 2.1)` (see
-    [`doc/COPYRIGHTS`](https://github.com/wch/r-source/blob/trunk/doc/COPYRIGHTS)).
-    Hence, future versions might relicense the header-only library under
-    `LGPL (>= 3)` for permissive linking to `integratecpp`.
+- The current version of `integratecpp` is licensed under `GPL (>=3)`
+  due to its dependence and linking to `Rcpp`. The provided header-only
+  library depends only on STL headers and
+  [`<R_ext/Applic.h>`](https://github.com/wch/r-source/blob/trunk/src/include/R_ext/Applic.h).
+  The latter is licensed under `LGPL (>= 2.1)` (see
+  [`doc/COPYRIGHTS`](https://github.com/wch/r-source/blob/trunk/doc/COPYRIGHTS)).
+  Hence, future versions might relicense the header-only library under
+  `LGPL (>= 3)` for permissive linking to `integratecpp`.
 
 Apart from internal improvements, `integratecpp` could provide
-convinience functions à la [`usethis`](https://github.com/r-lib/usethis)
-to integrate `integratecpp` into package developement. Also a function
-to vendor the header into a package under development could be created.
+convenience functions à la [`usethis`](https://github.com/r-lib/usethis)
+to integrate `integratecpp` into package development. Also a function to
+vendor the header into a package under development could be created.
 
 Some of these enhancements can be found in various feature branches on
 [github.com/hsloot/integratecpp](https://github.com/hsloot/integratecpp).
@@ -296,6 +296,6 @@ Conduct](https://contributor-covenant.org/version/2/0/CODE_OF_CONDUCT.html).
 By contributing to this project, you agree to abide by its terms.
 
 [^1]: The current version of `integratecpp` imports and links to `Rcpp`
-    for internal testing. This depency might be removed in future
+    for internal testing. This dependency might be removed in future
     versions and can be avoided if the header is vendored into the
     project.
