@@ -17,7 +17,7 @@
 
 #' A method for numerical integration
 #'
-#' @inherit stats::integrate
+#' @inheritParams stats::integrate
 #' @param max_subdivisions the maximum number of subintervals.
 #' @param relative_accuracy relative accuracy requested.
 #' @param absolute_accuracy absolute accuracy requested.
