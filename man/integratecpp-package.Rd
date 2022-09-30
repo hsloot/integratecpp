@@ -4,11 +4,11 @@
 \name{integratecpp-package}
 \alias{integratecpp}
 \alias{integratecpp-package}
-\title{integratecpp: C++ API for R integration routines}
+\title{integratecpp: C++ API for R Integration Routines}
 \description{
 \if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}
 
-The package integratecpp provides a header-only C++11 interface to R's C-API for numerical integration.
+Provides a header-only C++11 interface to R's C-API for numerical integration.
 }
 \seealso{
 Useful links:

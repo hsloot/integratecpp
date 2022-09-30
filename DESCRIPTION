@@ -1,12 +1,12 @@
 Type: Package
 Package: integratecpp
-Title: C++ API for R integration routines
+Title: C++ API for R Integration Routines
 Version: 0.2
 Authors@R:
     person("Henrik", "Sloot", , "henrik.sloot@gmail.com", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0001-8582-7776"))
-Description: The package integratecpp provides a header-only C++11
-    interface to R's C-API for numerical integration.
+Description: 
+    Provides a header-only C++11 interface to R's C-API for numerical integration.
 License: GPL (>= 3)
 URL: https://hsloot.github.io/integratecpp/
 Depends: 
