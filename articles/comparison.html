@@ -33,7 +33,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">integratecpp</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2-1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -105,7 +105,7 @@
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># R</span></span>
 <span></span>
-<span><span class="va">integrate_R</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="op">)</span> <span class="op">{</span></span>
+<span><span class="va">integrate_R</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="op">)</span> <span class="op">{</span> <span class="co"># nolint</span></span>
 <span>    <span class="fu"><a href="../reference/integrate.html">integrate</a></span><span class="op">(</span></span>
 <span>        <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fl">1</span> <span class="op">/</span> <span class="va">x</span><span class="op">^</span><span class="fl">0.7</span>,</span>
 <span>        lower <span class="op">=</span> <span class="fl">0</span>, upper <span class="op">=</span> <span class="fl">1</span></span>
@@ -372,11 +372,11 @@
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 5 × 6</span></span></span>
 <span><span class="co">#&gt;   expression                     min   median `itr/sec` mem_alloc `gc/sec`</span></span>
 <span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;bch:expr&gt;</span>                <span style="color: #949494; font-style: italic;">&lt;bch:tm&gt;</span> <span style="color: #949494; font-style: italic;">&lt;bch:tm&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;bch:byt&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> integrate_R()               40.5µs   43.6µs    <span style="text-decoration: underline;">22</span>564.   96.51KB     9.03</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> integrate_integratecpp()     7.8µs      8µs   <span style="text-decoration: underline;">123</span>929.    5.18KB     0   </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> integrate_Cish()             7.1µs    7.3µs   <span style="text-decoration: underline;">136</span>159.    4.13KB     0   </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> integrate_RcppGSL()          7.9µs      8µs   <span style="text-decoration: underline;">123</span>265.    4.13KB     0   </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> integrate_RcppNumerical()   50.2µs     51µs    <span style="text-decoration: underline;">19</span>293.    6.62KB     0</span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> integrate_R()               51.1µs   61.9µs    <span style="text-decoration: underline;">14</span>336.   96.51KB     8.57</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> integrate_integratecpp()     6.7µs    7.9µs   <span style="text-decoration: underline;">109</span>368.    5.18KB     0   </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> integrate_Cish()             6.7µs    7.1µs   <span style="text-decoration: underline;">127</span>020.    4.13KB     0   </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> integrate_RcppGSL()          7.4µs      8µs   <span style="text-decoration: underline;">108</span>960.    4.13KB     0   </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> integrate_RcppNumerical()   46.9µs   53.9µs    <span style="text-decoration: underline;">16</span>671.    6.62KB     0</span></span></code></pre></div>
 </div>
 <div class="section level2 unnumbered">
 <h2 class="unnumbered" id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
