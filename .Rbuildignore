@@ -8,6 +8,7 @@
 ^\.editorconfig$
 ^\.vscode$
 ^\.github$
+^\.lintr$
 ^CODE_OF_CONDUCT\.md$
 ^codecov\.yml$
 ^doc$

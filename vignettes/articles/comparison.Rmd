@@ -53,7 +53,7 @@ However, some have additional features.
 ```{r base-R}
 # R
 
-integrate_R <- function() {
+integrate_R <- function() { # nolint
     integrate(
         function(x) 1 / x^0.7,
         lower = 0, upper = 1
