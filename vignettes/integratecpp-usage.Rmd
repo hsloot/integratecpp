@@ -32,12 +32,12 @@ $$
 $$
 for values $\alpha \in \mathbb{R}$, $x \geq 0$.[^2][^3]
 
-## An implementation with `integratecpp`
+# An implementation with `integratecpp`
 
 ```{Rcpp run-all-C++,eval=TRUE, echo=FALSE, ref.label=knitr::all_rcpp_labels(), class.source = 'fold-hide'}
 ```
 
-As `integratecpp` requires `C++11`, we use the `Rcpp` plugin `cpp11` and link to the
+As `integratecpp` requires C++11, we use the `Rcpp` plugin `cpp11` and link to the
 includes directory of `integratecpp` using the depends attribute `integratecpp`.
 
 ```{Rcpp attributes, eval=FALSE, echo=TRUE, class.source = 'fold-none'}
@@ -99,11 +99,11 @@ Optionally, integration parameters can be changed,
 exceptions can be captured and handled,
 and the integration error estimate can be further examined.
 
-## An implementation without `integratecpp`
+# An implementation without `integratecpp`
 
 The following example does not use the `integratecpp` wrapper, but hints how the wrapper works
 internally.
-First, we need to include the header for `R`'s `C` entry-points for the integration routines `Rdqags` 
+First, we need to include the header for R's C entry-points for the integration routines `Rdqags` 
 and `Rdqagi`:
 
 ```{Rcpp included-additional-1, echo=TRUE, eval=FALSE}
@@ -196,7 +196,7 @@ double gamma_inc_direct(const double alpha, const double x) {
     // callback function
     auto ex = std::make_pair(fn, std::exception_ptr());
     
-    // call `C`-method `Rdqagi`
+    // call C-method `Rdqagi`
     Rdqagi(fn_callback, &ex, &bound, &inf, &epsabs, &epsrel, &result,
            &abserr, &neval, &ier, &limit, &lenw, &last, iwork.data(),
            work.data());
@@ -228,8 +228,8 @@ Using `cpp11` or writing your own wrapper is also possible.
 
 [^2]: The *upper incomplete Gamma function* can be indirectly evaluated for non-negative $\alpha$
 with the `pgamma`-function, which even is provided as a
-[entry-point in `R`s `C`-API](https://cran.r-project.org/doc/manuals/r-release/R-exts.html#Distribution-functions).
+[entry-point in Rs C-API](https://cran.r-project.org/doc/manuals/r-release/R-exts.html#Distribution-functions).
 In contrast, this is not possible for negative $\alpha$ as of `R 4.2-0`.
 
-[^3]: The package `gsl` provides a function and entry-points for `C` code to evaluate the
+[^3]: The package `gsl` provides a function and entry-points for C code to evaluate the
 *upper incomplete Gamma function* for negative values.

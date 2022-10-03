@@ -29,7 +29,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-## The Problem
+# The Problem
 
 We are using the following simple integral to compare various numerical integration options:
 
@@ -38,9 +38,9 @@ $$
 $$
 
 
-## Using base `R`
+# Using base R
 
-First, we calculate the integral using base-`R`.
+First, we calculate the integral using base-R.
 
 - Finite-interval integration uses a 21-point *Gauss-Kronrod* rule on equally-spaced subintervals.
 - Infinite-interval integration uses a 15-point *Gauss-Kronrod* rule on equally-spaced subintervals after transforming the integrand to the interval $[0, 1]$.
@@ -70,9 +70,9 @@ integrate_R()
 ```
 
 
-## Using `R`'s `C`-API
+# Using R's C-API
 
-We can calculate the same integral using `R`'s `C`-API
+We can calculate the same integral using R's C-API
 
 ```{Rcpp C-API}
 // C++11 
@@ -131,9 +131,9 @@ integrate_Cish()
 ```
 
 
-## Using `integratecpp`
+# Using `integratecpp`
 
-Using our `C++11` wrapper, numerical integration can be done seamlessly in `Rcpp`:
+Using our C++11 wrapper, numerical integration can be done seamlessly in `Rcpp`:
 
 ```{Rcpp integratecpp}
 // C++11 
@@ -169,9 +169,9 @@ integrate_integratecpp()
 ```
 
 
-## Using `RcppGSL`
+# Using `RcppGSL`
 
-With `RcppGSL`, we can use `gsl` in a similar way as `R`s `C`-API:
+With `RcppGSL`, we can use `gsl` in a similar way as Rs C-API:
 
 ```{Rcpp RcppGSL}
 // C++11 
@@ -229,7 +229,7 @@ integrate_RcppGSL()
 ```
 
 
-## Using `RcppNumerical`
+# Using `RcppNumerical`
 
 With `RcppNumerical`, we must define the integrator in the `Numer` namespace:
 
@@ -287,9 +287,9 @@ integrate_RcppNumerical()
 ```
 
 
-## Benchmark
+# Benchmark
 
-A benchmarks shows that our wrapper is almost as fast as the native `C`-API.
+A benchmarks shows that our wrapper is almost as fast as the native C-API.
 
 ```{r bench}
 # R
@@ -305,4 +305,4 @@ bench::mark(
 ```
 
 
-## References
+# References
