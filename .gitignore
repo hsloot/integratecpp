@@ -133,10 +133,11 @@ rsconnect/
 
 # End of https://www.toptal.com/developers/gitignore/api/r,c++,c
 
+.DS_Store
+
 .vscode
 .clang_complete
-.DS_Store
+
 inst/doc
-/doc/
-/Meta/
-docs
+doc/
+Meta/
