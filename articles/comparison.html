@@ -87,7 +87,8 @@
 <div class="section level2">
 <h2 id="the-problem">The Problem<a class="anchor" aria-label="anchor" href="#the-problem"></a>
 </h2>
-<p>We are using the following simple integral to compare various numerical integration options:</p>
+<p>We are using the following simple integral to compare various
+numerical integration options:</p>
 <p><span class="math display">\[
     \int_{0}^{1} 1 / x^{0.7} \mathrm{d}x .
 \]</span></p>
@@ -97,11 +98,18 @@
 </h2>
 <p>First, we calculate the integral using base-R.</p>
 <ul>
-<li>Finite-interval integration uses a 21-point <em>Gauss-Kronrod</em> rule on equally-spaced subintervals.</li>
-<li>Infinite-interval integration uses a 15-point <em>Gauss-Kronrod</em> rule on equally-spaced subintervals after transforming the integrand to the interval <span class="math inline">\([0, 1]\)</span>.</li>
-<li>Both use <em>Wynn’s <span class="math inline">\(\epsilon\)</span> algorithm</em> for limit-extrapolation.</li>
+<li>Finite-interval integration uses a 21-point <em>Gauss-Kronrod</em>
+rule on equally-spaced subintervals.</li>
+<li>Infinite-interval integration uses a 15-point <em>Gauss-Kronrod</em>
+rule on equally-spaced subintervals after transforming the integrand to
+the interval <span class="math inline">\([0, 1]\)</span>.</li>
+<li>Both use <em>Wynn’s <span class="math inline">\(\epsilon\)</span>
+algorithm</em> for limit-extrapolation.</li>
 </ul>
-<p>It is possible to configure the integration algorithms by changing the requested relative and absolute accuracies and the maximum number of subintervals. All of these features are shared by the following approaches. However, some have additional features.</p>
+<p>It is possible to configure the integration algorithms by changing
+the requested relative and absolute accuracies and the maximum number of
+subintervals. All of these features are shared by the following
+approaches. However, some have additional features.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># R</span></span>
 <span></span>
@@ -195,7 +203,8 @@
 <div class="section level2">
 <h2 id="using-integratecpp">Using <code>integratecpp</code><a class="anchor" aria-label="anchor" href="#using-integratecpp"></a>
 </h2>
-<p>Using our C++11 wrapper, numerical integration can be done seamlessly in <code>Rcpp</code>:</p>
+<p>Using our C++11 wrapper, numerical integration can be done seamlessly
+in <code>Rcpp</code>:</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co">// C++11 </span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="co">// [[Rcpp::plugins(cpp11)]]</span></span>
@@ -236,7 +245,8 @@
 <div class="section level2">
 <h2 id="using-rcppgsl">Using <code>RcppGSL</code><a class="anchor" aria-label="anchor" href="#using-rcppgsl"></a>
 </h2>
-<p>With <code>RcppGSL</code>, we can use <code>gsl</code> in a similar way as Rs C-API:</p>
+<p>With <code>RcppGSL</code>, we can use <code>gsl</code> in a similar
+way as Rs C-API:</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co">// C++11 </span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="co">// [[Rcpp::depends(RcppGSL)]]</span></span>
@@ -299,7 +309,8 @@
 <div class="section level2">
 <h2 id="using-rcppnumerical">Using <code>RcppNumerical</code><a class="anchor" aria-label="anchor" href="#using-rcppnumerical"></a>
 </h2>
-<p>With <code>RcppNumerical</code>, we must define the integrator in the <code>Numer</code> namespace:</p>
+<p>With <code>RcppNumerical</code>, we must define the integrator in the
+<code>Numer</code> namespace:</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co">// C++11</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="co">// [[Rcpp::depends(RcppEigen)]]</span></span>
@@ -357,7 +368,8 @@
 <div class="section level2">
 <h2 id="benchmark">Benchmark<a class="anchor" aria-label="anchor" href="#benchmark"></a>
 </h2>
-<p>A benchmarks shows that our wrapper is almost as fast as the native C-API.</p>
+<p>A benchmarks shows that our wrapper is almost as fast as the native
+C-API.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># R</span></span>
 <span></span>
@@ -372,18 +384,20 @@
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 5 × 6</span></span></span>
 <span><span class="co">#&gt;   expression                     min   median `itr/sec` mem_alloc `gc/sec`</span></span>
 <span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;bch:expr&gt;</span>                <span style="color: #949494; font-style: italic;">&lt;bch:tm&gt;</span> <span style="color: #949494; font-style: italic;">&lt;bch:tm&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;bch:byt&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> integrate_R()               40.9µs   43.9µs    <span style="text-decoration: underline;">22</span>379.   96.51KB     11.2</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> integrate_integratecpp()     7.8µs    7.9µs   <span style="text-decoration: underline;">125</span>297.    5.18KB      0  </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> integrate_Cish()             7.1µs    7.3µs   <span style="text-decoration: underline;">135</span>663.    4.13KB      0  </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> integrate_RcppGSL()          7.8µs      8µs   <span style="text-decoration: underline;">124</span>358.    4.13KB      0  </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> integrate_RcppNumerical()   50.1µs   50.7µs    <span style="text-decoration: underline;">19</span>399.    6.62KB      0</span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> integrate_R()               41.1µs   44.1µs    <span style="text-decoration: underline;">22</span>484.   96.52KB     9.00</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> integrate_integratecpp()     7.5µs    7.6µs   <span style="text-decoration: underline;">129</span>815.    5.18KB     0   </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> integrate_Cish()             6.8µs      7µs   <span style="text-decoration: underline;">142</span>057.    4.13KB     0   </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> integrate_RcppGSL()          7.7µs    7.9µs   <span style="text-decoration: underline;">125</span>576.    4.13KB     0   </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> integrate_RcppNumerical()   50.1µs   51.4µs    <span style="text-decoration: underline;">19</span>312.    6.62KB     2.07</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 class="unnumbered" id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
 </h2>
 <div id="refs" class="references csl-bib-body hanging-indent">
 <div id="ref-Piessens1983a" class="csl-entry">
-Piessens, Robert, Elise Doncker-Kapenga, Christoph W. Überhuber, and David K. Kahaner. 1983. <em>Quadpack</em>. Springer Berlin, Heidelberg. <a href="https://doi.org/10.1007/978-3-642-61786-7" class="external-link">https://doi.org/10.1007/978-3-642-61786-7</a>.
+Piessens, Robert, Elise Doncker-Kapenga, Christoph W. Überhuber, and
+David K. Kahaner. 1983. <em>Quadpack</em>. Springer Berlin, Heidelberg.
+<a href="https://doi.org/10.1007/978-3-642-61786-7" class="external-link">https://doi.org/10.1007/978-3-642-61786-7</a>.
 </div>
 </div>
 </div>
