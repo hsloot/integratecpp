@@ -1,5 +1,3 @@
-
-
 # Created by https://www.toptal.com/developers/gitignore/api/r,c++,c
 # Edit at https://www.toptal.com/developers/gitignore?templates=r,c++,c
 
@@ -133,11 +131,12 @@ rsconnect/
 
 # End of https://www.toptal.com/developers/gitignore/api/r,c++,c
 
+## MacOs
 .DS_Store
 
+## IDE configs
 .vscode
 .clang_complete
 
-inst/doc
 doc/
 Meta/

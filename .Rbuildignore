@@ -9,13 +9,12 @@
 ^\.vscode$
 ^\.github$
 ^\.lintr$
-^CODE_OF_CONDUCT\.md$
 ^codecov\.yml$
-^doc$
-^Meta$
 ^_pkgdown\.yml$
-^docs$
-^pkgdown$
 ^cran-comments\.md$
 ^Doxyfile$
+^doc$
+^Meta$
+^docs$
+^pkgdown$
 ^vignettes/articles$
