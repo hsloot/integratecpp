@@ -1,0 +1,30 @@
+name: Erronous documentation
+description: Criticise the documentation
+title: "[DOC] <title>"
+labels: documentation
+assignees:
+  - hsloot
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to fill out this report!
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Submission terms and conditions
+      options:
+        - label: |
+            I aggree to follow the [Code of Conduct](https://github.com/hsloot/integratecpp/blob/main/.github/CODE_OF_CONDUCT.md) that this repository adheres to.
+          required: true
+        - label: |
+            I checked the [current issues](https://github.com/hsloot/integratecpp/issues) for duplicate problems.
+          required: true
+  - type: textarea
+    id: report
+    attributes:
+      label: Issue description
+      description: |
+        Please briefly describe how the documentation should be improved.
+    validations:
+      required: true

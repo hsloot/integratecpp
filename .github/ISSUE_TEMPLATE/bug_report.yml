@@ -1,0 +1,54 @@
+name: Bug report
+description: File a bug report
+title: "[BUG] <title>"
+labels: bug
+assignees:
+  - hsloot
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to fill out this bug report!
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Submission terms and conditions
+      options:
+        - label: |
+            I aggree to follow the [Code of Conduct](https://github.com/hsloot/integratecpp/blob/main/.github/CODE_OF_CONDUCT.md) that this repository adheres to.
+          required: true
+        - label: |
+            I checked the [current issues](https://github.com/hsloot/integratecpp/issues) for duplicate problems.
+          required: true
+  - type: textarea
+    id: report
+    attributes:
+      label: Issue description
+      description: |
+        Please briefly describe your problem and what output you expect. If you have a question, please don't use this form. Instead, ask on <https://stackoverflow.com/> or <https://community.rstudio.com/>.
+      placeholder: |
+        Write about:
+        - Current behaviour
+        - Expected behaviour
+    validations:
+      required: true
+  - type: textarea
+    id: info
+    attributes:
+      label: Information about your system
+      description: |
+        Please include relevant information about your version, platform, machine, compiler, configurations, ...
+    validations:
+      required: false
+  - type: textarea
+    id: reprex
+    attributes:
+      label: Reproducible example
+      description: |
+        Please include a minimal reproducible example (AKA a reprex). If you've never heard of a [reprex](http://reprex.tidyverse.org/) before, start by reading <https://www.tidyverse.org/help/#reprex>.
+      placeholder: |
+        - Consider including with session information with `reprex(session_info = TRUE)`.
+        - Sanitize the output of any personal information.
+        - If you cannot create a reproducible example with `reprex()`, consider writing a step-by-step instructions.
+    validations:
+      required: false
