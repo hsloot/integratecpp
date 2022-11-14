@@ -15,7 +15,7 @@ body:
       label: Submission terms and conditions
       options:
         - label: |
-            I aggree to follow the [Code of Conduct](https://github.com/hsloot/integratecpp/blob/main/.github/CODE_OF_CONDUCT.md) that this repository adheres to.
+            I aggree to follow the [Code of Conduct](https://hsloot.github.io/integratecpp/CODE_OF_CONDUCT.html) that this repository adheres to.
           required: true
         - label: |
             I checked the [current issues](https://github.com/hsloot/integratecpp/issues) for duplicate problems.
@@ -28,6 +28,7 @@ body:
         Please briefly describe your problem and what output you expect. If you have a question, please don't use this form. Instead, ask on <https://stackoverflow.com/> or <https://community.rstudio.com/>.
       placeholder: |
         Write about:
+
         - Current behaviour
         - Expected behaviour
     validations:
