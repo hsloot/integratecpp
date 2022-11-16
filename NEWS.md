@@ -1,7 +1,13 @@
+# integratecpp 0.3 
+
+- Re-license public header `integratecpp.h` under LGPL, version 3 or later.
+
+
 # integratecpp 0.2-2
 
 - Update actions workflows
 - Minor changes of project structure and config files
+
 
 # integratecpp 0.2-1
 
