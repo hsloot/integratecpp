@@ -5,8 +5,8 @@ Version: 0.2-2
 Authors@R:
     person("Henrik", "Sloot", , "henrik.sloot@gmail.com", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0001-8582-7776"))
-Description: 
-    Provides a header-only C++11 interface to R's C-API for numerical integration.
+Description: Provides a header-only C++11 interface to R's C-API for
+    numerical integration.
 License: GPL (>= 3)
 URL: https://hsloot.github.io/integratecpp/
 Depends: 
