@@ -19,6 +19,8 @@
 #'
 #' @slot pointer An external pointer to a C++ object.
 #'
+#' @family test-helper
+#'
 #' @importFrom methods setClass
 #' @keywords internal
 Integrator <- setClass("Integrator", slots = c("pointer" = "externalptr")) # nolint

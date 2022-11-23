@@ -20,6 +20,11 @@
 #' @param exception name of the exception to be thrown.
 #' @param message error message passed to the exception constructor.
 #'
+#' @return A String with `message` if `exception` is the name of an
+#'   implemented exception class.
+#'
+#' @family test-helper
+#'
 #' @keywords internal
 catch_what <- function(exception, message) {
     stopifnot(exception %in% c(

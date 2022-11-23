@@ -16,11 +16,11 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 #' @docType package
-#' @keywords internal
 "_PACKAGE"
 
 ## usethis namespace: start
 #' @useDynLib integratecpp, .registration = TRUE
 #' @importFrom Rcpp sourceCpp
+#' @noRd
 ## usethis namespace: end
 NULL

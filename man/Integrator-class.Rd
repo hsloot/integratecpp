@@ -44,4 +44,10 @@ or \code{work_size}.
 \item{\code{pointer}}{An external pointer to a C++ object.}
 }}
 
+\seealso{
+Other test-helper: 
+\code{\link{catch_what}()},
+\code{\link{integrate}}
+}
+\concept{test-helper}
 \keyword{internal}

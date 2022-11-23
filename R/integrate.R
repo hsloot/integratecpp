@@ -22,6 +22,10 @@
 #' @param relative_accuracy relative accuracy requested.
 #' @param absolute_accuracy absolute accuracy requested.
 #'
+#' @return A double with the approximate integral value.
+#'
+#' @family test-helper
+#'
 #' @include RcppExports.R
 #' @keywords internal
 integrate <- function(f, lower, upper, ..., max_subdivisions = 100L,

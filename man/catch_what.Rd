@@ -11,7 +11,17 @@ catch_what(exception, message)
 
 \item{message}{error message passed to the exception constructor.}
 }
+\value{
+A String with \code{message} if \code{exception} is the name of an
+implemented exception class.
+}
 \description{
 Throw exception and catch error message
 }
+\seealso{
+Other test-helper: 
+\code{\link{Integrator-class}},
+\code{\link{integrate}}
+}
+\concept{test-helper}
 \keyword{internal}

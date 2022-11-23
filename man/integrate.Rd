@@ -35,7 +35,16 @@ integrate(
     function.  If false some errors will give a result with a warning in
     the \code{message} component.}
 }
+\value{
+A double with the approximate integral value.
+}
 \description{
 A method for numerical integration
 }
+\seealso{
+Other test-helper: 
+\code{\link{Integrator-class}},
+\code{\link{catch_what}()}
+}
+\concept{test-helper}
 \keyword{internal}

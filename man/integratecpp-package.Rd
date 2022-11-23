@@ -21,4 +21,3 @@ Useful links:
 \strong{Maintainer}: Henrik Sloot \email{henrik.sloot@gmail.com} (\href{https://orcid.org/0000-0001-8582-7776}{ORCID})
 
 }
-\keyword{internal}
