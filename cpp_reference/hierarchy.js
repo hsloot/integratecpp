@@ -2,13 +2,13 @@ var hierarchy =
 [
     [ "integratecpp::integrator::config_type", "structintegratecpp_1_1integrator_1_1config__type.html", null ],
     [ "integratecpp::integrator", "classintegratecpp_1_1integrator.html", null ],
-    [ "logic_error", null, [
+    [ "std::logic_error", null, [
       [ "integratecpp::integration_logic_error", "classintegratecpp_1_1integration__logic__error.html", [
         [ "integratecpp::invalid_input_error", "structintegratecpp_1_1invalid__input__error.html", null ]
       ] ]
     ] ],
     [ "integratecpp::integrator::return_type", "structintegratecpp_1_1integrator_1_1return__type.html", null ],
-    [ "runtime_error", null, [
+    [ "std::runtime_error", null, [
       [ "integratecpp::integration_runtime_error", "classintegratecpp_1_1integration__runtime__error.html", [
         [ "integratecpp::bad_integrand_error", "classintegratecpp_1_1bad__integrand__error.html", null ],
         [ "integratecpp::divergence_error", "classintegratecpp_1_1divergence__error.html", null ],
