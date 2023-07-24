@@ -20,6 +20,7 @@
 #include <stdexcept>
 #include <string>
 
+#define RCPP_NO_UNWIND_PROTECT 1
 #include <Rcpp.h>
 
 #include "integratecpp.h"
