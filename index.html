@@ -86,7 +86,7 @@
 <p>You can install the development version of <code>integratecpp</code> like so:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># R</span></span>
-<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"hsloot/integratecpp"</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"hsloot/integratecpp"</span><span class="op">)</span></span></code></pre></div>
 <p>To include the header into your C++ source files for building with <code>Rcpp</code>, use</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">// C++</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co">// [[Rcpp::plugins(cpp11)]]</span></span>
@@ -198,7 +198,7 @@
 </tr>
 </tbody>
 </table>
-<p>What separates our approach are zero additional dependencies (if vendored) and an intuitive pure C++ API which does not rely on <code>Rcpp</code> itself. Hence, as <code>Rdqags</code> and <code>Rdqagi</code> are not using longjumps, it can be used in a pure C++ back-end. A comparison of different numerical integration approaches in C++ is summarized in the article <a href="articles/comparison.html">“Comparing numerical integration packages”</a>.</p>
+<p>What separates our approach are zero additional dependencies (if vendored) and an intuitive pure C++ API which does not rely on <code>Rcpp</code> itself. Hence, as <code>Rdqags</code> and <code>Rdqagi</code> are not using longjumps <em>themselves</em>, our approach can be used in a pure C++ back-end.<a class="footnote-ref" tabindex="0" data-bs-toggle="popover" data-bs-content="&lt;p&gt;Note that the provided integrator-function itself should not use longjumps (e.g., R functions provided through Rcpp) to exit the frame; if you want to use R functions with &lt;code&gt;Rcpp &amp;gt;= 1.0.10&lt;/code&gt;, consider defining &lt;code&gt;RCPP_NO_UNWIND_PROTECT&lt;/code&gt; before loading the Rcpp header file.&lt;/p&gt;"><sup>2</sup></a> A comparison of different numerical integration approaches in C++ is summarized in the article <a href="articles/comparison.html">“Comparing numerical integration packages”</a>.</p>
 </div>
 <div class="section level2">
 <h2 id="outlook">Outlook<a class="anchor" aria-label="anchor" href="#outlook"></a>
