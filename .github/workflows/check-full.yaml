@@ -62,25 +62,11 @@ jobs:
         run:  |
           cxx_std <- "${{ matrix.config.cxx_std }}"
           file <- file.path("DESCRIPTION")
-          readLines(file) |>
-              sapply(
-                  function(x)
-                      gsub(
-                          "(?<=SystemRequirements:[[:space:]])C\\+\\+11",
-                          cxx_std,
-                          x,
-                          perl = TRUE)) |>
+          c(readLines(file), paste("SystemRequirements:", cxx_std)) |>
               writeLines(file)
           cxx_std <- gsub("[\\+]{2}", "XX", cxx_std)
           file <- file.path("src", "Makevars")
-          readLines(file) |>
-              sapply(
-                  function(x)
-                      gsub(
-                          "(?<=CXX_STD[[:space:]]=[[:space:]])CXX11",
-                          cxx_std,
-                          x,
-                          perl = TRUE)) |>
+          c(readLines(file), paste0("CXX_STD=",cxx_std)) |>
               writeLines(file)
         shell: Rscript {0}
 
