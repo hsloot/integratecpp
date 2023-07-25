@@ -14,9 +14,9 @@ name: check-full
 
 jobs:
   R-CMD-check:
-    runs-on: ${{ matrix.config.os }}
+    runs-on: ${{ matrix.os }}
 
-    name: ${{ matrix.config.os }} (${{ matrix.config.r }} with ${{ matrix.config.cxx_std }})
+    name: ${{ matrix.os }} (${{ matrix.r }} with ${{ matrix.cxx_std }})
 
     strategy:
       fail-fast: false
