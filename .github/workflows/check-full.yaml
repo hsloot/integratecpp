@@ -75,12 +75,12 @@ jobs:
         run:  |
           cxx_std <- "${{ matrix.cxx_std }}"
           file <- file.path("DESCRIPTION")
-          c(readLines(file), paste("SystemRequirements:", cxx_std)) |>
-              writeLines(file)
+          lines <- c(readLines(file), paste("SystemRequirements:", cxx_std))
+          writeLines(lines, file)
           cxx_std <- gsub("[\\+]{2}", "XX", cxx_std)
           file <- file.path("src", "Makevars")
-          c(readLines(file), paste0("CXX_STD=",cxx_std)) |>
-              writeLines(file)
+          lines <- c(readLines(file), paste0("CXX_STD=",cxx_std))
+          writeLines(lines, file)
         shell: Rscript {0}
 
       - uses: r-lib/actions/check-r-package@v2
