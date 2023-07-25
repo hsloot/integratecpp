@@ -21,21 +21,34 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        config:
-          - {os: macOS-latest,   r: 'release',    cxx_std: 'C++11'}
-
-          - {os: windows-latest, r: 'release',    cxx_std: 'C++11'}
-          - {os: windows-latest, r: '3.6',        cxx_std: 'C++11'}
-
-          # Use older ubuntu to maximise backward compatibility
-          - {os: ubuntu-18.04,   r: 'devel',      cxx_std: 'C++11',   http-user-agent: 'release'}
-          - {os: ubuntu-18.04,   r: 'release',    cxx_std: 'C++11'}
-          - {os: ubuntu-18.04,   r: 'oldrel-1',   cxx_std: 'C++11'}
-          - {os: ubuntu-18.04,   r: 'oldrel-2',   cxx_std: 'C++11'}
-          - {os: ubuntu-18.04,   r: 'oldrel-3',   cxx_std: 'C++11'}
-          - {os: ubuntu-18.04,   r: 'oldrel-4',   cxx_std: 'C++11'}
-          - {os: ubuntu-18.04,   r: 'release',    cxx_std: 'C++14'}
-          - {os: ubuntu-18.04,   r: 'release',    cxx_std: 'C++17'}
+        os: [ubuntu-latest]
+        r: ['devel']
+        cxx_std: ['C++11', 'C++14', 'C++17']
+        include:
+          - os: ubuntu-latest
+            r: 'release'
+            cxx_std: 'C++17'
+          - os: macOS-latest
+            r: 'release'
+            cxx_std: 'C++17'
+          - os: windows-latest
+            r: 'release'
+            cxx_std: 'C++17'
+          - os: windows-latest
+            r: '3.6'
+            cxx_std: 'C++11'
+          - os: ubuntu-latest
+            r: 'oldrel-1'
+            cxx_std: 'C++11'
+          - os: ubuntu-latest
+            r: 'oldrel-2'
+            cxx_std: 'C++11'
+          - os: ubuntu-latest
+            r: 'oldrel-3'
+            cxx_std: 'C++11'
+          - os: ubuntu-latest
+            r: 'oldrel-4'
+            cxx_std: 'C++11'
 
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
@@ -48,8 +61,8 @@ jobs:
 
       - uses: r-lib/actions/setup-r@v2
         with:
-          r-version: ${{ matrix.config.r }}
-          http-user-agent: ${{ matrix.config.http-user-agent }}
+          r-version: ${{ matrix.r }}
+          http-user-agent: ${{ matrix.http-user-agent }}
           use-public-rspm: true
 
       - uses: r-lib/actions/setup-r-dependencies@v2
@@ -57,10 +70,10 @@ jobs:
           extra-packages: any::rcmdcheck
           needs: check
 
-      - if: ${{ matrix.config.cxx_std != 'C++11' }}
-        name: use CXX_STD = ${{ matrix.config.cxx_std }}
+      - if: ${{ matrix.cxx_std }}
+        name: use CXX_STD = ${{ matrix.cxx_std }}
         run:  |
-          cxx_std <- "${{ matrix.config.cxx_std }}"
+          cxx_std <- "${{ matrix.cxx_std }}"
           file <- file.path("DESCRIPTION")
           c(readLines(file), paste("SystemRequirements:", cxx_std)) |>
               writeLines(file)
