@@ -9,6 +9,7 @@
 ^\.vscode$
 ^\.github$
 ^\.lintr$
+^\.devcontainer$
 ^codecov\.yml$
 ^_pkgdown\.yml$
 ^cran-comments\.md$

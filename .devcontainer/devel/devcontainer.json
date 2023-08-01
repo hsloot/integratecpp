@@ -1,0 +1,12 @@
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the
+// README at: https://github.com/rocker-org/devcontainer-templates/tree/main/src/r-ver
+{
+	"name": "devel",
+	"image": "ghcr.io/rocker-org/devcontainer/r-ver:4.3",
+	"features": {
+		"ghcr.io/rocker-org/devcontainer-features/r-packages:1": {
+			"packages": "devtools,rmarkdown,roxygen2,testthat,covr,pkgdown,lintr,Rcpp,RcppNumerical,RcppEigen,RcppGSL,bench",
+			"installSystemRequirements": true
+		}
+	}
+}
