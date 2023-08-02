@@ -1,0 +1,8 @@
+{
+    "build": {
+        "dockerfile": "Dockerfile"
+    },
+    "runArgs": [
+        "--security-opt", "seccomp=unconfined"
+    ]
+}
