@@ -42,8 +42,8 @@ insert_final_newline = unset
 [Makefile]
 indent_style = tab
 
-# Unset for auto-generated files
-[{NAMESPACE,*/RcppExports.{R,cpp},man/**}]
+# Unset for auto-generated files and .clang_format
+[{.clang_format,NAMESPACE,*/RcppExports.{R,cpp},man/**}]
 trim_trailing_whitespace = unset
 insert_final_newline = unset
 indent_style = unset
