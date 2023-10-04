@@ -335,8 +335,9 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<b>Initial value:</b><div class="fragment"><div class="line">{std::pow(std::numeric_limits&lt;double&gt;::epsilon(),</div>
-<div class="line">                                      0.25)}</div>
+<b>Initial value:</b><div class="fragment"><div class="line">{</div>
+<div class="line">            std::pow(std::numeric_limits&lt;double&gt;::epsilon(),</div>
+<div class="line">                     0.25)}</div>
 </div><!-- fragment -->
 <p>The requested relative accuracy. </p>
 <dl class="section pre"><dt>Precondition</dt><dd><code>relative_accuracy &gt; 0 || relative_accuracy &gt;= max(50. * rel.mach.acc., 0.5e-28)</code>. </dd></dl>
