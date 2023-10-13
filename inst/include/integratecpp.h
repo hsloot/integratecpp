@@ -625,7 +625,7 @@ class divergence_error : public integration_runtime_error {
  * `max_subdivisions < 1` or `work_size < max_subdivisions*4`.
  * Result, `absolute_error`, `neval`, last are set to zero.
  */
-struct invalid_input_error : public integration_logic_error {
+class invalid_input_error : public integration_logic_error {
    public:
     using integration_logic_error::integration_logic_error;
 };
