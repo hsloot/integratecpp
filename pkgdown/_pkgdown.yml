@@ -9,7 +9,7 @@ navbar:
   components:
     cppreference:
       text: C++ Reference
-      href: cpp_reference/index.html
+      href: sphinx/index.html
 
 reference:
 - title: Package
