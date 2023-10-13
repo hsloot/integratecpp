@@ -18,5 +18,5 @@
 ^Meta$
 ^docs$
 ^pkgdown$
-^vignettes/articles$
+^vignettes/web_only$
 ^revdep$
