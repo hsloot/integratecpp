@@ -4,7 +4,7 @@
 ^README\.Rmd$
 ^CPPLINT\.cfg$
 ^\.clang_complete$
-^\.clang_format$
+^\.clang-format$
 ^\.editorconfig$
 ^\.vscode$
 ^\.github$
