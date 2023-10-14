@@ -10,14 +10,16 @@ Welcome to integratecpp's documentation!
    :maxdepth: 3
    :caption: Contents:
 
-A wrapper class
-===============
+:ref:`genindex`
+
+Integrator wrapper
+==================
 
 .. doxygenclass:: integratecpp::integrator
    :members:
 
-A drop-in replacement wrapper
-=============================
+Intergrate drop-in wrapper
+==========================
 
 .. doxygenfunction:: integratecpp::integrate
 
@@ -47,8 +49,3 @@ Library exceptions
 
 .. doxygenclass:: integratecpp::invalid_input_error
    :members:
-
-Index
-=====
-
-:ref:`genindex`
