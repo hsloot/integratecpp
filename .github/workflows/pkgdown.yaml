@@ -48,7 +48,7 @@ jobs:
           needs: website
 
       - name: Build cpp documentation
-        working-directory: ${{runner.workspace}}/pkgdown/cpp
+        working-directory: ./pkgdown/cpp
         shell: bash
         run: |
           doxygen Doxyfile
