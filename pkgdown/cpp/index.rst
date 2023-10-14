@@ -10,7 +10,8 @@ Welcome to integratecpp's documentation!
    :maxdepth: 3
    :caption: Contents:
 
-:ref:`genindex`
+* Back the the `main page <../index.html>`_.
+* :ref:`genindex`
 
 Integrator wrapper
 ==================
