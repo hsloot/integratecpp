@@ -10,6 +10,6 @@ var integratecpp_8h =
     [ "bad_integrand_error", "classintegratecpp_1_1bad__integrand__error.html", "classintegratecpp_1_1bad__integrand__error" ],
     [ "extrapolation_roundoff_error", "classintegratecpp_1_1extrapolation__roundoff__error.html", "classintegratecpp_1_1extrapolation__roundoff__error" ],
     [ "divergence_error", "classintegratecpp_1_1divergence__error.html", "classintegratecpp_1_1divergence__error" ],
-    [ "invalid_input_error", "structintegratecpp_1_1invalid__input__error.html", "structintegratecpp_1_1invalid__input__error" ],
+    [ "invalid_input_error", "classintegratecpp_1_1invalid__input__error.html", "classintegratecpp_1_1invalid__input__error" ],
     [ "integrate", "integratecpp_8h.html#aeb5fd03ec5ab325b743b87ac7f841c5e", null ]
 ];

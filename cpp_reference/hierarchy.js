@@ -4,7 +4,7 @@ var hierarchy =
     [ "integratecpp::integrator", "classintegratecpp_1_1integrator.html", null ],
     [ "std::logic_error", null, [
       [ "integratecpp::integration_logic_error", "classintegratecpp_1_1integration__logic__error.html", [
-        [ "integratecpp::invalid_input_error", "structintegratecpp_1_1invalid__input__error.html", null ]
+        [ "integratecpp::invalid_input_error", "classintegratecpp_1_1invalid__input__error.html", null ]
       ] ]
     ] ],
     [ "integratecpp::integrator::return_type", "structintegratecpp_1_1integrator_1_1return__type.html", null ],
