@@ -56,7 +56,7 @@ jobs:
             -Dbreathe_projects.integratecpp=_build/xml \
             . \
             ../assets/sphinx
-          touch assets/sphinx/.nojekyll
+          touch ../assets/sphinx/.nojekyll
 
       - name: Build site
         run: pkgdown::build_site_github_pages(new_process = FALSE, install = FALSE)
