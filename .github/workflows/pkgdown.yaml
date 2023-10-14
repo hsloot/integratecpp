@@ -11,9 +11,6 @@ on:
 
 name: pkgdown
 
-env:
-  BUILD_TYPE: Release
-
 jobs:
   pkgdown:
     runs-on: ubuntu-latest
@@ -36,9 +33,8 @@ jobs:
         shell: bash
         run: |
           apt-get udpate && apt-get upgrade
-          apt-get install -y doxygen graphviz libgsl-dev
-          pip  install --upgrade pip
-          pip install sphinx
+          apt-get install -y doxygen graphviz python3-sphinx libgsl-dev
+          pip install --upgrade pip
           pip install sphinx_rtd_theme
           pip install breathe
 
@@ -51,21 +47,16 @@ jobs:
           extra-packages: any::pkgdown, local::.
           needs: website
 
-      - name: Create CMake build environment
-        run: cmake -E make_directory ${{runner.workspace}}/build
-
-      - name: Configure CMake
-        shell: bash
-        working-directory: ${{runner.workspace}}/build
-        run: cmake -S $GITHUB_WORKSPACE -B . -DBUILD_DOCS=ON
-
-      - name: Build documentation
-        working-directory: ${{runner.workspace}}
+      - name: Build cpp documentation
+        working-directory: ${{runner.workspace}}/pkgdown/cpp
         shell: bash
         run: |
-          cmake --build . --target Doxygen --config $BUILD_TYPE
-          cmake --build . --target Sphinx --config $BUILD_TYPE
-          touch docs/sphinx/.nojekyll
+          doxygen Doxyfile
+          sphinx-build -b html \
+            -Dbreathe_projects.integratecpp=_build/xml \
+            . \
+            ../assets/sphinx
+          touch assets/sphinx/.nojekyll
 
       - name: Build site
         run: pkgdown::build_site_github_pages(new_process = FALSE, install = FALSE)

@@ -1,5 +1,5 @@
-# Created by https://www.toptal.com/developers/gitignore/api/c,r,c++,cmake
-# Edit at https://www.toptal.com/developers/gitignore?templates=c,r,c++,cmake
+# Created by https://www.toptal.com/developers/gitignore/api/c,r,c++
+# Edit at https://www.toptal.com/developers/gitignore?templates=c,r,c++
 
 ### C ###
 # Prerequisites
@@ -74,23 +74,6 @@ dkms.conf
 
 # Executables
 
-### CMake ###
-CMakeLists.txt.user
-CMakeCache.txt
-CMakeFiles
-CMakeScripts
-Testing
-Makefile
-cmake_install.cmake
-install_manifest.txt
-compile_commands.json
-CTestTestfile.cmake
-_deps
-
-### CMake Patch ###
-# External projects
-*-prefix/
-
 ### R ###
 # History files
 .Rhistory
@@ -146,7 +129,7 @@ rsconnect/
 # R package: bookdown caching files
 /*_files/
 
-# End of https://www.toptal.com/developers/gitignore/api/c,r,c++,cmake
+# End of https://www.toptal.com/developers/gitignore/api/c,r,c++
 
 ## MacOs
 .DS_Store
