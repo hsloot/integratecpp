@@ -1,5 +1,5 @@
-# Created by https://www.toptal.com/developers/gitignore/api/r,c++,c
-# Edit at https://www.toptal.com/developers/gitignore?templates=r,c++,c
+# Created by https://www.toptal.com/developers/gitignore/api/c,r,c++
+# Edit at https://www.toptal.com/developers/gitignore?templates=c,r,c++
 
 ### C ###
 # Prerequisites
@@ -129,7 +129,7 @@ rsconnect/
 # R package: bookdown caching files
 /*_files/
 
-# End of https://www.toptal.com/developers/gitignore/api/r,c++,c
+# End of https://www.toptal.com/developers/gitignore/api/c,r,c++
 
 ## MacOs
 .DS_Store
