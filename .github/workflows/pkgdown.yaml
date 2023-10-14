@@ -32,8 +32,8 @@ jobs:
       - name: install dependencies
         shell: bash
         run: |
-          apt-get udpate && apt-get upgrade
-          apt-get install -y doxygen graphviz python3-sphinx libgsl-dev
+          sudo apt-get udpate && sudo apt-get upgrade
+          sudo apt-get install -y doxygen graphviz python3-sphinx libgsl-dev
           pip install --upgrade pip
           pip install sphinx_rtd_theme
           pip install breathe
