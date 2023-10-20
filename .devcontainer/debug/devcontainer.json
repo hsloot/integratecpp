@@ -5,5 +5,12 @@
     },
     "runArgs": [
         "--security-opt", "seccomp=unconfined"
-    ]
+	],
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"DavidAnson.vscode-markdownlint"
+			]
+		}
+	}
 }

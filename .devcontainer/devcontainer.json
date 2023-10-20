@@ -8,5 +8,12 @@
 			"packages": "devtools,rmarkdown,roxygen2,testthat,covr,pkgdown,lintr,Rcpp,RcppNumerical,RcppEigen,RcppGSL,bench",
 			"installSystemRequirements": true
 		}
+	},
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"DavidAnson.vscode-markdownlint"
+			]
+		}
 	}
 }
