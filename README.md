@@ -4,12 +4,14 @@
 # integratecpp
 
 <!-- badges: start -->
+<!-- markdownlint-capture -->
+<!-- markdownlint-disable MD045 -->
 
 [![Codecov test
 coverage](https://codecov.io/gh/hsloot/integratecpp/branch/main/graph/badge.svg)](https://app.codecov.io/gh/hsloot/integratecpp?branch=main)
 [![](https://img.shields.io/badge/pkgdown-integratecpp-blue.svg)](https://hsloot.github.io/integratecpp/)
 [![](https://img.shields.io/badge/Doxygen-integratecpp-blue.svg)](https://hsloot.github.io/integratecpp/html/index.html)
-<!-- badges: end -->
+<!-- markdownlint-restore --> <!-- badges: end -->
 
 The package `integratecpp` provides a header-only C++11 interface to R’s
 C-API for numerical integration.
@@ -133,12 +135,17 @@ numerical integration in C++ code of R packages. Two examples are:
 Both approaches provide a finer control over the specific integration
 algorithms than R does. The following table provides a summary.
 
+<!-- markdownlint-capture -->
+<!-- markdownlint-disable MD013 -->
+
 | **Approach**    | **Depends** | **Imports**  | **LinkingTo**       | **SystemRequirements** | **External dependency** | **Additional features** |
 |:----------------|-------------|--------------|---------------------|------------------------|-------------------------|-------------------------|
 | `integratecpp`  | `R >= 3.1`  | (`Rcpp`[^1]) | (`Rcpp`)            | C++11                  |                         | ❌                      |
 | C-API           |             |              |                     |                        |                         | ❌                      |
 | `gsl`           |             | (`Rcpp`)     | (`Rcpp`, `RcppGSL`) |                        | `gsl`                   | ✅                      |
 | `RcppNumerical` |             | `Rcpp`       | `Rcpp`, `RcppEigen` |                        |                         | ✅                      |
+
+<!--markdownlint-restore -->
 
 What separates our approach are zero additional dependencies (if
 vendored) and an intuitive pure C++ API which does not rely on `Rcpp`
