@@ -9,6 +9,7 @@
 ^\.vscode$
 ^\.github$
 ^\.lintr$
+^\.markdownlint\.yaml$
 ^\.devcontainer$
 ^codecov\.yml$
 ^_pkgdown\.yml$
