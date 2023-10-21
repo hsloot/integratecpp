@@ -10,6 +10,7 @@
 ^\.github$
 ^\.lintr$
 ^\.markdownlint\.yaml$
+^\.markdownlintignore$
 ^\.devcontainer$
 ^codecov\.yml$
 ^_pkgdown\.yml$
