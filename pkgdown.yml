@@ -4,7 +4,7 @@ pkgdown_sha: ~
 articles:
   integratecpp-usage: integratecpp-usage.html
   comparison: web_only/comparison.html
-last_built: 2023-10-14T01:57Z
+last_built: 2023-10-23T12:34Z
 urls:
   reference: https://hsloot.github.io/integratecpp/reference
   article: https://hsloot.github.io/integratecpp/articles
