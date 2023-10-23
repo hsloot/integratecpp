@@ -84,6 +84,10 @@
 
     
     
+<!-- cSpell: ignoreRegExp \\.* -->
+<!-- cSpell: words cmath,stdexcept -->
+<!-- cSpell: words decltype,nullptr,pgamma,isfinite -->
+<!-- cSpell: words cond,abserr,neval,epsrel,epsabs,lenw,iwork -->
 <p>The following vignette demonstrates how using
 <code>integratecpp</code> simplifies and improves using numerical
 integration in <code>Rcpp</code>. <a class="footnote-ref" tabindex="0" data-bs-toggle="popover" data-bs-content="&lt;p&gt;We use &lt;code&gt;Rcpp&lt;/code&gt; for simplicity. There no
@@ -123,7 +127,7 @@ directory of <code>integratecpp</code> using the depends attribute
 <div class="sourceCode" id="cb2"><pre class="sourceCode cpp fold-none"><code class="sourceCode cpp"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;cmath&gt;</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;integratecpp.h&gt;</span></span></code></pre></div>
 <p>Finally, we implement our function using the
-<code>integratecpp</code> interface to <code>Rdagi</code>:</p>
+<code>integratecpp</code> interface to <code>Rdqagi</code>:</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode cpp fold-none"><code class="sourceCode cpp"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co">// [[Rcpp::export]]</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="dt">double</span> gamma_inc<span class="op">(</span><span class="at">const</span> <span class="dt">double</span> alpha<span class="op">,</span> <span class="at">const</span> <span class="dt">double</span> x<span class="op">)</span> <span class="op">{</span></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    <span class="co">// </span><span class="al">NOTE</span><span class="co">: integrand implemented as capturing lambda</span></span>
@@ -227,7 +231,7 @@ function</em>:</p>
 <span id="cb8-38"><a href="#cb8-38" aria-hidden="true" tabindex="-1"></a>        <span class="kw">auto</span> <span class="op">&amp;</span>fn_integrand <span class="op">=</span> <span class="op">(*</span><span class="kw">static_cast</span><span class="op">&lt;</span><span class="dt">ex_t</span> <span class="op">*&gt;(</span>ex<span class="op">)).</span>first<span class="op">;</span></span>
 <span id="cb8-39"><a href="#cb8-39" aria-hidden="true" tabindex="-1"></a>        <span class="kw">auto</span> <span class="op">&amp;</span>e_ptr <span class="op">=</span> <span class="op">(*</span><span class="kw">static_cast</span><span class="op">&lt;</span><span class="dt">ex_t</span> <span class="op">*&gt;(</span>ex<span class="op">)).</span>second<span class="op">;</span></span>
 <span id="cb8-40"><a href="#cb8-40" aria-hidden="true" tabindex="-1"></a>        </span>
-<span id="cb8-41"><a href="#cb8-41" aria-hidden="true" tabindex="-1"></a>        <span class="co">// evaluate `Callable` at *inout* pointer-to-arry `x`</span></span>
+<span id="cb8-41"><a href="#cb8-41" aria-hidden="true" tabindex="-1"></a>        <span class="co">// evaluate `Callable` at *in-out* pointer-to-array `x`</span></span>
 <span id="cb8-42"><a href="#cb8-42" aria-hidden="true" tabindex="-1"></a>        <span class="co">// and catch possible exceptions in exception pointer</span></span>
 <span id="cb8-43"><a href="#cb8-43" aria-hidden="true" tabindex="-1"></a>        <span class="cf">try</span> <span class="op">{</span></span>
 <span id="cb8-44"><a href="#cb8-44" aria-hidden="true" tabindex="-1"></a>            <span class="bu">std::</span>transform<span class="op">(&amp;</span>x<span class="op">[</span><span class="dv">0</span><span class="op">],</span> <span class="op">&amp;</span>x<span class="op">[</span>n<span class="op">],</span> <span class="op">&amp;</span>x<span class="op">[</span><span class="dv">0</span><span class="op">],</span> fn_integrand<span class="op">);</span></span>
@@ -259,7 +263,7 @@ function</em>:</p>
 <span id="cb8-70"><a href="#cb8-70" aria-hidden="true" tabindex="-1"></a>    <span class="co">// rethrow possible exceptions during function evaluation</span></span>
 <span id="cb8-71"><a href="#cb8-71" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>ex<span class="op">.</span>second<span class="op">)</span> <span class="bu">std::</span>rethrow_exception<span class="op">(</span>ex<span class="op">.</span>second<span class="op">);</span></span>
 <span id="cb8-72"><a href="#cb8-72" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb8-73"><a href="#cb8-73" aria-hidden="true" tabindex="-1"></a>    <span class="co">// throw `Rcpp::exception` if integration error occured</span></span>
+<span id="cb8-73"><a href="#cb8-73" aria-hidden="true" tabindex="-1"></a>    <span class="co">// throw `Rcpp::exception` if integration error occurred</span></span>
 <span id="cb8-74"><a href="#cb8-74" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>ier <span class="op">&gt;</span> <span class="dv">0</span><span class="op">)</span> Rcpp<span class="op">::</span>stop<span class="op">(</span><span class="st">"Integration error"</span><span class="op">);</span></span>
 <span id="cb8-75"><a href="#cb8-75" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-76"><a href="#cb8-76" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> result<span class="op">;</span></span>

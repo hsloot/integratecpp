@@ -19,8 +19,8 @@ Integrator wrapper
 .. doxygenclass:: integratecpp::integrator
    :members:
 
-Intergrate drop-in wrapper
-==========================
+Integrate drop-in wrapper
+=========================
 
 .. doxygenfunction:: integratecpp::integrate
 

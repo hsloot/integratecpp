@@ -84,6 +84,14 @@
 
     
     
+<!-- cSpell: ignoreRegExp \\.* -->
+<!-- cSpell: words nocite -->
+<!-- cSpell: words -Wvla -->
+<!-- cSpell: words cmath -->
+<!-- cSpell: words nullptr -->
+<!-- cSpell: words gsl_integration_workspace_alloc,gsl_integration_qags -->
+<!-- cSpell: words abserr,neval,epsrel,epsabs,lenw,iwork -->
+<!-- cSpell: words Numer,integrate_Cish -->
 <div class="section level2">
 <h2 id="the-problem">The Problem<a class="anchor" aria-label="anchor" href="#the-problem"></a>
 </h2>
@@ -114,17 +122,17 @@ approaches. However, some have additional features.</p>
 <code class="sourceCode R"><span><span class="co"># R</span></span>
 <span></span>
 <span><span class="va">integrate_R</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="op">)</span> <span class="op">{</span> <span class="co"># nolint</span></span>
-<span>  <span class="fu"><a href="../../reference/integrate.html">integrate</a></span><span class="op">(</span></span>
-<span>    <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fl">1</span> <span class="op">/</span> <span class="va">x</span><span class="op">^</span><span class="fl">0.7</span>,</span>
-<span>    lower <span class="op">=</span> <span class="fl">0</span>, upper <span class="op">=</span> <span class="fl">1</span></span>
-<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>    <span class="op">(</span><span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span></span>
-<span>      <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
-<span>        <span class="st">"value"</span> <span class="op">=</span> <span class="va">x</span><span class="op">$</span><span class="va">value</span>,</span>
-<span>        <span class="st">"abserr"</span> <span class="op">=</span> <span class="va">x</span><span class="op">$</span><span class="va">abs.err</span>,</span>
-<span>        <span class="st">"subdivisions"</span> <span class="op">=</span> <span class="va">x</span><span class="op">$</span><span class="va">subdivisions</span></span>
-<span>      <span class="op">)</span></span>
-<span>    <span class="op">}</span><span class="op">)</span><span class="op">(</span><span class="op">)</span></span>
+<span>    <span class="fu"><a href="../../reference/integrate.html">integrate</a></span><span class="op">(</span></span>
+<span>        <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fl">1</span> <span class="op">/</span> <span class="va">x</span><span class="op">^</span><span class="fl">0.7</span>,</span>
+<span>        lower <span class="op">=</span> <span class="fl">0</span>, upper <span class="op">=</span> <span class="fl">1</span></span>
+<span>    <span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>        <span class="op">(</span><span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span></span>
+<span>            <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>                <span class="st">"value"</span> <span class="op">=</span> <span class="va">x</span><span class="op">$</span><span class="va">value</span>,</span>
+<span>                <span class="st">"abserr"</span> <span class="op">=</span> <span class="va">x</span><span class="op">$</span><span class="va">abs.err</span>,</span>
+<span>                <span class="st">"subdivisions"</span> <span class="op">=</span> <span class="va">x</span><span class="op">$</span><span class="va">subdivisions</span></span>
+<span>            <span class="op">)</span></span>
+<span>        <span class="op">}</span><span class="op">)</span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="op">}</span></span>
 <span></span>
 <span><span class="fu">integrate_R</span><span class="op">(</span><span class="op">)</span></span>
@@ -375,21 +383,21 @@ C-API.</p>
 <code class="sourceCode R"><span><span class="co"># R</span></span>
 <span></span>
 <span><span class="fu">bench</span><span class="fu">::</span><span class="fu"><a href="http://bench.r-lib.org/reference/mark.html" class="external-link">mark</a></span><span class="op">(</span></span>
-<span>  <span class="fu">integrate_R</span><span class="op">(</span><span class="op">)</span>,</span>
-<span>  <span class="fu">integrate_integratecpp</span><span class="op">(</span><span class="op">)</span>,</span>
-<span>  <span class="fu">integrate_Cish</span><span class="op">(</span><span class="op">)</span>,</span>
-<span>  <span class="fu">integrate_RcppGSL</span><span class="op">(</span><span class="op">)</span>,</span>
-<span>  <span class="fu">integrate_RcppNumerical</span><span class="op">(</span><span class="op">)</span>,</span>
-<span>  check <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span>    <span class="fu">integrate_R</span><span class="op">(</span><span class="op">)</span>,</span>
+<span>    <span class="fu">integrate_integratecpp</span><span class="op">(</span><span class="op">)</span>,</span>
+<span>    <span class="fu">integrate_Cish</span><span class="op">(</span><span class="op">)</span>,</span>
+<span>    <span class="fu">integrate_RcppGSL</span><span class="op">(</span><span class="op">)</span>,</span>
+<span>    <span class="fu">integrate_RcppNumerical</span><span class="op">(</span><span class="op">)</span>,</span>
+<span>    check <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 5 × 6</span></span></span>
 <span><span class="co">#&gt;   expression                     min   median `itr/sec` mem_alloc `gc/sec`</span></span>
 <span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;bch:expr&gt;</span>                <span style="color: #949494; font-style: italic;">&lt;bch:tm&gt;</span> <span style="color: #949494; font-style: italic;">&lt;bch:tm&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;bch:byt&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> integrate_R()               42.3µs   45.4µs    <span style="text-decoration: underline;">21</span>806.   69.85KB     14.1</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> integrate_integratecpp()       8µs    8.1µs   <span style="text-decoration: underline;">121</span>893.    5.18KB      0  </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> integrate_Cish()             7.5µs    7.7µs   <span style="text-decoration: underline;">128</span>880.    4.13KB     12.9</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> integrate_RcppGSL()          8.1µs    8.3µs   <span style="text-decoration: underline;">119</span>641.    4.13KB      0  </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> integrate_RcppNumerical()   52.8µs   53.3µs    <span style="text-decoration: underline;">18</span>566.    6.62KB      0</span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> integrate_R()                 56µs   66.9µs    <span style="text-decoration: underline;">13</span>272.   69.85KB     8.50</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> integrate_integratecpp()     7.5µs    8.1µs   <span style="text-decoration: underline;">107</span>006.    5.18KB    10.7 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> integrate_Cish()             6.6µs    7.6µs   <span style="text-decoration: underline;">113</span>032.    4.13KB     0   </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> integrate_RcppGSL()          7.1µs    7.8µs   <span style="text-decoration: underline;">110</span>016.    4.13KB     0   </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> integrate_RcppNumerical()   47.8µs   58.4µs    <span style="text-decoration: underline;">15</span>902.    6.62KB     0</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 class="unnumbered" id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
