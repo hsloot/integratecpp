@@ -9,7 +9,12 @@
 	"customizations": {
 		"vscode": {
 			"extensions": [
-				"DavidAnson.vscode-markdownlint"
+				"DavidAnson.vscode-markdownlint",
+				"REditorSupport.r",
+				"streetsidesoftware.code-spell-checker",
+				"ms-vscode.cpptools",
+				"EditorConfig.EditorConfig",
+				"redhat.vscode-yaml"
 			]
 		}
 	}
