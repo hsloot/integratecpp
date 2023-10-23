@@ -1,7 +1,8 @@
 name: Bug report
 description: File a bug report
 title: "[BUG] <title>"
-labels: bug
+labels:
+  - bug
 assignees:
   - hsloot
 body:

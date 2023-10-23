@@ -1,7 +1,8 @@
 name: Erronous documentation
 description: Criticise the documentation
 title: "[DOC] <title>"
-labels: documentation
+labels:
+  - documentation
 assignees:
   - hsloot
 body:
