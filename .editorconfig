@@ -23,7 +23,7 @@ indent_size = 4
 # Markdown, Rmarkdown, quarto files
 [*.{R,r,q,}md]
 indent_style = space
-indent_size = 2
+indent_size = 4
 trim_trailing_whitespace = false
 
 # yaml config files
