@@ -26,8 +26,9 @@ body:
       label: Issue description
       description: |
         Please briefly describe your problem and what output you expect.
-        If you have a question, please don't use this form. Instead, ask on
-        <https://stackoverflow.com/> or <https://community.rstudio.com/>.
+        If you have a question, please don't use this form, open an issue for
+        erronous documentation if the matter is not sufficiently answered in the
+        documentation.
 
         Write about
         - Current behaviour
