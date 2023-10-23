@@ -1,6 +1,8 @@
 linters: linters_with_defaults(
+    indentation_linter(4),
     line_length_linter(100)
   )
 exclusions: list(
-    "vignettes/articles/comparison_cache"
+    "R/RcppExports.R",
+    "vignettes/web_only/comparison_cache"
   )

@@ -1,4 +1,4 @@
-# Copyright (C) 2022 Henrik Sloot
+# Copyright (C) 2023 Henrik Sloot
 #
 # This file is part of integratecpp
 #
@@ -15,6 +15,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+# cSpell: words cond,externalptr
+
 #' A class for numerical integration
 #'
 #' @slot pointer An external pointer to a C++ object.
@@ -29,18 +31,18 @@ Integrator <- setClass("Integrator", slots = c("pointer" = "externalptr")) # nol
 #' @keywords internal
 #' @noRd
 setValidity("Integrator", function(object) {
-  if (identical(object@pointer, new("externalptr"))) {
-    return("dangling pointer")
-  } else {
-    return(tryCatch(
-      Rcpp__integrator__throw_if_invalid(object@pointer),
-      error = function(cond) {
-        return(as.character(cond))
-      }
-    ))
-  }
+    if (identical(object@pointer, new("externalptr"))) {
+        return("dangling pointer")
+    } else {
+        return(tryCatch(
+            Rcpp__integrator__throw_if_invalid(object@pointer),
+            error = function(cond) {
+                return(as.character(cond))
+            }
+        ))
+    }
 
-  invisible(TRUE)
+    invisible(TRUE)
 })
 
 #' @describeIn Integrator-class
@@ -50,10 +52,10 @@ setValidity("Integrator", function(object) {
 #' @importFrom methods setMethod validObject
 #' @keywords internal
 setMethod("initialize", "Integrator", function(.Object, max_subdivisions = 100, relative_accuracy = .Machine$double.eps^0.25, absolute_accuracy = relative_accuracy, work_size = 4 * max_subdivisions) { # nolint
-  .Object@pointer <- Rcpp__integrator__new(max_subdivisions, relative_accuracy, absolute_accuracy, work_size) # nolint
-  validObject(.Object)
+    .Object@pointer <- Rcpp__integrator__new(max_subdivisions, relative_accuracy, absolute_accuracy, work_size) # nolint
+    validObject(.Object)
 
-  .Object
+    .Object
 })
 
 #' @describeIn Integrator-class
@@ -67,26 +69,26 @@ setMethod("initialize", "Integrator", function(.Object, max_subdivisions = 100, 
 #'
 #' @keywords internal
 setMethod("$", "Integrator", function(x, name) {
-  if (name %in% c("max_subdivisions", "relative_accuracy", "absolute_accuracy", "work_size")) { # nolint
-    get(paste("Rcpp__integrator__get", name, sep = "_"))(x@pointer)
-  } else if (name == "integrate") {
-    function(f, lower, upper, ..., stop_on_error = TRUE) { # nolint
-      out <- Rcpp__integrator__integrate(
-        x@pointer,
-        function(y) f(y, ...), lower, upper
-      )
-      out$call <- match.call()
-      class(out) <- "integrate"
+    if (name %in% c("max_subdivisions", "relative_accuracy", "absolute_accuracy", "work_size")) { # nolint
+        get(paste("Rcpp__integrator__get", name, sep = "_"))(x@pointer)
+    } else if (name == "integrate") {
+        function(f, lower, upper, ..., stop_on_error = TRUE) { # nolint
+            out <- Rcpp__integrator__integrate(
+                x@pointer,
+                function(y) f(y, ...), lower, upper
+            )
+            out$call <- match.call()
+            class(out) <- "integrate"
 
-      if (isTRUE(stop_on_error) && !isTRUE(out$message == "OK")) {
-        stop(out$message)
-      }
+            if (isTRUE(stop_on_error) && !isTRUE(out$message == "OK")) {
+                stop(out$message)
+            }
 
-      out
+            out
+        }
+    } else {
+        stop("not implemented") # nocov
     }
-  } else {
-    stop("not implemented") # nocov
-  }
 })
 
 #' @describeIn Integrator-class
@@ -99,14 +101,14 @@ setMethod("$", "Integrator", function(x, name) {
 #'
 #' @keywords internal
 setMethod("$<-", "Integrator", function(x, name, value) {
-  if (name %in% c("max_subdivisions", "relative_accuracy", "absolute_accuracy", "work_size")) { # nolint
-    get(paste("Rcpp__integrator__set", name, sep = "_"))(x@pointer, value)
-    validObject(x)
+    if (name %in% c("max_subdivisions", "relative_accuracy", "absolute_accuracy", "work_size")) { # nolint
+        get(paste("Rcpp__integrator__set", name, sep = "_"))(x@pointer, value)
+        validObject(x)
 
-    x
-  } else {
-    stop("not implemented") # nocov
-  }
+        x
+    } else {
+        stop("not implemented") # nocov
+    }
 })
 
 # nocov start
@@ -121,18 +123,18 @@ setMethod("$<-", "Integrator", function(x, name, value) {
 #' @keywords internal
 #' @noRd
 setMethod("show", "Integrator", function(object) {
-  cat(sprintf("An object of class %s\n", classLabel(class(object))))
-  if (isTRUE(validObject(object, test = TRUE))) {
-    cat(sprintf("%s\n", format(object@pointer)))
-    cat(sprintf("- max_subdivisions: %s\n", format(object$max_subdivisions)))
-    cat(sprintf("- relative_accuracy: %s\n", format(object$relative_accuracy, scientific = TRUE)))
-    cat(sprintf("- absolute_accuracy: %s\n", format(object$absolute_accuracy, scientific = TRUE)))
-    cat(sprintf("- work_size: %s\n", format(object$work_size)))
-  } else {
-    cat("\t (invalid or not initialized)\n")
-  }
+    cat(sprintf("An object of class %s\n", classLabel(class(object))))
+    if (isTRUE(validObject(object, test = TRUE))) {
+        cat(sprintf("%s\n", format(object@pointer)))
+        cat(sprintf("- max_subdivisions: %s\n", format(object$max_subdivisions)))
+        cat(sprintf("- relative_accuracy: %s\n", format(object$relative_accuracy, scientific = TRUE)))
+        cat(sprintf("- absolute_accuracy: %s\n", format(object$absolute_accuracy, scientific = TRUE)))
+        cat(sprintf("- work_size: %s\n", format(object$work_size)))
+    } else {
+        cat("\t (invalid or not initialized)\n")
+    }
 
-  invisible(NULL)
+    invisible(NULL)
 })
 
 # nolint end

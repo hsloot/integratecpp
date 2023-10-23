@@ -49,7 +49,7 @@ Rcpp::List Rcpp__integrate(Rcpp::Function fn, const double lower,
     } catch (const std::exception &e) {
         Rcpp::stop(e.what());  // # nocov
     } catch (...) {
-        Rcpp::stop("Unexcpected error");  // # nocov
+        Rcpp::stop("Unexpected error");  // # nocov
     }
     return Rcpp::List::create(Rcpp::Named("value") = result.value,
                               Rcpp::Named("abs.error") = result.absolute_error,

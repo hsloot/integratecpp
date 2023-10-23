@@ -8,12 +8,16 @@ vignette: >
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
+<!-- cSpell: ignoreRegExp \\.* -->
+<!-- cSpell: words cmath,stdexcept -->
+<!-- cSpell: words decltype,nullptr,pgamma,isfinite -->
+<!-- cSpell: words cond,abserr,neval,epsrel,epsabs,lenw,iwork -->
 
 ```{r setup, include = FALSE}
 knitr::opts_chunk$set(
-  collapse = TRUE,
-  comment = "#>",
-  class.source = "fold-none"
+    collapse = TRUE,
+    comment = "#>",
+    class.source = "fold-none"
 )
 ```
 
@@ -55,7 +59,8 @@ Next, we include the STL header `<cmath>` for using `std::pow` and we include th
 #include <integratecpp.h>
 ```
 
-Finally, we implement our function using the `integratecpp` interface to `Rdagi`:
+Finally, we implement our function using the `integratecpp` interface to
+`Rdqagi`:
 
 ```{Rcpp demo-Rcpp, echo=TRUE, eval=FALSE}
 // [[Rcpp::export]]
@@ -172,7 +177,7 @@ double gamma_inc_direct(const double alpha, const double x) {
         auto &fn_integrand = (*static_cast<ex_t *>(ex)).first;
         auto &e_ptr = (*static_cast<ex_t *>(ex)).second;
         
-        // evaluate `Callable` at *inout* pointer-to-arry `x`
+        // evaluate `Callable` at *in-out* pointer-to-array `x`
         // and catch possible exceptions in exception pointer
         try {
             std::transform(&x[0], &x[n], &x[0], fn_integrand);
@@ -204,7 +209,7 @@ double gamma_inc_direct(const double alpha, const double x) {
     // rethrow possible exceptions during function evaluation
     if (ex.second) std::rethrow_exception(ex.second);
     
-    // throw `Rcpp::exception` if integration error occured
+    // throw `Rcpp::exception` if integration error occurred
     if (ier > 0) Rcpp::stop("Integration error");
 
     return result;

@@ -1,9 +1,8 @@
 name: Feature request
 description: Make a feature request
-title: "[FEAT] <title>"
-labels: enhancement
-assignees:
-  - hsloot
+title: "[FEAT]"
+labels:
+  - enhancement
 body:
   - type: markdown
     attributes:
@@ -15,16 +14,19 @@ body:
       label: Submission terms and conditions
       options:
         - label: |
-            I aggree to follow the [Code of Conduct](https://hsloot.github.io/integratecpp/CODE_OF_CONDUCT.html) that this repository adheres to.
+            I agree to follow the [Code of Conduct](https://hsloot.github.io/integratecpp/CODE_OF_CONDUCT.html)
+            that this repository adheres to.
           required: true
         - label: |
-            I checked the [current issues](https://github.com/hsloot/integratecpp/issues) for duplicate problems.
+            I checked the [current issues](https://github.com/hsloot/integratecpp/issues)
+            for duplicate problems.
           required: true
   - type: textarea
     id: report
     attributes:
       label: Feature request
       description:
-        Please briefly describe your feature request. Consider including suggestions how to implemented **after a brief summary**.
+        Please briefly describe your feature request. Consider including
+        suggestions how to implemented **after a brief summary**.
     validations:
       required: true

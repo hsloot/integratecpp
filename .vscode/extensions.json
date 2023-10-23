@@ -1,0 +1,10 @@
+{
+    "recommendations": [
+        "davidanson.vscode-markdownlint",
+        "streetsidesoftware.code-spell-checker",
+        "reditorsupport.r",
+        "ms-vscode.cpptools",
+        "editorconfig.editorconfig",
+        "redhat.vscode-yaml"
+    ]
+}

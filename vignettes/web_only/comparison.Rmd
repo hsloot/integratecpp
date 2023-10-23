@@ -20,12 +20,20 @@ references:
 nocite: |
   @Piessens1983a
 ---
+<!-- cSpell: ignoreRegExp \\.* -->
+<!-- cSpell: words nocite -->
+<!-- cSpell: words -Wvla -->
+<!-- cSpell: words cmath -->
+<!-- cSpell: words nullptr -->
+<!-- cSpell: words gsl_integration_workspace_alloc,gsl_integration_qags -->
+<!-- cSpell: words abserr,neval,epsrel,epsabs,lenw,iwork -->
+<!-- cSpell: words Numer,integrate_Cish -->
 
 ```{r knitr-setup, include = FALSE}
 knitr::opts_chunk$set(
-  collapse = TRUE,
-  comment = "#>",
-  cache = TRUE
+    collapse = TRUE,
+    comment = "#>",
+    cache = TRUE
 )
 ```
 
@@ -54,17 +62,17 @@ However, some have additional features.
 # R
 
 integrate_R <- function() { # nolint
-  integrate(
-    function(x) 1 / x^0.7,
-    lower = 0, upper = 1
-  ) |>
-    (function(x) {
-      list(
-        "value" = x$value,
-        "abserr" = x$abs.err,
-        "subdivisions" = x$subdivisions
-      )
-    })()
+    integrate(
+        function(x) 1 / x^0.7,
+        lower = 0, upper = 1
+    ) |>
+        (function(x) {
+            list(
+                "value" = x$value,
+                "abserr" = x$abs.err,
+                "subdivisions" = x$subdivisions
+            )
+        })()
 }
 
 integrate_R()
@@ -296,12 +304,12 @@ A benchmarks shows that our wrapper is almost as fast as the native C-API.
 # R
 
 bench::mark(
-  integrate_R(),
-  integrate_integratecpp(),
-  integrate_Cish(),
-  integrate_RcppGSL(),
-  integrate_RcppNumerical(),
-  check = FALSE
+    integrate_R(),
+    integrate_integratecpp(),
+    integrate_Cish(),
+    integrate_RcppGSL(),
+    integrate_RcppNumerical(),
+    check = FALSE
 )
 ```
 

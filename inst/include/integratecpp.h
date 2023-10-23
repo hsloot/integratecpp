@@ -1,4 +1,4 @@
-// Copyright (C) 2022 Henrik Sloot
+// Copyright (C) 2023 Henrik Sloot
 //
 // This file is part of integratecpp
 //
@@ -14,6 +14,10 @@
 //
 // You should have received a copy of the GNU Lesser General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+// cSpell: ignoreRegExp \\.*
+// cSpell: words Rdqag
+// cSpell: words epsrel,epsabs,lenw,abserr,iwork,neval,integr_fn
 
 /*!
  * \file integratecpp.h
@@ -74,7 +78,7 @@ namespace integratecpp {
  * - Integration results are returned in structs of type
  *   `integratecpp::integrator::return_type` with the approximated integral
  *   value, an estimated error, the final number of subdivisions, and the number
- *   of funcion evaluations.
+ *   of function evaluations.
  * - Issues regarding the configuration parameter throw an exception, deriving
  *   from `integratecpp::integration_logic_error` and issues during the
  *   integration may throw exceptions deriving from
@@ -84,7 +88,7 @@ namespace integratecpp {
 class integrator {
    public:
     /*!
-     * \brief  Defines a struct for the integation results returned from
+     * \brief  Defines a struct for the integration results returned from
      *         `integratecpp::integrator::operator()()`. Compare
      *         [`src/appl/integrate.c`](https://github.com/wch/r-source/blob/trunk/src/appl/integrate.c)
      *         in R-source):
@@ -241,7 +245,7 @@ class integrator {
         std::is_nothrow_move_assignable<config_type>::value,
         "`integratecpp::integrator::config_type` not nothrow move-assignable");
     // NOTE: `integratecpp::integrator::config_type` is not trivial as it has
-    //        non-trivial member intializations.
+    //        non-trivial member initializations.
     // static_assert(std::is_trivial<config_type>::value,
     //               "`integratecpp::integrator::config_type` not trivial");
     static_assert(
@@ -360,7 +364,7 @@ class integrator {
     //! \endcond
 
     /*!
-     * \brief  Approximates an integratal numerically for a functor, lower, and
+     * \brief  Approximates an integral numerically for a functor, lower, and
      *         upper bound, using `Rdqags` if both bounds are are finite and
      *         `Rdqagi` of at least one of the bounds is infinite.
      *
@@ -391,7 +395,7 @@ class integrator {
      *               deemed divergence (or slowly convergent).
      * \exception    throws integratecpp::integration_runtime_error if the
      *               `Callable` returns infinite values.
-     * \exception    rethrows catched exceptions that occur during the evaluation
+     * \exception    rethrows caught exceptions that occur during the evaluation
      *               of the `Callable`.
      */
     template <typename UnaryRealFunction_>
@@ -410,7 +414,7 @@ static_assert(std::is_nothrow_move_constructible<integrator>::value,
 static_assert(std::is_nothrow_move_assignable<integrator>::value,
               "`integratecpp::integrator` not nothrow move-assignable");
 // NOTE: `integratecpp::integrator` is not trivial as it has
-//        non-trivial member intializations.
+//        non-trivial member initializations.
 // static_assert(std::is_trivial<integrator>::value,
 //               "`integratecpp::integrator` not trivial");
 static_assert(std::is_standard_layout<integrator>::value,
@@ -418,7 +422,7 @@ static_assert(std::is_standard_layout<integrator>::value,
 
 /*!
  * \brief  A drop-in replacement of `integratecpp::integrator` for numerical
- *         integration. Approximates an integratal numerically for a functor,
+ *         integration. Approximates an integral numerically for a functor,
  *         lower, and upper bound, using `Rdqags` if both bounds are are finite
  *         and `Rdqagi` of at least one of the bounds is infinite.
  *
@@ -452,7 +456,7 @@ static_assert(std::is_standard_layout<integrator>::value,
  *               deemed divergence (or slowly convergent).
  * \exception    throws integratecpp::integration_runtime_error if the
  *               `Callable` returns infinite values.
- * \exception    rethrows catched exceptions that occur during the evaluation
+ * \exception    rethrows caught exceptions that occur during the evaluation
  *               of the `Callable`.
  */
 template <typename UnaryRealFunction_>
@@ -553,7 +557,7 @@ class integration_logic_error : public std::logic_error {
  * determine the integration difficulties. If the position of a local difficulty
  * can be determined (e.g. singularity, discontinuity within the interval) one
  * will probably gain from splitting up the interval at this point and calling
- * the integrator on the subranges. If possible, an appropriate special-purpose
+ * the integrator on the sub-ranges. If possible, an appropriate special-purpose
  * integrator should be used, which is designed for handling the type of
  * difficulty involved.
  */
@@ -747,8 +751,8 @@ inline integrator::return_type integrator::operator()(UnaryRealFunction_ &&fn,
     auto iwork = std::vector<int>(limit);
     auto work = std::vector<double>(lenw);
 
-    // NOTE: create non-capturing callback Lambda (which can be implicitely
-    // converted to a fnct.-pointer of signature `integr_fn` aka
+    // NOTE: create non-capturing callback Lambda (which can be implicitly
+    // converted to a function.-pointer of signature `integr_fn` aka
     // `void(double *, int, void *)`).
     // the actual integrand function is passed through the `void *` in the last
     // argument alongside with a `std::unique_ptr` to capture exceptions during
@@ -772,8 +776,8 @@ inline integrator::return_type integrator::operator()(UnaryRealFunction_ &&fn,
         auto &fn_integrand = (*static_cast<ex_t *>(ex)).first;
         auto &e_ptr = (*static_cast<ex_t *>(ex)).second;
 
-        // NOTE: `guarded_transform` is a wrapper arround `std::transform`,
-        // catching all exceptions appart `std::bad_alloc` and storing them in
+        // NOTE: `guarded_transform` is a wrapper around `std::transform`,
+        // catching all exceptions apart `std::bad_alloc` and storing them in
         // the provided `std::exception_ptr`. an additional check is performed
         // whether all results are finite. in case of errors, all function
         // values are set to zero.

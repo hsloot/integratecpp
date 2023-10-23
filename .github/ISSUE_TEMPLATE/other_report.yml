@@ -1,13 +1,12 @@
-name: Erroneous documentation
-description: Criticize the documentation
-title: "[DOC]"
-labels:
-  - documentation
+name: Report another issue
+description: |
+  Describe an issues that does not git a bug report, a feature request, or a
+  report about erroneous documentation.
 body:
   - type: markdown
     attributes:
       value: |
-        Thanks for taking the time to fill out this report!
+        Thanks for taking the time to fill out this bug report!
   - type: checkboxes
     id: terms
     attributes:
@@ -26,6 +25,13 @@ body:
     attributes:
       label: Issue description
       description: |
-        Please briefly describe how the documentation should be improved.
+        Please briefly describe your problem and what output you expect.
+        If you have a question, please don't use this form, open an issue for
+        erroneous documentation if the matter is not sufficiently answered in the
+        documentation.
+
+        Write about
+        - Current behavior
+        - Expected behavior
     validations:
       required: true
