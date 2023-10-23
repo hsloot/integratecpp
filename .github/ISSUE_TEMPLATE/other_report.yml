@@ -2,8 +2,6 @@ name: Report another issue
 description: |
   Describe an issues that does not git a bug report, a feature request, or a
   report about erronous documentation.
-assignees:
-  - hsloot
 body:
   - type: markdown
     attributes:

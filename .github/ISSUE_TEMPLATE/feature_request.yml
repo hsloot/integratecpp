@@ -3,8 +3,6 @@ description: Make a feature request
 title: "[FEAT] <title>"
 labels:
   - enhancement
-assignees:
-  - hsloot
 body:
   - type: markdown
     attributes:

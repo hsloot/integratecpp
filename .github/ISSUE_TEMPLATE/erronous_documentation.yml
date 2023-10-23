@@ -3,8 +3,6 @@ description: Criticise the documentation
 title: "[DOC] <title>"
 labels:
   - documentation
-assignees:
-  - hsloot
 body:
   - type: markdown
     attributes:
