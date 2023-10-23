@@ -11,7 +11,8 @@ Briefly summarize what you change with this pull request.
       [contributing guide](https://hsloot.github.io/integratecpp/CONTRIBUTING.html).
 - [ ] Test for new features or bugs are included and successful.
 - [ ] Documentation of new features is included.
-- [ ] Changes are summarized in the [changelog](NEWS.md) if appropriate.
+- [ ] Changes are summarized in the [NEWS.md](/hsloot/integratecpp/NEWS.md) if
+      appropriate.
 - [ ] All commits are complient with the rules and licensing governing as
       described in the [developer certificate of origin](https://developercertificate.org).
 
