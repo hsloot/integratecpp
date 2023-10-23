@@ -14,8 +14,8 @@ comment in the first line.
 ## Bigger changes
 
 If you want to make a bigger change, it's a good idea to first file an issue and
-make sure someone from the team agrees that it’s needed.  If you’ve found a bug,
-please file an issue that illustrates the bug with a minimal
+make sure maintainers agree that it’s needed. If you’ve found a bug, please file
+an issue that illustrates the bug with a minimal
 [reprex](https://www.tidyverse.org/help/#reprex) (this will also help you write
 a unit test, if needed).
 
@@ -35,26 +35,34 @@ a unit test, if needed).
 
 * Make your changes, commit to git, and then create a PR by running
   `usethis::pr_push()`, and following the prompts in your browser.
-  The title of your PR should briefly describe the change.  The body of your PR
+  The title of your PR should briefly describe the change. The body of your PR
   should contain `Fixes #issue-number`.
+
+* Update the documentation using `devtools::document()` and commit/push the
+  changes.
+
+* Run `lintr::lint_package()`, resolve all lints, and commit/push the changes.
 
 * For user-facing changes, add a bullet to the top of `NEWS.md` (i.e. just below
   the first header). Follow the style described in
   <https://style.tidyverse.org/news.html>.
 
-### Code style
-
-* New code should follow the tidyverse
-  [style guide](https://style.tidyverse.org). You can use the
-  [styler](https://CRAN.R-project.org/package=styler) package to apply these
-  styles, but please don't restyle code that has nothing to do with your PR.  
+### Documenation and testing
 
 * We use [roxygen2](https://cran.r-project.org/package=roxygen2), with
   [Markdown syntax](https://cran.r-project.org/web/packages/roxygen2/vignettes/rd-formatting.html),
   for documentation.  
 
 * We use [testthat](https://cran.r-project.org/package=testthat) for unit tests.
-  Contributions with test cases included are easier to accept.  
+  Contributions with test cases included are easier to accept.
+
+### Code style
+
+* New code should follow the tidyverse
+  [style guide](https://style.tidyverse.org). Use `lintr::lint_package()` to
+  create an overview of all style-violations. You can use the
+  [styler](https://CRAN.R-project.org/package=styler) package to apply these
+  styles, but please don't restyle code that has nothing to do with your PR.  
 
 ## Code of Conduct
 
