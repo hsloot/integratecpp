@@ -1,6 +1,6 @@
 name: Feature request
 description: Make a feature request
-title: "[FEAT] <title>"
+title: "[FEAT]"
 labels:
   - enhancement
 body:

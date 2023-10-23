@@ -1,6 +1,6 @@
 name: Erronous documentation
 description: Criticise the documentation
-title: "[DOC] <title>"
+title: "[DOC]"
 labels:
   - documentation
 body:
