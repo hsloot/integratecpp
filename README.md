@@ -1,6 +1,6 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
-<!-- cSpell: words RcppEigen,Makevars -->
+<!-- cSpell: words Makevars -->
 
 # integratecpp
 

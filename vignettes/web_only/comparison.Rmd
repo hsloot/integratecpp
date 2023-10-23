@@ -27,7 +27,7 @@ nocite: |
 <!-- cSpell: words nullptr -->
 <!-- cSpell: words gsl_integration_workspace_alloc,gsl_integration_qags -->
 <!-- cSpell: words abserr,neval,epsrel,epsabs,lenw,iwork -->
-<!-- cSpell: words RcppEigen,Numer,integrate_Cish -->
+<!-- cSpell: words Numer,integrate_Cish -->
 
 ```{r knitr-setup, include = FALSE}
 knitr::opts_chunk$set(

@@ -2,7 +2,7 @@
 output: github_document
 ---
 <!-- README.md is generated from README.Rmd. Please edit that file -->
-<!-- cSpell: words RcppEigen,Makevars -->
+<!-- cSpell: words ,Makevars -->
 
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
