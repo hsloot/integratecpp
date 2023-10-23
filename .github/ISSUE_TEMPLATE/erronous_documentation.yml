@@ -1,5 +1,5 @@
-name: Erronous documentation
-description: Criticise the documentation
+name: Erroneous documentation
+description: Criticize the documentation
 title: "[DOC]"
 labels:
   - documentation
@@ -14,7 +14,7 @@ body:
       label: Submission terms and conditions
       options:
         - label: |
-            I aggree to follow the [Code of Conduct](https://hsloot.github.io/integratecpp/CODE_OF_CONDUCT.html)
+            I agree to follow the [Code of Conduct](https://hsloot.github.io/integratecpp/CODE_OF_CONDUCT.html)
             that this repository adheres to.
           required: true
         - label: |

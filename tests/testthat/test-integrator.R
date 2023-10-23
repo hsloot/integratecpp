@@ -15,6 +15,9 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+# cSpell: ignore behaviour
+# cSpell: words meanlog,sdlog
+
 remove_call <- function(x) {
   x <- x[-match(x, "call")]
 }
@@ -51,7 +54,7 @@ test_that("Parameter setting works as expected", {
   expect_equal(integrator$work_size, 800)
 })
 
-test_that("Default settings for exponential distribtion's expectation", {
+test_that("Default settings for exponential distribution's expectation", {
   integrator <- Integrator()
   fn <- function(x, rate = 1) {
     x * dexp(x, rate = rate)
@@ -73,7 +76,7 @@ test_that("Default settings for exponential distribtion's expectation", {
   )
 })
 
-test_that("Default settings for beta distribtion's expectation", {
+test_that("Default settings for beta distribution's expectation", {
   integrator <- Integrator()
   fn <- function(x, shape1, shape2) {
     x * dbeta(x, shape1 = shape1, shape2 = shape2)
@@ -95,7 +98,7 @@ test_that("Default settings for beta distribtion's expectation", {
   )
 })
 
-test_that("Default settings for negative Weibull distribtion's expectation", {
+test_that("Default settings for negative Weibull distribution's expectation", {
   integrator <- Integrator()
   fn <- function(x, shape, scale = 1) {
     x * dweibull(-x, shape = shape, scale = scale)

@@ -1,4 +1,6 @@
-## Summary <!-- markdownlint-disable-line MD041 -->
+<!-- cSpell: words lintr -->
+<!-- markdownlint-disable MD041 -->
+## Summary
 
 <!-- 
     Briefly summarize what you change with this pull request.
@@ -26,7 +28,7 @@
 
 ---
 
-## Questionaire
+## Questionnaire
 
 <!--
     Remove all bullets NOT applicable to this PR

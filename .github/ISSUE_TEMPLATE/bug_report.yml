@@ -14,7 +14,7 @@ body:
       label: Submission terms and conditions
       options:
         - label: |
-            I aggree to follow the [Code of Conduct](https://hsloot.github.io/integratecpp/CODE_OF_CONDUCT.html)
+            I agree to follow the [Code of Conduct](https://hsloot.github.io/integratecpp/CODE_OF_CONDUCT.html)
             that this repository adheres to.
           required: true
         - label: |
@@ -32,8 +32,8 @@ body:
       placeholder: |
         Write about:
 
-        - Current behaviour
-        - Expected behaviour
+        - Current behavior
+        - Expected behavior
     validations:
       required: true
   - type: textarea

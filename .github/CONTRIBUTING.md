@@ -1,3 +1,4 @@
+<!-- cSpell: words roxygen2,lintr,reprex,testthat,tidyverse -->
 # Contributing to integratecpp
 
 This outlines how to propose a change to integratecpp.
@@ -47,7 +48,7 @@ a unit test, if needed).
   the first header). Follow the style described in
   <https://style.tidyverse.org/news.html>.
 
-### Documenation and testing
+### Documentation and testing
 
 * We use [roxygen2](https://cran.r-project.org/package=roxygen2), with
   [Markdown syntax](https://cran.r-project.org/web/packages/roxygen2/vignettes/rd-formatting.html),

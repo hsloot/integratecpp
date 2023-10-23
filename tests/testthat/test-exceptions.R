@@ -15,13 +15,15 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+# cSpell: ignore behaviour
+
 test_that("`integration_logic_error` works as expected", {
   expect_equal(
     catch_what("integration_logic_error", ""),
     ""
   )
 
-  message <- "a logic error occured during integration"
+  message <- "a logic error occurred during integration"
   expect_equal(
     catch_what("integration_logic_error", message),
     message
@@ -34,7 +36,7 @@ test_that("`integration_runtime_error` works as expected", {
     ""
   )
 
-  message <- "a runtime error occured during integration"
+  message <- "a runtime error occurred during integration"
   expect_equal(
     catch_what("integration_runtime_error", message),
     message

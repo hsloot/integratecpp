@@ -1,0 +1,6 @@
+{
+    "cSpell.enabled": true,
+    "yaml.schemas": {
+        "https://json.schemastore.org/github-issue-config.json": "file:///Users/henriksloot/Github/integratecpp/.github/ISSUE_TEMPLATE/config.yml"
+    }
+}

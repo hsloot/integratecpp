@@ -1,0 +1,47 @@
+{
+    "version": "0.2",
+    "language": "en-US",
+    "enableFiletypes": [
+        "rmd"
+    ],
+    "words": [
+        "Applic.h",
+        "codecov",
+        "Doncker-Kapenga",
+        "favicon",
+        "favicons",
+        "hsloot",
+        "integratecpp",
+        "Kahaner",
+        "Kronrod",
+        "knitr",
+        "longjump",
+        "longjumps",
+        "markdownlint",
+        "nocov",
+        "nolint",
+        "Piessens",
+        "Quadpack",
+        "Rcpp",
+        "Rdqagi",
+        "Rdqags",
+        "reprex",
+        "rmarkdown",
+        "roundoff",
+        "RoxygenNote",
+        "Sloot",
+        "Springer-Verlag",
+        "subintervals",
+        "usethis",
+        "Überhuber",
+        "Weibull"
+    ],
+    "ignorePaths": [
+        ".devcontainer",
+        ".vscode",
+        "**/RcppExports.*",
+        "docs",
+        "man",
+        "pkgdown"
+    ]
+}

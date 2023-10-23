@@ -20,6 +20,14 @@ references:
 nocite: |
   @Piessens1983a
 ---
+<!-- cSpell: ignoreRegExp \\.* -->
+<!-- cSpell: words nocite -->
+<!-- cSpell: words -Wvla -->
+<!-- cSpell: words cmath -->
+<!-- cSpell: words nullptr -->
+<!-- cSpell: words gsl_integration_workspace_alloc,gsl_integration_qags -->
+<!-- cSpell: words abserr,neval,epsrel,epsabs,lenw,iwork -->
+<!-- cSpell: words RcppEigen,Numer,integrate_Cish -->
 
 ```{r knitr-setup, include = FALSE}
 knitr::opts_chunk$set(

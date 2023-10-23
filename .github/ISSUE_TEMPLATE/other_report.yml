@@ -1,7 +1,7 @@
 name: Report another issue
 description: |
   Describe an issues that does not git a bug report, a feature request, or a
-  report about erronous documentation.
+  report about erroneous documentation.
 body:
   - type: markdown
     attributes:
@@ -13,7 +13,7 @@ body:
       label: Submission terms and conditions
       options:
         - label: |
-            I aggree to follow the [Code of Conduct](https://hsloot.github.io/integratecpp/CODE_OF_CONDUCT.html)
+            I agree to follow the [Code of Conduct](https://hsloot.github.io/integratecpp/CODE_OF_CONDUCT.html)
             that this repository adheres to.
           required: true
         - label: |
@@ -27,11 +27,11 @@ body:
       description: |
         Please briefly describe your problem and what output you expect.
         If you have a question, please don't use this form, open an issue for
-        erronous documentation if the matter is not sufficiently answered in the
+        erroneous documentation if the matter is not sufficiently answered in the
         documentation.
 
         Write about
-        - Current behaviour
-        - Expected behaviour
+        - Current behavior
+        - Expected behavior
     validations:
       required: true
