@@ -1,8 +1,6 @@
 # Contributing to integratecpp
 
-This outlines how to propose a change to integratecpp. For more detailed info
-about contributing to this, and other tidyverse packages, please see the
-[**development contributing guide**](https://rstd.io/tidy-contrib).
+This outlines how to propose a change to integratecpp.
 
 ## Fixing typos
 
