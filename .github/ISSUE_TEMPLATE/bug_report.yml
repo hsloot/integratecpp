@@ -16,17 +16,21 @@ body:
       label: Submission terms and conditions
       options:
         - label: |
-            I aggree to follow the [Code of Conduct](https://hsloot.github.io/integratecpp/CODE_OF_CONDUCT.html) that this repository adheres to.
+            I aggree to follow the [Code of Conduct](https://hsloot.github.io/integratecpp/CODE_OF_CONDUCT.html)
+            that this repository adheres to.
           required: true
         - label: |
-            I checked the [current issues](https://github.com/hsloot/integratecpp/issues) for duplicate problems.
+            I checked the [current issues](https://github.com/hsloot/integratecpp/issues)
+            for duplicate problems.
           required: true
   - type: textarea
     id: report
     attributes:
       label: Issue description
       description: |
-        Please briefly describe your problem and what output you expect. If you have a question, please don't use this form. Instead, ask on <https://stackoverflow.com/> or <https://community.rstudio.com/>.
+        Please briefly describe your problem and what output you expect.
+        If you have a question, please don't use this form. Instead, ask on
+        <https://stackoverflow.com/> or <https://community.rstudio.com/>.
       placeholder: |
         Write about:
 
@@ -39,7 +43,8 @@ body:
     attributes:
       label: Information about your system
       description: |
-        Please include relevant information about your version, platform, machine, compiler, configurations, ...
+        Please include relevant information about your version, platform,
+        machine, compiler, configurations, ...
     validations:
       required: false
   - type: textarea
@@ -47,10 +52,14 @@ body:
     attributes:
       label: Reproducible example
       description: |
-        Please include a minimal reproducible example (AKA a reprex). If you've never heard of a [reprex](http://reprex.tidyverse.org/) before, start by reading <https://www.tidyverse.org/help/#reprex>.
+        Please include a minimal reproducible example (AKA a reprex). If you've
+        never heard of a [reprex](http://reprex.tidyverse.org/) before, start by
+        reading <https://www.tidyverse.org/help/#reprex>.
       placeholder: |
-        - Consider including with session information with `reprex(session_info = TRUE)`.
+        - Consider including with session information with
+          `reprex(session_info = TRUE)`.
         - Sanitize the output of any personal information.
-        - If you cannot create a reproducible example with `reprex()`, consider writing a step-by-step instructions.
+        - If you cannot create a reproducible example with `reprex()`, consider
+          writing a step-by-step instructions.
     validations:
       required: false

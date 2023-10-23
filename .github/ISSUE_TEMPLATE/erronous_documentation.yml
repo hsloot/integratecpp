@@ -16,10 +16,12 @@ body:
       label: Submission terms and conditions
       options:
         - label: |
-            I aggree to follow the [Code of Conduct](https://hsloot.github.io/integratecpp/CODE_OF_CONDUCT.html) that this repository adheres to.
+            I aggree to follow the [Code of Conduct](https://hsloot.github.io/integratecpp/CODE_OF_CONDUCT.html)
+            that this repository adheres to.
           required: true
         - label: |
-            I checked the [current issues](https://github.com/hsloot/integratecpp/issues) for duplicate problems.
+            I checked the [current issues](https://github.com/hsloot/integratecpp/issues)
+            for duplicate problems.
           required: true
   - type: textarea
     id: report
