@@ -1,0 +1,38 @@
+name: Report another issue
+description: |
+  Describe an issues that does not git a bug report, a feature request, or a
+  report about erronous documentation.
+assignees:
+  - hsloot
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to fill out this bug report!
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Submission terms and conditions
+      options:
+        - label: |
+            I aggree to follow the [Code of Conduct](https://hsloot.github.io/integratecpp/CODE_OF_CONDUCT.html)
+            that this repository adheres to.
+          required: true
+        - label: |
+            I checked the [current issues](https://github.com/hsloot/integratecpp/issues)
+            for duplicate problems.
+          required: true
+  - type: textarea
+    id: report
+    attributes:
+      label: Issue description
+      description: |
+        Please briefly describe your problem and what output you expect.
+        If you have a question, please don't use this form. Instead, ask on
+        <https://stackoverflow.com/> or <https://community.rstudio.com/>.
+
+        Write about
+        - Current behaviour
+        - Expected behaviour
+    validations:
+      required: true
