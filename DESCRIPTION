@@ -8,7 +8,7 @@ Authors@R:
 Description: Provides a header-only C++11 interface to R's C-API for
     numerical integration.
 License: GPL (>= 3)
-URL: https://hsloot.github.io/integratecpp/
+URL: https://hsloot.github.io/integratecpp/, https://github.com/hsloot/integratecpp
 Depends: 
     R (>= 3.1.0)
 Imports:
