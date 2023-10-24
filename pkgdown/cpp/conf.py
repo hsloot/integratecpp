@@ -29,7 +29,10 @@ author = 'Henrik Sloot'
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 #...
-extensions = [ "breathe" ]
+extensions = [
+    "sphinx_rtd_theme",
+    "breathe"
+]
 
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
@@ -43,6 +46,13 @@ exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 # a list of builtin themes.
 #
 html_theme = 'sphinx_rtd_theme'
+html_theme_options = {
+    'navigation_depth': 4,
+}
+html_show_sourcelink = False
 
 # Breathe Configuration
-breathe_default_project = 'integratecpp'
+breathe_projects = {
+    "integratecpp": "_build/xml/"
+}
+breathe_default_project = "integratecpp"

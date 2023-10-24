@@ -4,12 +4,16 @@ template:
 
 navbar:
   structure:
-    left:  [intro, cppreference, reference, articles, tutorials, news]
+    left:  [intro, reference, articles, tutorials, news]
     right: [search, github]
   components:
-    cppreference:
-      text: C++ Reference
-      href: sphinx/index.html
+    reference:
+      text: Reference
+      menu:
+      - text: R Reference
+        href: reference/index.html
+      - text: C++ Reference
+        href: sphinx/index.html
 
 reference:
 - title: Package
