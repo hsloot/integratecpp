@@ -1,5 +1,5 @@
 ---
-title: "Using `integratecpp`"
+title: "Using integratecpp"
 output:
   rmarkdown::html_vignette:
     code_folding: hide
