@@ -44,15 +44,6 @@ your `DESCRIPTION` file:
 
 ``` deb-control
 LinkingTo: integratecpp
-SystemRequirements: C++11
-```
-
-Additionally, if you are using an `Makevars` or `Makevars.win` file,
-[*WRE*](https://cran.r-project.org/doc/manuals/r-release/R-exts.html#Using-C_002b_002b-code)
-suggests adding the following:
-
-``` makefile
-CXX_STD = CXX11
 ```
 
 Note that the header does includes only C++ standard library headers and
