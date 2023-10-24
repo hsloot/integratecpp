@@ -1,6 +1,4 @@
-# NEWS
-
-## integratecpp 0.3
+## integratecpp 0.3 <!-- markdownlint-disable-line MD041 -->
 
 - Re-license public header `integratecpp.h` under LGPL, version 3 or later.
 
