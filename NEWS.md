@@ -1,14 +1,8 @@
-## integratecpp 0.3 <!-- markdownlint-disable-line MD041 -->
+## integratecpp 0.2 <!-- markdownlint-disable-line MD041 -->
 
 - Re-license public header `integratecpp.h` under LGPL, version 3 or later.
-
-## integratecpp 0.2-2
-
 - Update actions workflows
 - Minor changes of project structure and config files
-
-## integratecpp 0.2-1
-
 - Update RoxygenNote field, add logo, fix typos.
 
 ## integratecpp 0.1
