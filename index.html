@@ -97,32 +97,29 @@
 <span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;integratecpp.h&gt;</span></span>
 <span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="co">// your code</span></span></code></pre></div>
 <p>If you intend including the header in source files of an R-package, you should drop the <code>Rcpp</code> attributes and include the following lines in your <code>DESCRIPTION</code> file:</p>
-<pre class="deb-control"><code><span><span class="va">LinkingTo</span><span class="op">:</span> <span class="va">integratecpp</span></span>
-<span><span class="va">SystemRequirements</span><span class="op">:</span> <span class="va">C</span><span class="op">+</span><span class="op">+</span><span class="fl">11</span></span></code></pre>
-<p>Additionally, if you are using an <code>Makevars</code> or <code>Makevars.win</code> file, <a href="https://cran.r-project.org/doc/manuals/r-release/R-exts.html#Using-C_002b_002b-code" class="external-link"><em>WRE</em></a> suggests adding the following:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode makefile"><code class="sourceCode makefile"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="dt">CXX_STD </span><span class="ch">=</span><span class="st"> CXX11</span></span></code></pre></div>
+<pre class="deb-control"><code><span><span class="va">LinkingTo</span><span class="op">:</span> <span class="va">integratecpp</span></span></code></pre>
 <p>Note that the header does includes only C++ standard library headers and <a href="https://github.com/wch/r-source/blob/trunk/src/include/R_ext/Applic.h" class="external-link"><code>&lt;R_ext/Applic.h&gt;</code></a>.</p>
 </div>
 <div class="section level2">
 <h2 id="how-to-use-it">How to use it?<a class="anchor" aria-label="anchor" href="#how-to-use-it"></a>
 </h2>
 <p>Suppose we want to integrate the identity function over the unit interval. First, we must include the required headers (and <code>Rcpp</code> attributes, if <code>Rcpp</code> is used), for example:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;integratecpp.h&gt;</span></span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;integratecpp.h&gt;</span></span></code></pre></div>
 <p>Second, we have to define the integrand as an object that is invocable by <code>const double</code> and returns <code>double</code>, for example a lambda-functor:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">auto</span> fn <span class="op">=</span> <span class="op">[](</span><span class="at">const</span> <span class="dt">double</span> x<span class="op">)</span> <span class="op">{</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> x<span class="op">;</span></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">auto</span> fn <span class="op">=</span> <span class="op">[](</span><span class="at">const</span> <span class="dt">double</span> x<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> x<span class="op">;</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span></code></pre></div>
 <p>Third, we can use the integrate routine:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="at">const</span> <span class="kw">auto</span> result <span class="op">=</span> integratecpp<span class="op">::</span>integrate<span class="op">(</span>fn<span class="op">,</span> <span class="fl">0.</span><span class="op">,</span> <span class="fl">1.</span><span class="op">);</span></span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="at">const</span> <span class="kw">auto</span> result <span class="op">=</span> integratecpp<span class="op">::</span>integrate<span class="op">(</span>fn<span class="op">,</span> <span class="fl">0.</span><span class="op">,</span> <span class="fl">1.</span><span class="op">);</span></span></code></pre></div>
 <p>The last part can be enclosed in a try-catch block:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="cf">try</span> <span class="op">{</span></span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">const</span> <span class="kw">auto</span> result <span class="op">=</span> integratecpp<span class="op">::</span>integrate<span class="op">(</span>fn<span class="op">,</span> <span class="fl">0.</span><span class="op">,</span> <span class="fl">1.</span><span class="op">);</span></span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="co">// ...</span></span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="op">}</span> <span class="cf">catch</span> <span class="op">(</span><span class="at">const</span> integratecpp<span class="op">::</span>integration_logic_error <span class="op">&amp;</span>e<span class="op">)</span> <span class="op">{</span></span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  <span class="co">// ...</span></span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="op">}</span> <span class="cf">catch</span> <span class="op">(</span><span class="at">const</span> integratecpp<span class="op">::</span>integration_runtime_error <span class="op">&amp;</span>e<span class="op">)</span> <span class="op">{</span></span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>  <span class="co">// ...</span></span>
-<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="cf">try</span> <span class="op">{</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">const</span> <span class="kw">auto</span> result <span class="op">=</span> integratecpp<span class="op">::</span>integrate<span class="op">(</span>fn<span class="op">,</span> <span class="fl">0.</span><span class="op">,</span> <span class="fl">1.</span><span class="op">);</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="co">// ...</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="op">}</span> <span class="cf">catch</span> <span class="op">(</span><span class="at">const</span> integratecpp<span class="op">::</span>integration_logic_error <span class="op">&amp;</span>e<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  <span class="co">// ...</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="op">}</span> <span class="cf">catch</span> <span class="op">(</span><span class="at">const</span> integratecpp<span class="op">::</span>integration_runtime_error <span class="op">&amp;</span>e<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>  <span class="co">// ...</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
 <p>Optional configurations similar to those of <code><a href="https://rdrr.io/r/stats/integrate.html" class="external-link">stats::integrate</a></code> are also available if needed. For a more realistic example, see the vignette <a href="articles/integratecpp-usage.html">“Using <code>integratecpp</code>”</a>.</p>
 </div>
 <div class="section level2">
@@ -202,7 +199,7 @@
 </tr>
 </tbody>
 </table>
-<!--markdownlint-restore --><p>What separates our approach are zero additional dependencies (if vendored) and an intuitive pure C++ API which does not rely on <code>Rcpp</code> itself. Hence, as <code>Rdqags</code> and <code>Rdqagi</code> are not using longjumps <em>themselves</em>, our approach can be used in a pure C++ back-end.<a class="footnote-ref" tabindex="0" data-bs-toggle="popover" data-bs-content="&lt;p&gt;Note that the provided integrator-function itself should not use longjumps (e.g., R functions provided through Rcpp) to exit the frame; if you want to use R functions with &lt;code&gt;Rcpp &amp;gt;= 1.0.10&lt;/code&gt;, consider defining &lt;code&gt;RCPP_NO_UNWIND_PROTECT&lt;/code&gt; before loading the Rcpp header file.&lt;/p&gt;"><sup>2</sup></a> A comparison of different numerical integration approaches in C++ is summarized in the article <a href="articles/comparison.html">“Comparing numerical integration packages”</a>.</p>
+<!--markdownlint-restore --><p>What separates our approach are zero additional dependencies (if vendored) and an intuitive pure C++ API which does not rely on <code>Rcpp</code> itself. Hence, as <code>Rdqags</code> and <code>Rdqagi</code> are not using longjumps <em>themselves</em>, our approach can be used in a pure C++ back-end.<a class="footnote-ref" tabindex="0" data-bs-toggle="popover" data-bs-content="&lt;p&gt;Note that the provided integrator-function itself should not use longjumps (e.g., R functions provided through Rcpp) to exit the frame; if you want to use R functions with &lt;code&gt;Rcpp &amp;gt;= 1.0.10&lt;/code&gt;, consider defining &lt;code&gt;RCPP_NO_UNWIND_PROTECT&lt;/code&gt; before loading the Rcpp header file.&lt;/p&gt;"><sup>2</sup></a> A comparison of different numerical integration approaches in C++ is summarized in the article <a href="vignettes/web_only/comparison.Rmd">“Comparing numerical integration packages”</a>.</p>
 </div>
 <div class="section level2">
 <h2 id="outlook">Outlook<a class="anchor" aria-label="anchor" href="#outlook"></a>
