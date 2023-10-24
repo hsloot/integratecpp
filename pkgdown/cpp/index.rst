@@ -6,47 +6,53 @@
 Welcome to integratecpp's documentation!
 ========================================
 
+.. doxygenfile:: integratecpp.h
+   :sections: detaileddescription
+
+Documentation
+-------------
+
+:doc:`installation`
+   How to install the library.
+
+:doc:`usage`
+   How to use the library.
+
+C++ reference
+-------------
+
+:doc:`wrapper/class`
+   A wrapper-class for numerical integration.
+
+:doc:`wrapper/function`
+   A drop-in wrapper-function for n numerical integration.
+
+:doc:`exceptions`
+   Supported library exceptions.
+
+.. Hidden TOCs
+
 .. toctree::
+   :caption: Documentation
    :maxdepth: 3
-   :caption: Contents:
+   :hidden:
 
-* Back the the `main page <../index.html>`_.
-* :ref:`genindex`
+   installation
+   usage
 
-Integrator wrapper
-==================
+.. toctree::
+   :caption: C++ Reference
+   :maxdepth: 3
+   :hidden:
 
-.. doxygenclass:: integratecpp::integrator
-   :members:
+   wrapper/class
+   wrapper/function
+   exceptions
 
-Integrate drop-in wrapper
-=========================
+.. toctree::
+   :caption: Other
+   :maxdepth: 1
+   :hidden:
 
-.. doxygenfunction:: integratecpp::integrate
-
-Library exceptions
-==================
-
-.. doxygenclass:: integratecpp::integration_runtime_error
-   :members:
-
-.. doxygenclass:: integratecpp::integration_logic_error
-   :members:
-
-.. doxygenclass:: integratecpp::max_subdivision_error
-   :members:
-
-.. doxygenclass:: integratecpp::roundoff_error
-   :members:
-
-.. doxygenclass:: integratecpp::bad_integrand_error
-   :members:
-
-.. doxygenclass:: integratecpp::extrapolation_roundoff_error
-   :members:
-
-.. doxygenclass:: integratecpp::divergence_error
-   :members:
-
-.. doxygenclass:: integratecpp::invalid_input_error
-   :members:
+   genindex
+   Back to the main page <https://hsloot.github.io/integratecpp>
