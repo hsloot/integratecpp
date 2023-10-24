@@ -101,7 +101,7 @@ try {
 
 Optional configurations similar to those of `stats::integrate` are also
 available if needed. For a more realistic example, see the vignette
-["Using `integratecpp`"](https://hsloot.github.io/integratecpp/articles/integratecpp-usage.html).
+["Using `integratecpp`"](https://hsloot.github.io/integratecpp/articles/integratecpp.html).
 
 
 ## Why is this useful?
