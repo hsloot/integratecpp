@@ -89,7 +89,8 @@ try {
 
 Optional configurations similar to those of `stats::integrate` are also
 available if needed. For a more realistic example, see the vignette
-[“Using `integratecpp`”](articles/integratecpp-usage.html).
+[“Using
+`integratecpp`”](https://hsloot.github.io/integratecpp/articles/integratecpp-usage.html).
 
 ## Why is this useful?
 
@@ -145,7 +146,7 @@ itself. Hence, as `Rdqags` and `Rdqagi` are not using longjumps
 *themselves*, our approach can be used in a pure C++ back-end.[^2] A
 comparison of different numerical integration approaches in C++ is
 summarized in the article [“Comparing numerical integration
-packages”](vignettes/web_only/comparison.Rmd).
+packages”](https://hsloot.github.io/integratecpp/articles/web_only/comparison.html).
 
 ## Outlook
 
