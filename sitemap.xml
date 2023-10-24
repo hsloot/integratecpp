@@ -16,7 +16,7 @@
     <loc>https://hsloot.github.io/integratecpp/articles/index.html</loc>
   </url>
   <url>
-    <loc>https://hsloot.github.io/integratecpp/articles/integratecpp-usage.html</loc>
+    <loc>https://hsloot.github.io/integratecpp/articles/integratecpp.html</loc>
   </url>
   <url>
     <loc>https://hsloot.github.io/integratecpp/articles/web_only/comparison.html</loc>
@@ -49,12 +49,27 @@
     <loc>https://hsloot.github.io/integratecpp/reference/integratecpp-package.html</loc>
   </url>
   <url>
+    <loc>https://hsloot.github.io/integratecpp/sphinx/exceptions.html</loc>
+  </url>
+  <url>
     <loc>https://hsloot.github.io/integratecpp/sphinx/genindex.html</loc>
   </url>
   <url>
     <loc>https://hsloot.github.io/integratecpp/sphinx/index.html</loc>
   </url>
   <url>
+    <loc>https://hsloot.github.io/integratecpp/sphinx/installation.html</loc>
+  </url>
+  <url>
     <loc>https://hsloot.github.io/integratecpp/sphinx/search.html</loc>
+  </url>
+  <url>
+    <loc>https://hsloot.github.io/integratecpp/sphinx/usage.html</loc>
+  </url>
+  <url>
+    <loc>https://hsloot.github.io/integratecpp/sphinx/wrapper/class.html</loc>
+  </url>
+  <url>
+    <loc>https://hsloot.github.io/integratecpp/sphinx/wrapper/function.html</loc>
   </url>
 </urlset>

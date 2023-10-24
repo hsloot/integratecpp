@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Library exceptions &mdash; integratecpp  documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Integrate drop-in function-wrapper" href="wrapper/function.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            integratecpp
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usage.html">Usage</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">C++ Reference</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="wrapper/class.html">Integrator wrapper-class</a></li>
+<li class="toctree-l1"><a class="reference internal" href="wrapper/function.html">Integrate drop-in function-wrapper</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Library exceptions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#logic-error">Logic error</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N12integratecpp23integration_logic_errorE"><code class="docutils literal notranslate"><span class="pre">integration_logic_error</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv4N12integratecpp23integration_logic_error23integration_logic_errorEKNSt6stringERKN10integrator11return_typeE"><code class="docutils literal notranslate"><span class="pre">integration_logic_error::integration_logic_error()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv4N12integratecpp23integration_logic_error23integration_logic_errorEPKcRKN10integrator11return_typeE"><code class="docutils literal notranslate"><span class="pre">integration_logic_error::integration_logic_error()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv4NK12integratecpp23integration_logic_error6resultEv"><code class="docutils literal notranslate"><span class="pre">integration_logic_error::result()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N12integratecpp19invalid_input_errorE"><code class="docutils literal notranslate"><span class="pre">invalid_input_error</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv4N12integratecpp19invalid_input_error23integration_logic_errorEKNSt6stringERKN10integrator11return_typeE"><code class="docutils literal notranslate"><span class="pre">invalid_input_error::integration_logic_error()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv4N12integratecpp19invalid_input_error23integration_logic_errorEPKcRKN10integrator11return_typeE"><code class="docutils literal notranslate"><span class="pre">invalid_input_error::integration_logic_error()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#runtime-error">Runtime error</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N12integratecpp25integration_runtime_errorE"><code class="docutils literal notranslate"><span class="pre">integration_runtime_error</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv4N12integratecpp25integration_runtime_error25integration_runtime_errorEKNSt6stringERKN10integrator11return_typeE"><code class="docutils literal notranslate"><span class="pre">integration_runtime_error::integration_runtime_error()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv4N12integratecpp25integration_runtime_error25integration_runtime_errorEPKcRKN10integrator11return_typeE"><code class="docutils literal notranslate"><span class="pre">integration_runtime_error::integration_runtime_error()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv4NK12integratecpp25integration_runtime_error6resultEv"><code class="docutils literal notranslate"><span class="pre">integration_runtime_error::result()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N12integratecpp21max_subdivision_errorE"><code class="docutils literal notranslate"><span class="pre">max_subdivision_error</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv4N12integratecpp21max_subdivision_error25integration_runtime_errorEKNSt6stringERKN10integrator11return_typeE"><code class="docutils literal notranslate"><span class="pre">max_subdivision_error::integration_runtime_error()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv4N12integratecpp21max_subdivision_error25integration_runtime_errorEPKcRKN10integrator11return_typeE"><code class="docutils literal notranslate"><span class="pre">max_subdivision_error::integration_runtime_error()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N12integratecpp14roundoff_errorE"><code class="docutils literal notranslate"><span class="pre">roundoff_error</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv4N12integratecpp14roundoff_error25integration_runtime_errorEKNSt6stringERKN10integrator11return_typeE"><code class="docutils literal notranslate"><span class="pre">roundoff_error::integration_runtime_error()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv4N12integratecpp14roundoff_error25integration_runtime_errorEPKcRKN10integrator11return_typeE"><code class="docutils literal notranslate"><span class="pre">roundoff_error::integration_runtime_error()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N12integratecpp19bad_integrand_errorE"><code class="docutils literal notranslate"><span class="pre">bad_integrand_error</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv4N12integratecpp19bad_integrand_error25integration_runtime_errorEKNSt6stringERKN10integrator11return_typeE"><code class="docutils literal notranslate"><span class="pre">bad_integrand_error::integration_runtime_error()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv4N12integratecpp19bad_integrand_error25integration_runtime_errorEPKcRKN10integrator11return_typeE"><code class="docutils literal notranslate"><span class="pre">bad_integrand_error::integration_runtime_error()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N12integratecpp28extrapolation_roundoff_errorE"><code class="docutils literal notranslate"><span class="pre">extrapolation_roundoff_error</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv4N12integratecpp28extrapolation_roundoff_error25integration_runtime_errorEKNSt6stringERKN10integrator11return_typeE"><code class="docutils literal notranslate"><span class="pre">extrapolation_roundoff_error::integration_runtime_error()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv4N12integratecpp28extrapolation_roundoff_error25integration_runtime_errorEPKcRKN10integrator11return_typeE"><code class="docutils literal notranslate"><span class="pre">extrapolation_roundoff_error::integration_runtime_error()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N12integratecpp16divergence_errorE"><code class="docutils literal notranslate"><span class="pre">divergence_error</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv4N12integratecpp16divergence_error25integration_runtime_errorEKNSt6stringERKN10integrator11return_typeE"><code class="docutils literal notranslate"><span class="pre">divergence_error::integration_runtime_error()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv4N12integratecpp16divergence_error25integration_runtime_errorEPKcRKN10integrator11return_typeE"><code class="docutils literal notranslate"><span class="pre">divergence_error::integration_runtime_error()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Other</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="genindex.html">Index</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://hsloot.github.io/integratecpp">Back to the main page</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">integratecpp</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Library exceptions</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="library-exceptions">
+<h1>Library exceptions<a class="headerlink" href="#library-exceptions" title="Link to this heading"></a></h1>
+<section id="logic-error">
+<h2>Logic error<a class="headerlink" href="#logic-error" title="Link to this heading"></a></h2>
+<dl class="cpp class">
+<dt class="sig sig-object cpp" id="_CPPv4N12integratecpp23integration_logic_errorE">
+<span id="_CPPv3N12integratecpp23integration_logic_errorE"></span><span id="_CPPv2N12integratecpp23integration_logic_errorE"></span><span id="integratecpp::integration_logic_error"></span><span class="target" id="classintegratecpp_1_1integration__logic__error"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">integration_logic_error</span></span></span><span class="w"> </span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="k"><span class="pre">public</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">logic_error</span></span><a class="headerlink" href="#_CPPv4N12integratecpp23integration_logic_errorE" title="Link to this definition"></a><br /></dt>
+<dd><p>Defines a type of object to be thrown as exception. It reports errors that occur during the integration routine of <code class="docutils literal notranslate"><a class="reference internal" href="wrapper/class.html#classintegratecpp_1_1integrator_1aa2d869a24be03580af1cd7cfeb0e262b"><span class="std std-ref"><span class="pre">integratecpp::integrator::operator()()</span></span></a></code> and that are a consequence of faulty logic within the program such as violating logical preconditions or class invariants and may be preventable. </p>
+<p>Subclassed by <a class="reference internal" href="#classintegratecpp_1_1invalid__input__error"><span class="std std-ref">integratecpp::invalid_input_error</span></a></p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N12integratecpp23integration_logic_error23integration_logic_errorEKNSt6stringERKN10integrator11return_typeE">
+<span id="_CPPv3N12integratecpp23integration_logic_error23integration_logic_errorEKNSt6stringERKN10integrator11return_typeE"></span><span id="_CPPv2N12integratecpp23integration_logic_error23integration_logic_errorEKNSt6stringERKN10integrator11return_typeE"></span><span id="integratecpp::integration_logic_error::integration_logic_error__ssC.integrator::return_typeCR"></span><span class="target" id="classintegratecpp_1_1integration__logic__error_1a05151424f9c53facfad2bd17bac8c52b"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">explicit</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">integration_logic_error</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">what</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="wrapper/class.html#_CPPv4N12integratecpp10integratorE" title="integratecpp::integrator"><span class="n"><span class="pre">integrator</span></span></a><span class="p"><span class="pre">::</span></span><a class="reference internal" href="wrapper/class.html#_CPPv4N12integratecpp10integrator11return_typeE" title="integratecpp::integrator::return_type"><span class="n"><span class="pre">return_type</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">result</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N12integratecpp23integration_logic_error23integration_logic_errorEKNSt6stringERKN10integrator11return_typeE" title="Link to this definition"></a><br /></dt>
+<dd><p>A full constructor, specifying the error message with <code class="docutils literal notranslate"><span class="pre">std::string</span></code>. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>what</strong> – a <code class="docutils literal notranslate"><span class="pre">std::string</span></code> containing the error message. </p></li>
+<li><p><strong>result</strong> – a <code class="docutils literal notranslate"><a class="reference internal" href="wrapper/class.html#structintegratecpp_1_1integrator_1_1return__type"><span class="std std-ref"><span class="pre">integratecpp::integrator::return_type</span></span></a></code> with the integration results at the time of error. </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N12integratecpp23integration_logic_error23integration_logic_errorEPKcRKN10integrator11return_typeE">
+<span id="_CPPv3N12integratecpp23integration_logic_error23integration_logic_errorEPKcRKN10integrator11return_typeE"></span><span id="_CPPv2N12integratecpp23integration_logic_error23integration_logic_errorEPKcRKN10integrator11return_typeE"></span><span id="integratecpp::integration_logic_error::integration_logic_error__cCP.integrator::return_typeCR"></span><span class="target" id="classintegratecpp_1_1integration__logic__error_1add9f769df9140e9f94087ce51a4db798"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">explicit</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">integration_logic_error</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">what</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="wrapper/class.html#_CPPv4N12integratecpp10integratorE" title="integratecpp::integrator"><span class="n"><span class="pre">integrator</span></span></a><span class="p"><span class="pre">::</span></span><a class="reference internal" href="wrapper/class.html#_CPPv4N12integratecpp10integrator11return_typeE" title="integratecpp::integrator::return_type"><span class="n"><span class="pre">return_type</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">result</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N12integratecpp23integration_logic_error23integration_logic_errorEPKcRKN10integrator11return_typeE" title="Link to this definition"></a><br /></dt>
+<dd><p>A full constructor, specifying the error message with <code class="docutils literal notranslate"><span class="pre">const</span> <span class="pre">char</span> <span class="pre">*</span></code>. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>what</strong> – a <code class="docutils literal notranslate"><span class="pre">const</span> <span class="pre">char</span> <span class="pre">*</span></code> containing a pointer a a const char array with the error message. </p></li>
+<li><p><strong>result</strong> – a <code class="docutils literal notranslate"><a class="reference internal" href="wrapper/class.html#structintegratecpp_1_1integrator_1_1return__type"><span class="std std-ref"><span class="pre">integratecpp::integrator::return_type</span></span></a></code> with the integration results at the time of error. </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK12integratecpp23integration_logic_error6resultEv">
+<span id="_CPPv3NK12integratecpp23integration_logic_error6resultEv"></span><span id="_CPPv2NK12integratecpp23integration_logic_error6resultEv"></span><span id="integratecpp::integration_logic_error::resultC"></span><span class="target" id="classintegratecpp_1_1integration__logic__error_1a5a12805bedeee6d6bd14859d52627f3d"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><a class="reference internal" href="wrapper/class.html#_CPPv4N12integratecpp10integratorE" title="integratecpp::integrator"><span class="n"><span class="pre">integrator</span></span></a><span class="p"><span class="pre">::</span></span><a class="reference internal" href="wrapper/class.html#_CPPv4N12integratecpp10integrator11return_typeE" title="integratecpp::integrator::return_type"><span class="n"><span class="pre">return_type</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">result</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="k"><span class="pre">noexcept</span></span><a class="headerlink" href="#_CPPv4NK12integratecpp23integration_logic_error6resultEv" title="Link to this definition"></a><br /></dt>
+<dd><p>Accessor the the result at the time or error. </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+<dl class="cpp class">
+<dt class="sig sig-object cpp" id="_CPPv4N12integratecpp19invalid_input_errorE">
+<span id="_CPPv3N12integratecpp19invalid_input_errorE"></span><span id="_CPPv2N12integratecpp19invalid_input_errorE"></span><span id="integratecpp::invalid_input_error"></span><span class="target" id="classintegratecpp_1_1invalid__input__error"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">invalid_input_error</span></span></span><span class="w"> </span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="k"><span class="pre">public</span></span><span class="w"> </span><span class="n"><span class="pre">integratecpp</span></span><span class="p"><span class="pre">::</span></span><a class="reference internal" href="#_CPPv4N12integratecpp23integration_logic_errorE" title="integratecpp::integration_logic_error"><span class="n"><span class="pre">integration_logic_error</span></span></a><a class="headerlink" href="#_CPPv4N12integratecpp19invalid_input_errorE" title="Link to this definition"></a><br /></dt>
+<dd><p>Defines a type of object to be thrown as exception. It reports errors that occur during the integration routine of <code class="docutils literal notranslate"><a class="reference internal" href="wrapper/class.html#classintegratecpp_1_1integrator_1aa2d869a24be03580af1cd7cfeb0e262b"><span class="std std-ref"><span class="pre">integratecpp::integrator::operator()()</span></span></a></code> if the integral is probably divergent, or slowly convergent. if the input is invalid. </p>
+<p>This could be because (<code class="docutils literal notranslate"><span class="pre">absolute_accuracy</span> <span class="pre">&lt;=</span> <span class="pre">0</span></code> and <code class="docutils literal notranslate"><span class="pre">relative_accuracy</span> <span class="pre">&lt;</span> <span class="pre">max(50*rel.mach.acc.,0.5d-28)</span></code>) or <code class="docutils literal notranslate"><span class="pre">max_subdivisions</span> <span class="pre">&lt;</span> <span class="pre">1</span></code> or <code class="docutils literal notranslate"><span class="pre">work_size</span> <span class="pre">&lt;</span> <span class="pre">max_subdivisions*4</span></code>. Result, <code class="docutils literal notranslate"><span class="pre">absolute_error</span></code>, <code class="docutils literal notranslate"><span class="pre">neval</span></code>, last are set to zero. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N12integratecpp19invalid_input_error23integration_logic_errorEKNSt6stringERKN10integrator11return_typeE">
+<span id="_CPPv3N12integratecpp19invalid_input_error23integration_logic_errorEKNSt6stringERKN10integrator11return_typeE"></span><span id="_CPPv2N12integratecpp19invalid_input_error23integration_logic_errorEKNSt6stringERKN10integrator11return_typeE"></span><span id="integratecpp::invalid_input_error::integration_logic_error__ssC.integrator::return_typeCR"></span><span class="target" id="classintegratecpp_1_1invalid__input__error_1a05151424f9c53facfad2bd17bac8c52b"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">explicit</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">integration_logic_error</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">what</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="wrapper/class.html#_CPPv4N12integratecpp10integratorE" title="integratecpp::integrator"><span class="n"><span class="pre">integrator</span></span></a><span class="p"><span class="pre">::</span></span><a class="reference internal" href="wrapper/class.html#_CPPv4N12integratecpp10integrator11return_typeE" title="integratecpp::integrator::return_type"><span class="n"><span class="pre">return_type</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">result</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N12integratecpp19invalid_input_error23integration_logic_errorEKNSt6stringERKN10integrator11return_typeE" title="Link to this definition"></a><br /></dt>
+<dd><p>A full constructor, specifying the error message with <code class="docutils literal notranslate"><span class="pre">std::string</span></code>. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>what</strong> – a <code class="docutils literal notranslate"><span class="pre">std::string</span></code> containing the error message. </p></li>
+<li><p><strong>result</strong> – a <code class="docutils literal notranslate"><a class="reference internal" href="wrapper/class.html#structintegratecpp_1_1integrator_1_1return__type"><span class="std std-ref"><span class="pre">integratecpp::integrator::return_type</span></span></a></code> with the integration results at the time of error. </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N12integratecpp19invalid_input_error23integration_logic_errorEPKcRKN10integrator11return_typeE">
+<span id="_CPPv3N12integratecpp19invalid_input_error23integration_logic_errorEPKcRKN10integrator11return_typeE"></span><span id="_CPPv2N12integratecpp19invalid_input_error23integration_logic_errorEPKcRKN10integrator11return_typeE"></span><span id="integratecpp::invalid_input_error::integration_logic_error__cCP.integrator::return_typeCR"></span><span class="target" id="classintegratecpp_1_1invalid__input__error_1add9f769df9140e9f94087ce51a4db798"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">explicit</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">integration_logic_error</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">what</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="wrapper/class.html#_CPPv4N12integratecpp10integratorE" title="integratecpp::integrator"><span class="n"><span class="pre">integrator</span></span></a><span class="p"><span class="pre">::</span></span><a class="reference internal" href="wrapper/class.html#_CPPv4N12integratecpp10integrator11return_typeE" title="integratecpp::integrator::return_type"><span class="n"><span class="pre">return_type</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">result</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N12integratecpp19invalid_input_error23integration_logic_errorEPKcRKN10integrator11return_typeE" title="Link to this definition"></a><br /></dt>
+<dd><p>A full constructor, specifying the error message with <code class="docutils literal notranslate"><span class="pre">const</span> <span class="pre">char</span> <span class="pre">*</span></code>. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>what</strong> – a <code class="docutils literal notranslate"><span class="pre">const</span> <span class="pre">char</span> <span class="pre">*</span></code> containing a pointer a a const char array with the error message. </p></li>
+<li><p><strong>result</strong> – a <code class="docutils literal notranslate"><a class="reference internal" href="wrapper/class.html#structintegratecpp_1_1integrator_1_1return__type"><span class="std std-ref"><span class="pre">integratecpp::integrator::return_type</span></span></a></code> with the integration results at the time of error. </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</section>
+<section id="runtime-error">
+<h2>Runtime error<a class="headerlink" href="#runtime-error" title="Link to this heading"></a></h2>
+<dl class="cpp class">
+<dt class="sig sig-object cpp" id="_CPPv4N12integratecpp25integration_runtime_errorE">
+<span id="_CPPv3N12integratecpp25integration_runtime_errorE"></span><span id="_CPPv2N12integratecpp25integration_runtime_errorE"></span><span id="integratecpp::integration_runtime_error"></span><span class="target" id="classintegratecpp_1_1integration__runtime__error"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">integration_runtime_error</span></span></span><span class="w"> </span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="k"><span class="pre">public</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">runtime_error</span></span><a class="headerlink" href="#_CPPv4N12integratecpp25integration_runtime_errorE" title="Link to this definition"></a><br /></dt>
+<dd><p>Defines a type of object to be thrown as exception. It reports errors that occur during the integration routine of <code class="docutils literal notranslate"><a class="reference internal" href="wrapper/class.html#classintegratecpp_1_1integrator_1aa2d869a24be03580af1cd7cfeb0e262b"><span class="std std-ref"><span class="pre">integratecpp::integrator::operator()()</span></span></a></code> and are due to events beyond the scope of the program and not easily predicted. </p>
+<p>Subclassed by <a class="reference internal" href="#classintegratecpp_1_1bad__integrand__error"><span class="std std-ref">integratecpp::bad_integrand_error</span></a>, <a class="reference internal" href="#classintegratecpp_1_1divergence__error"><span class="std std-ref">integratecpp::divergence_error</span></a>, <a class="reference internal" href="#classintegratecpp_1_1extrapolation__roundoff__error"><span class="std std-ref">integratecpp::extrapolation_roundoff_error</span></a>, <a class="reference internal" href="#classintegratecpp_1_1max__subdivision__error"><span class="std std-ref">integratecpp::max_subdivision_error</span></a>, <a class="reference internal" href="#classintegratecpp_1_1roundoff__error"><span class="std std-ref">integratecpp::roundoff_error</span></a></p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N12integratecpp25integration_runtime_error25integration_runtime_errorEKNSt6stringERKN10integrator11return_typeE">
+<span id="_CPPv3N12integratecpp25integration_runtime_error25integration_runtime_errorEKNSt6stringERKN10integrator11return_typeE"></span><span id="_CPPv2N12integratecpp25integration_runtime_error25integration_runtime_errorEKNSt6stringERKN10integrator11return_typeE"></span><span id="integratecpp::integration_runtime_error::integration_runtime_error__ssC.integrator::return_typeCR"></span><span class="target" id="classintegratecpp_1_1integration__runtime__error_1a9dcf9add3110bcff0eba744ccaf16f81"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">explicit</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">integration_runtime_error</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">what</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="wrapper/class.html#_CPPv4N12integratecpp10integratorE" title="integratecpp::integrator"><span class="n"><span class="pre">integrator</span></span></a><span class="p"><span class="pre">::</span></span><a class="reference internal" href="wrapper/class.html#_CPPv4N12integratecpp10integrator11return_typeE" title="integratecpp::integrator::return_type"><span class="n"><span class="pre">return_type</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">result</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N12integratecpp25integration_runtime_error25integration_runtime_errorEKNSt6stringERKN10integrator11return_typeE" title="Link to this definition"></a><br /></dt>
+<dd><p>A full constructor, specifying the error message with <code class="docutils literal notranslate"><span class="pre">std::string</span></code>. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>what</strong> – a <code class="docutils literal notranslate"><span class="pre">std::string</span></code> containing the error message. </p></li>
+<li><p><strong>result</strong> – a <code class="docutils literal notranslate"><a class="reference internal" href="wrapper/class.html#structintegratecpp_1_1integrator_1_1return__type"><span class="std std-ref"><span class="pre">integratecpp::integrator::return_type</span></span></a></code> with the integration results at the time of error. </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N12integratecpp25integration_runtime_error25integration_runtime_errorEPKcRKN10integrator11return_typeE">
+<span id="_CPPv3N12integratecpp25integration_runtime_error25integration_runtime_errorEPKcRKN10integrator11return_typeE"></span><span id="_CPPv2N12integratecpp25integration_runtime_error25integration_runtime_errorEPKcRKN10integrator11return_typeE"></span><span id="integratecpp::integration_runtime_error::integration_runtime_error__cCP.integrator::return_typeCR"></span><span class="target" id="classintegratecpp_1_1integration__runtime__error_1ad5fbf1693468a95b382e27a70397d54d"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">explicit</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">integration_runtime_error</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">what</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="wrapper/class.html#_CPPv4N12integratecpp10integratorE" title="integratecpp::integrator"><span class="n"><span class="pre">integrator</span></span></a><span class="p"><span class="pre">::</span></span><a class="reference internal" href="wrapper/class.html#_CPPv4N12integratecpp10integrator11return_typeE" title="integratecpp::integrator::return_type"><span class="n"><span class="pre">return_type</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">result</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N12integratecpp25integration_runtime_error25integration_runtime_errorEPKcRKN10integrator11return_typeE" title="Link to this definition"></a><br /></dt>
+<dd><p>A full constructor, specifying the error message with <code class="docutils literal notranslate"><span class="pre">const</span> <span class="pre">char</span> <span class="pre">*</span></code>. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>what</strong> – a <code class="docutils literal notranslate"><span class="pre">const</span> <span class="pre">char</span> <span class="pre">*</span></code> containing a pointer a a const char array with the error message. </p></li>
+<li><p><strong>result</strong> – a <code class="docutils literal notranslate"><a class="reference internal" href="wrapper/class.html#structintegratecpp_1_1integrator_1_1return__type"><span class="std std-ref"><span class="pre">integratecpp::integrator::return_type</span></span></a></code> with the integration results at the time of error. </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK12integratecpp25integration_runtime_error6resultEv">
+<span id="_CPPv3NK12integratecpp25integration_runtime_error6resultEv"></span><span id="_CPPv2NK12integratecpp25integration_runtime_error6resultEv"></span><span id="integratecpp::integration_runtime_error::resultC"></span><span class="target" id="classintegratecpp_1_1integration__runtime__error_1acc1bb1240375563e57ebd3a0a8404027"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><a class="reference internal" href="wrapper/class.html#_CPPv4N12integratecpp10integratorE" title="integratecpp::integrator"><span class="n"><span class="pre">integrator</span></span></a><span class="p"><span class="pre">::</span></span><a class="reference internal" href="wrapper/class.html#_CPPv4N12integratecpp10integrator11return_typeE" title="integratecpp::integrator::return_type"><span class="n"><span class="pre">return_type</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">result</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="k"><span class="pre">noexcept</span></span><a class="headerlink" href="#_CPPv4NK12integratecpp25integration_runtime_error6resultEv" title="Link to this definition"></a><br /></dt>
+<dd><p>Accessor the the result at the time or error. </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+<dl class="cpp class">
+<dt class="sig sig-object cpp" id="_CPPv4N12integratecpp21max_subdivision_errorE">
+<span id="_CPPv3N12integratecpp21max_subdivision_errorE"></span><span id="_CPPv2N12integratecpp21max_subdivision_errorE"></span><span id="integratecpp::max_subdivision_error"></span><span class="target" id="classintegratecpp_1_1max__subdivision__error"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">max_subdivision_error</span></span></span><span class="w"> </span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="k"><span class="pre">public</span></span><span class="w"> </span><span class="n"><span class="pre">integratecpp</span></span><span class="p"><span class="pre">::</span></span><a class="reference internal" href="#_CPPv4N12integratecpp25integration_runtime_errorE" title="integratecpp::integration_runtime_error"><span class="n"><span class="pre">integration_runtime_error</span></span></a><a class="headerlink" href="#_CPPv4N12integratecpp21max_subdivision_errorE" title="Link to this definition"></a><br /></dt>
+<dd><p>Defines a type of object to be thrown as exception. It reports errors that occur during the integration routine of <code class="docutils literal notranslate"><a class="reference internal" href="wrapper/class.html#classintegratecpp_1_1integrator_1aa2d869a24be03580af1cd7cfeb0e262b"><span class="std std-ref"><span class="pre">integratecpp::integrator::operator()()</span></span></a></code> if the maximum number of subdivisions allowed has been achieved. </p>
+<p>One can allow more subdivisions by increasing the value of <code class="docutils literal notranslate"><span class="pre">max_subdivisions</span></code> (and taking the according dimension adjustments into account). However, if this yields no improvement it is advised to analyze the integrand in order to determine the integration difficulties. If the position of a local difficulty can be determined (e.g. singularity, discontinuity within the interval) one will probably gain from splitting up the interval at this point and calling the integrator on the sub-ranges. If possible, an appropriate special-purpose integrator should be used, which is designed for handling the type of difficulty involved. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N12integratecpp21max_subdivision_error25integration_runtime_errorEKNSt6stringERKN10integrator11return_typeE">
+<span id="_CPPv3N12integratecpp21max_subdivision_error25integration_runtime_errorEKNSt6stringERKN10integrator11return_typeE"></span><span id="_CPPv2N12integratecpp21max_subdivision_error25integration_runtime_errorEKNSt6stringERKN10integrator11return_typeE"></span><span id="integratecpp::max_subdivision_error::integration_runtime_error__ssC.integrator::return_typeCR"></span><span class="target" id="classintegratecpp_1_1max__subdivision__error_1a9dcf9add3110bcff0eba744ccaf16f81"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">explicit</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">integration_runtime_error</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">what</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="wrapper/class.html#_CPPv4N12integratecpp10integratorE" title="integratecpp::integrator"><span class="n"><span class="pre">integrator</span></span></a><span class="p"><span class="pre">::</span></span><a class="reference internal" href="wrapper/class.html#_CPPv4N12integratecpp10integrator11return_typeE" title="integratecpp::integrator::return_type"><span class="n"><span class="pre">return_type</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">result</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N12integratecpp21max_subdivision_error25integration_runtime_errorEKNSt6stringERKN10integrator11return_typeE" title="Link to this definition"></a><br /></dt>
+<dd><p>A full constructor, specifying the error message with <code class="docutils literal notranslate"><span class="pre">std::string</span></code>. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>what</strong> – a <code class="docutils literal notranslate"><span class="pre">std::string</span></code> containing the error message. </p></li>
+<li><p><strong>result</strong> – a <code class="docutils literal notranslate"><a class="reference internal" href="wrapper/class.html#structintegratecpp_1_1integrator_1_1return__type"><span class="std std-ref"><span class="pre">integratecpp::integrator::return_type</span></span></a></code> with the integration results at the time of error. </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N12integratecpp21max_subdivision_error25integration_runtime_errorEPKcRKN10integrator11return_typeE">
+<span id="_CPPv3N12integratecpp21max_subdivision_error25integration_runtime_errorEPKcRKN10integrator11return_typeE"></span><span id="_CPPv2N12integratecpp21max_subdivision_error25integration_runtime_errorEPKcRKN10integrator11return_typeE"></span><span id="integratecpp::max_subdivision_error::integration_runtime_error__cCP.integrator::return_typeCR"></span><span class="target" id="classintegratecpp_1_1max__subdivision__error_1ad5fbf1693468a95b382e27a70397d54d"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">explicit</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">integration_runtime_error</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">what</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="wrapper/class.html#_CPPv4N12integratecpp10integratorE" title="integratecpp::integrator"><span class="n"><span class="pre">integrator</span></span></a><span class="p"><span class="pre">::</span></span><a class="reference internal" href="wrapper/class.html#_CPPv4N12integratecpp10integrator11return_typeE" title="integratecpp::integrator::return_type"><span class="n"><span class="pre">return_type</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">result</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N12integratecpp21max_subdivision_error25integration_runtime_errorEPKcRKN10integrator11return_typeE" title="Link to this definition"></a><br /></dt>
+<dd><p>A full constructor, specifying the error message with <code class="docutils literal notranslate"><span class="pre">const</span> <span class="pre">char</span> <span class="pre">*</span></code>. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>what</strong> – a <code class="docutils literal notranslate"><span class="pre">const</span> <span class="pre">char</span> <span class="pre">*</span></code> containing a pointer a a const char array with the error message. </p></li>
+<li><p><strong>result</strong> – a <code class="docutils literal notranslate"><a class="reference internal" href="wrapper/class.html#structintegratecpp_1_1integrator_1_1return__type"><span class="std std-ref"><span class="pre">integratecpp::integrator::return_type</span></span></a></code> with the integration results at the time of error. </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+<dl class="cpp class">
+<dt class="sig sig-object cpp" id="_CPPv4N12integratecpp14roundoff_errorE">
+<span id="_CPPv3N12integratecpp14roundoff_errorE"></span><span id="_CPPv2N12integratecpp14roundoff_errorE"></span><span id="integratecpp::roundoff_error"></span><span class="target" id="classintegratecpp_1_1roundoff__error"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">roundoff_error</span></span></span><span class="w"> </span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="k"><span class="pre">public</span></span><span class="w"> </span><span class="n"><span class="pre">integratecpp</span></span><span class="p"><span class="pre">::</span></span><a class="reference internal" href="#_CPPv4N12integratecpp25integration_runtime_errorE" title="integratecpp::integration_runtime_error"><span class="n"><span class="pre">integration_runtime_error</span></span></a><a class="headerlink" href="#_CPPv4N12integratecpp14roundoff_errorE" title="Link to this definition"></a><br /></dt>
+<dd><p>Defines a type of object to be thrown as exception. It reports errors that occur during the integration routine of <code class="docutils literal notranslate"><a class="reference internal" href="wrapper/class.html#classintegratecpp_1_1integrator_1aa2d869a24be03580af1cd7cfeb0e262b"><span class="std std-ref"><span class="pre">integratecpp::integrator::operator()()</span></span></a></code> or <code class="docutils literal notranslate"><a class="reference internal" href="wrapper/function.html#integratecpp_8h_1aeb5fd03ec5ab325b743b87ac7f841c5e"><span class="std std-ref"><span class="pre">integratecpp::integrate()</span></span></a></code> if the occurrence of roundoff error is detected, which prevents the requested tolerance from being achieved. </p>
+<p>The error may be under-estimated. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N12integratecpp14roundoff_error25integration_runtime_errorEKNSt6stringERKN10integrator11return_typeE">
+<span id="_CPPv3N12integratecpp14roundoff_error25integration_runtime_errorEKNSt6stringERKN10integrator11return_typeE"></span><span id="_CPPv2N12integratecpp14roundoff_error25integration_runtime_errorEKNSt6stringERKN10integrator11return_typeE"></span><span id="integratecpp::roundoff_error::integration_runtime_error__ssC.integrator::return_typeCR"></span><span class="target" id="classintegratecpp_1_1roundoff__error_1a9dcf9add3110bcff0eba744ccaf16f81"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">explicit</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">integration_runtime_error</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">what</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="wrapper/class.html#_CPPv4N12integratecpp10integratorE" title="integratecpp::integrator"><span class="n"><span class="pre">integrator</span></span></a><span class="p"><span class="pre">::</span></span><a class="reference internal" href="wrapper/class.html#_CPPv4N12integratecpp10integrator11return_typeE" title="integratecpp::integrator::return_type"><span class="n"><span class="pre">return_type</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">result</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N12integratecpp14roundoff_error25integration_runtime_errorEKNSt6stringERKN10integrator11return_typeE" title="Link to this definition"></a><br /></dt>
+<dd><p>A full constructor, specifying the error message with <code class="docutils literal notranslate"><span class="pre">std::string</span></code>. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>what</strong> – a <code class="docutils literal notranslate"><span class="pre">std::string</span></code> containing the error message. </p></li>
+<li><p><strong>result</strong> – a <code class="docutils literal notranslate"><a class="reference internal" href="wrapper/class.html#structintegratecpp_1_1integrator_1_1return__type"><span class="std std-ref"><span class="pre">integratecpp::integrator::return_type</span></span></a></code> with the integration results at the time of error. </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N12integratecpp14roundoff_error25integration_runtime_errorEPKcRKN10integrator11return_typeE">
+<span id="_CPPv3N12integratecpp14roundoff_error25integration_runtime_errorEPKcRKN10integrator11return_typeE"></span><span id="_CPPv2N12integratecpp14roundoff_error25integration_runtime_errorEPKcRKN10integrator11return_typeE"></span><span id="integratecpp::roundoff_error::integration_runtime_error__cCP.integrator::return_typeCR"></span><span class="target" id="classintegratecpp_1_1roundoff__error_1ad5fbf1693468a95b382e27a70397d54d"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">explicit</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">integration_runtime_error</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">what</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="wrapper/class.html#_CPPv4N12integratecpp10integratorE" title="integratecpp::integrator"><span class="n"><span class="pre">integrator</span></span></a><span class="p"><span class="pre">::</span></span><a class="reference internal" href="wrapper/class.html#_CPPv4N12integratecpp10integrator11return_typeE" title="integratecpp::integrator::return_type"><span class="n"><span class="pre">return_type</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">result</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N12integratecpp14roundoff_error25integration_runtime_errorEPKcRKN10integrator11return_typeE" title="Link to this definition"></a><br /></dt>
+<dd><p>A full constructor, specifying the error message with <code class="docutils literal notranslate"><span class="pre">const</span> <span class="pre">char</span> <span class="pre">*</span></code>. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>what</strong> – a <code class="docutils literal notranslate"><span class="pre">const</span> <span class="pre">char</span> <span class="pre">*</span></code> containing a pointer a a const char array with the error message. </p></li>
+<li><p><strong>result</strong> – a <code class="docutils literal notranslate"><a class="reference internal" href="wrapper/class.html#structintegratecpp_1_1integrator_1_1return__type"><span class="std std-ref"><span class="pre">integratecpp::integrator::return_type</span></span></a></code> with the integration results at the time of error. </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+<dl class="cpp class">
+<dt class="sig sig-object cpp" id="_CPPv4N12integratecpp19bad_integrand_errorE">
+<span id="_CPPv3N12integratecpp19bad_integrand_errorE"></span><span id="_CPPv2N12integratecpp19bad_integrand_errorE"></span><span id="integratecpp::bad_integrand_error"></span><span class="target" id="classintegratecpp_1_1bad__integrand__error"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">bad_integrand_error</span></span></span><span class="w"> </span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="k"><span class="pre">public</span></span><span class="w"> </span><span class="n"><span class="pre">integratecpp</span></span><span class="p"><span class="pre">::</span></span><a class="reference internal" href="#_CPPv4N12integratecpp25integration_runtime_errorE" title="integratecpp::integration_runtime_error"><span class="n"><span class="pre">integration_runtime_error</span></span></a><a class="headerlink" href="#_CPPv4N12integratecpp19bad_integrand_errorE" title="Link to this definition"></a><br /></dt>
+<dd><p>Defines a type of object to be thrown as exception. It reports errors that occur during the integration routine of <code class="docutils literal notranslate"><a class="reference internal" href="wrapper/class.html#classintegratecpp_1_1integrator_1aa2d869a24be03580af1cd7cfeb0e262b"><span class="std std-ref"><span class="pre">integratecpp::integrator::operator()()</span></span></a></code> if extremely bad integrand behaviour occurs at some points of the integration interval. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N12integratecpp19bad_integrand_error25integration_runtime_errorEKNSt6stringERKN10integrator11return_typeE">
+<span id="_CPPv3N12integratecpp19bad_integrand_error25integration_runtime_errorEKNSt6stringERKN10integrator11return_typeE"></span><span id="_CPPv2N12integratecpp19bad_integrand_error25integration_runtime_errorEKNSt6stringERKN10integrator11return_typeE"></span><span id="integratecpp::bad_integrand_error::integration_runtime_error__ssC.integrator::return_typeCR"></span><span class="target" id="classintegratecpp_1_1bad__integrand__error_1a9dcf9add3110bcff0eba744ccaf16f81"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">explicit</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">integration_runtime_error</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">what</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="wrapper/class.html#_CPPv4N12integratecpp10integratorE" title="integratecpp::integrator"><span class="n"><span class="pre">integrator</span></span></a><span class="p"><span class="pre">::</span></span><a class="reference internal" href="wrapper/class.html#_CPPv4N12integratecpp10integrator11return_typeE" title="integratecpp::integrator::return_type"><span class="n"><span class="pre">return_type</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">result</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N12integratecpp19bad_integrand_error25integration_runtime_errorEKNSt6stringERKN10integrator11return_typeE" title="Link to this definition"></a><br /></dt>
+<dd><p>A full constructor, specifying the error message with <code class="docutils literal notranslate"><span class="pre">std::string</span></code>. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>what</strong> – a <code class="docutils literal notranslate"><span class="pre">std::string</span></code> containing the error message. </p></li>
+<li><p><strong>result</strong> – a <code class="docutils literal notranslate"><a class="reference internal" href="wrapper/class.html#structintegratecpp_1_1integrator_1_1return__type"><span class="std std-ref"><span class="pre">integratecpp::integrator::return_type</span></span></a></code> with the integration results at the time of error. </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N12integratecpp19bad_integrand_error25integration_runtime_errorEPKcRKN10integrator11return_typeE">
+<span id="_CPPv3N12integratecpp19bad_integrand_error25integration_runtime_errorEPKcRKN10integrator11return_typeE"></span><span id="_CPPv2N12integratecpp19bad_integrand_error25integration_runtime_errorEPKcRKN10integrator11return_typeE"></span><span id="integratecpp::bad_integrand_error::integration_runtime_error__cCP.integrator::return_typeCR"></span><span class="target" id="classintegratecpp_1_1bad__integrand__error_1ad5fbf1693468a95b382e27a70397d54d"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">explicit</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">integration_runtime_error</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">what</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="wrapper/class.html#_CPPv4N12integratecpp10integratorE" title="integratecpp::integrator"><span class="n"><span class="pre">integrator</span></span></a><span class="p"><span class="pre">::</span></span><a class="reference internal" href="wrapper/class.html#_CPPv4N12integratecpp10integrator11return_typeE" title="integratecpp::integrator::return_type"><span class="n"><span class="pre">return_type</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">result</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N12integratecpp19bad_integrand_error25integration_runtime_errorEPKcRKN10integrator11return_typeE" title="Link to this definition"></a><br /></dt>
+<dd><p>A full constructor, specifying the error message with <code class="docutils literal notranslate"><span class="pre">const</span> <span class="pre">char</span> <span class="pre">*</span></code>. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>what</strong> – a <code class="docutils literal notranslate"><span class="pre">const</span> <span class="pre">char</span> <span class="pre">*</span></code> containing a pointer a a const char array with the error message. </p></li>
+<li><p><strong>result</strong> – a <code class="docutils literal notranslate"><a class="reference internal" href="wrapper/class.html#structintegratecpp_1_1integrator_1_1return__type"><span class="std std-ref"><span class="pre">integratecpp::integrator::return_type</span></span></a></code> with the integration results at the time of error. </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+<dl class="cpp class">
+<dt class="sig sig-object cpp" id="_CPPv4N12integratecpp28extrapolation_roundoff_errorE">
+<span id="_CPPv3N12integratecpp28extrapolation_roundoff_errorE"></span><span id="_CPPv2N12integratecpp28extrapolation_roundoff_errorE"></span><span id="integratecpp::extrapolation_roundoff_error"></span><span class="target" id="classintegratecpp_1_1extrapolation__roundoff__error"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">extrapolation_roundoff_error</span></span></span><span class="w"> </span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="k"><span class="pre">public</span></span><span class="w"> </span><span class="n"><span class="pre">integratecpp</span></span><span class="p"><span class="pre">::</span></span><a class="reference internal" href="#_CPPv4N12integratecpp25integration_runtime_errorE" title="integratecpp::integration_runtime_error"><span class="n"><span class="pre">integration_runtime_error</span></span></a><a class="headerlink" href="#_CPPv4N12integratecpp28extrapolation_roundoff_errorE" title="Link to this definition"></a><br /></dt>
+<dd><p>Defines a type of object to be thrown as exception. It reports errors that occur during the integration routine of <code class="docutils literal notranslate"><a class="reference internal" href="wrapper/class.html#classintegratecpp_1_1integrator_1aa2d869a24be03580af1cd7cfeb0e262b"><span class="std std-ref"><span class="pre">integratecpp::integrator::operator()()</span></span></a></code> if the algorithm does not converge. roundoff error is detected in the extrapolation table. </p>
+<p>It is assumed that the requested tolerance cannot be achieved, and that the returned result is the best which can be obtained. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N12integratecpp28extrapolation_roundoff_error25integration_runtime_errorEKNSt6stringERKN10integrator11return_typeE">
+<span id="_CPPv3N12integratecpp28extrapolation_roundoff_error25integration_runtime_errorEKNSt6stringERKN10integrator11return_typeE"></span><span id="_CPPv2N12integratecpp28extrapolation_roundoff_error25integration_runtime_errorEKNSt6stringERKN10integrator11return_typeE"></span><span id="integratecpp::extrapolation_roundoff_error::integration_runtime_error__ssC.integrator::return_typeCR"></span><span class="target" id="classintegratecpp_1_1extrapolation__roundoff__error_1a9dcf9add3110bcff0eba744ccaf16f81"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">explicit</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">integration_runtime_error</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">what</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="wrapper/class.html#_CPPv4N12integratecpp10integratorE" title="integratecpp::integrator"><span class="n"><span class="pre">integrator</span></span></a><span class="p"><span class="pre">::</span></span><a class="reference internal" href="wrapper/class.html#_CPPv4N12integratecpp10integrator11return_typeE" title="integratecpp::integrator::return_type"><span class="n"><span class="pre">return_type</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">result</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N12integratecpp28extrapolation_roundoff_error25integration_runtime_errorEKNSt6stringERKN10integrator11return_typeE" title="Link to this definition"></a><br /></dt>
+<dd><p>A full constructor, specifying the error message with <code class="docutils literal notranslate"><span class="pre">std::string</span></code>. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>what</strong> – a <code class="docutils literal notranslate"><span class="pre">std::string</span></code> containing the error message. </p></li>
+<li><p><strong>result</strong> – a <code class="docutils literal notranslate"><a class="reference internal" href="wrapper/class.html#structintegratecpp_1_1integrator_1_1return__type"><span class="std std-ref"><span class="pre">integratecpp::integrator::return_type</span></span></a></code> with the integration results at the time of error. </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N12integratecpp28extrapolation_roundoff_error25integration_runtime_errorEPKcRKN10integrator11return_typeE">
+<span id="_CPPv3N12integratecpp28extrapolation_roundoff_error25integration_runtime_errorEPKcRKN10integrator11return_typeE"></span><span id="_CPPv2N12integratecpp28extrapolation_roundoff_error25integration_runtime_errorEPKcRKN10integrator11return_typeE"></span><span id="integratecpp::extrapolation_roundoff_error::integration_runtime_error__cCP.integrator::return_typeCR"></span><span class="target" id="classintegratecpp_1_1extrapolation__roundoff__error_1ad5fbf1693468a95b382e27a70397d54d"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">explicit</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">integration_runtime_error</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">what</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="wrapper/class.html#_CPPv4N12integratecpp10integratorE" title="integratecpp::integrator"><span class="n"><span class="pre">integrator</span></span></a><span class="p"><span class="pre">::</span></span><a class="reference internal" href="wrapper/class.html#_CPPv4N12integratecpp10integrator11return_typeE" title="integratecpp::integrator::return_type"><span class="n"><span class="pre">return_type</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">result</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N12integratecpp28extrapolation_roundoff_error25integration_runtime_errorEPKcRKN10integrator11return_typeE" title="Link to this definition"></a><br /></dt>
+<dd><p>A full constructor, specifying the error message with <code class="docutils literal notranslate"><span class="pre">const</span> <span class="pre">char</span> <span class="pre">*</span></code>. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>what</strong> – a <code class="docutils literal notranslate"><span class="pre">const</span> <span class="pre">char</span> <span class="pre">*</span></code> containing a pointer a a const char array with the error message. </p></li>
+<li><p><strong>result</strong> – a <code class="docutils literal notranslate"><a class="reference internal" href="wrapper/class.html#structintegratecpp_1_1integrator_1_1return__type"><span class="std std-ref"><span class="pre">integratecpp::integrator::return_type</span></span></a></code> with the integration results at the time of error. </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+<dl class="cpp class">
+<dt class="sig sig-object cpp" id="_CPPv4N12integratecpp16divergence_errorE">
+<span id="_CPPv3N12integratecpp16divergence_errorE"></span><span id="_CPPv2N12integratecpp16divergence_errorE"></span><span id="integratecpp::divergence_error"></span><span class="target" id="classintegratecpp_1_1divergence__error"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">divergence_error</span></span></span><span class="w"> </span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="k"><span class="pre">public</span></span><span class="w"> </span><span class="n"><span class="pre">integratecpp</span></span><span class="p"><span class="pre">::</span></span><a class="reference internal" href="#_CPPv4N12integratecpp25integration_runtime_errorE" title="integratecpp::integration_runtime_error"><span class="n"><span class="pre">integration_runtime_error</span></span></a><a class="headerlink" href="#_CPPv4N12integratecpp16divergence_errorE" title="Link to this definition"></a><br /></dt>
+<dd><p>Defines a type of object to be thrown as exception. It reports errors that occur during the integration routine of <code class="docutils literal notranslate"><a class="reference internal" href="wrapper/class.html#classintegratecpp_1_1integrator_1aa2d869a24be03580af1cd7cfeb0e262b"><span class="std std-ref"><span class="pre">integratecpp::integrator::operator()()</span></span></a></code> if the integral is probably divergent, or slowly convergent. </p>
+<p>It must be noted that divergence can occur with any other value of ier. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N12integratecpp16divergence_error25integration_runtime_errorEKNSt6stringERKN10integrator11return_typeE">
+<span id="_CPPv3N12integratecpp16divergence_error25integration_runtime_errorEKNSt6stringERKN10integrator11return_typeE"></span><span id="_CPPv2N12integratecpp16divergence_error25integration_runtime_errorEKNSt6stringERKN10integrator11return_typeE"></span><span id="integratecpp::divergence_error::integration_runtime_error__ssC.integrator::return_typeCR"></span><span class="target" id="classintegratecpp_1_1divergence__error_1a9dcf9add3110bcff0eba744ccaf16f81"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">explicit</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">integration_runtime_error</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">what</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="wrapper/class.html#_CPPv4N12integratecpp10integratorE" title="integratecpp::integrator"><span class="n"><span class="pre">integrator</span></span></a><span class="p"><span class="pre">::</span></span><a class="reference internal" href="wrapper/class.html#_CPPv4N12integratecpp10integrator11return_typeE" title="integratecpp::integrator::return_type"><span class="n"><span class="pre">return_type</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">result</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N12integratecpp16divergence_error25integration_runtime_errorEKNSt6stringERKN10integrator11return_typeE" title="Link to this definition"></a><br /></dt>
+<dd><p>A full constructor, specifying the error message with <code class="docutils literal notranslate"><span class="pre">std::string</span></code>. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>what</strong> – a <code class="docutils literal notranslate"><span class="pre">std::string</span></code> containing the error message. </p></li>
+<li><p><strong>result</strong> – a <code class="docutils literal notranslate"><a class="reference internal" href="wrapper/class.html#structintegratecpp_1_1integrator_1_1return__type"><span class="std std-ref"><span class="pre">integratecpp::integrator::return_type</span></span></a></code> with the integration results at the time of error. </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N12integratecpp16divergence_error25integration_runtime_errorEPKcRKN10integrator11return_typeE">
+<span id="_CPPv3N12integratecpp16divergence_error25integration_runtime_errorEPKcRKN10integrator11return_typeE"></span><span id="_CPPv2N12integratecpp16divergence_error25integration_runtime_errorEPKcRKN10integrator11return_typeE"></span><span id="integratecpp::divergence_error::integration_runtime_error__cCP.integrator::return_typeCR"></span><span class="target" id="classintegratecpp_1_1divergence__error_1ad5fbf1693468a95b382e27a70397d54d"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">explicit</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">integration_runtime_error</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">what</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="wrapper/class.html#_CPPv4N12integratecpp10integratorE" title="integratecpp::integrator"><span class="n"><span class="pre">integrator</span></span></a><span class="p"><span class="pre">::</span></span><a class="reference internal" href="wrapper/class.html#_CPPv4N12integratecpp10integrator11return_typeE" title="integratecpp::integrator::return_type"><span class="n"><span class="pre">return_type</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">result</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N12integratecpp16divergence_error25integration_runtime_errorEPKcRKN10integrator11return_typeE" title="Link to this definition"></a><br /></dt>
+<dd><p>A full constructor, specifying the error message with <code class="docutils literal notranslate"><span class="pre">const</span> <span class="pre">char</span> <span class="pre">*</span></code>. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>what</strong> – a <code class="docutils literal notranslate"><span class="pre">const</span> <span class="pre">char</span> <span class="pre">*</span></code> containing a pointer a a const char array with the error message. </p></li>
+<li><p><strong>result</strong> – a <code class="docutils literal notranslate"><a class="reference internal" href="wrapper/class.html#structintegratecpp_1_1integrator_1_1return__type"><span class="std std-ref"><span class="pre">integratecpp::integrator::return_type</span></span></a></code> with the integration results at the time of error. </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="wrapper/function.html" class="btn btn-neutral float-left" title="Integrate drop-in function-wrapper" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Henrik Sloot.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
