@@ -154,7 +154,7 @@ itself. Hence, as `Rdqags` and `Rdqagi` are not using longjumps
 *themselves*, our approach can be used in a pure C++ back-end.[^2] A
 comparison of different numerical integration approaches in C++ is
 summarized in the article [“Comparing numerical integration
-packages”](articles/comparison.html).
+packages”](vignettes/web_only/comparison.Rmd).
 
 ## Outlook
 
