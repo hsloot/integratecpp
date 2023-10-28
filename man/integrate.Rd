@@ -36,7 +36,7 @@ integrate(
     the \code{message} component.}
 }
 \value{
-A double with the approximate integral value.
+A list of class \code{integrate} with components \code{value}, \code{abs.error},
 }
 \description{
 A method for numerical integration

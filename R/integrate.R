@@ -22,7 +22,8 @@
 #' @param relative_accuracy relative accuracy requested.
 #' @param absolute_accuracy absolute accuracy requested.
 #'
-#' @return A double with the approximate integral value.
+#' @return A list of class `integrate` with components `value`, `abs.error`,
+#    `subdivision`, `message`, and `call`; see [stats::integrate()].
 #'
 #' @family test-helper
 #'
