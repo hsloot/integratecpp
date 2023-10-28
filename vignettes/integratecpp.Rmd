@@ -21,11 +21,10 @@ knitr::opts_chunk$set(
 )
 ```
 
-The following vignette demonstrates how using `integratecpp` simplifies and improves using numerical
-integration in `Rcpp`. [^1]
-We use a somewhat simplified problem to hint possible use-cases for `integratecpp` and demonstrate
-its usage.
-Suppose, we want need to evaluate the [*upper incomplete Gamma function*](https://en.wikipedia.org/wiki/Incomplete_gamma_function)
+The following demonstrates on a simplified problem how using `integratecpp`
+simplifies numerical integration in Rcpp compared to using R's C API. [^1]
+Suppose, we want need to evaluate the
+[*upper incomplete Gamma function*](https://en.wikipedia.org/wiki/Incomplete_gamma_function)
 $$
     \Gamma{(\alpha, x)}
         = \int_{x}^{\infty}{
@@ -36,13 +35,14 @@ $$
 $$
 for values $\alpha \in \mathbb{R}$, $x \geq 0$.[^2][^3]
 
-# An implementation with `integratecpp`
+# An implementation with integratecpp
 
 ```{Rcpp run-all-C++,eval=TRUE, echo=FALSE, ref.label=knitr::all_rcpp_labels(), class.source = 'fold-hide'}
 ```
 
-As `integratecpp` requires C++11, we use the `Rcpp` plugin `cpp11` and link to the
-includes directory of `integratecpp` using the depends attribute `integratecpp`.
+As `integratecpp` requires C++11, we use the Rcpp plugin `cpp11` and link to
+the includes directory of `integratecpp` using the depends attribute
+`integratecpp`:
 
 ```{Rcpp attributes, eval=FALSE, echo=TRUE, class.source = 'fold-none'}
 // C++11
@@ -51,8 +51,8 @@ includes directory of `integratecpp` using the depends attribute `integratecpp`.
 // [[Rcpp::depends(integratecpp)]]
 ```
 
-Next, we include the STL header `<cmath>` for using `std::pow` and we include the header
-`<integratecpp.h>`.
+Next, we include the STL header `<cmath>` for using `std::pow` and we include
+the header `<integratecpp.h>`:
 
 ```{Rcpp includes, echo=TRUE, eval=FALSE}
 #include <cmath>
@@ -93,23 +93,23 @@ Note, that in this basic form, using `integratecpp`'s wrapper requires only the
 following two things:
 
 - A [`Callable`](https://en.cppreference.com/w/cpp/named_req/Callable)
-  object which is [invocable](https://en.cppreference.com/w/cpp/types/is_invocable)
-  with type `const double` and yields a result convertible to `double`.
-  Roughly, an object that can be used to construct `std::function<double(const double)>`,
+  object which is
+  [invocable](https://en.cppreference.com/w/cpp/types/is_invocable) with type
+  `const double` and yields a result convertible to `double`. Roughly, an
+  object that can be used to construct `std::function<double(const double)>`,
   e.g., a suitable
   [lambda expression](https://en.cppreference.com/w/cpp/language/lambda).
 - A call to `integratecpp::integrate`.
 
-Optionally, integration parameters can be changed,
-exceptions can be captured and handled,
-and the integration error estimate can be further examined.
+Optionally, integration parameters can be changed, exceptions can be captured
+and handled, and the integration error estimate can be further examined.
 
-# An implementation without `integratecpp`
+# An implementation without integratecpp
 
-The following example does not use the `integratecpp` wrapper, but hints how the wrapper works
-internally.
-First, we need to include the header for R's C entry-points for the integration routines `Rdqags` 
-and `Rdqagi`:
+The following implementation uses R's C API instead of the `integratecpp`
+wrapper and hints how the wrapper works internally. First, we need to include
+the header for R's C entry-points for the integration routines `Rdqags` and
+`Rdqagi`:
 
 ```{Rcpp included-additional-1, echo=TRUE, eval=FALSE}
 // C++11
@@ -125,7 +125,8 @@ Then, we require some STL headers for handling data:
 #include <vector>    // std::vector
 ```
 
-Also, we need more STL headers and the `Rcpp` header for exception and error handling:
+Also, we need more STL headers and the Rcpp header for exception and error
+handling:
 
 ```{Rcpp includes-additional-3, echo=TRUE, eval=FALSE}
 #include <exception>  // std::exception_ptr, std::make_exception_ptr, 
@@ -146,7 +147,7 @@ double gamma_inc_direct(const double alpha, const double x) {
 
     // create bounds parameters for `Rdqagi`
     double bound = x;
-    int inf = 1.;
+    int inf = 1;
 
     // initialize output variables for integration results
     double result;
@@ -228,13 +229,14 @@ tryCatch(gamma_inc_direct(0, -1), error = function(cond) print(cond))
 ```
 
 
-[^1]: We use `Rcpp` for simplicity. There no inherent requirement to use `Rcpp` with `integratecpp`.
-Using `cpp11` or writing your own wrapper is also possible.
+[^1]: We use Rcpp for simplicity. There no inherent requirement to use Rcpp with
+`integratecpp`. Using `cpp11` or writing your own wrapper is also possible.
 
-[^2]: The *upper incomplete Gamma function* can be indirectly evaluated for non-negative $\alpha$
-with the `pgamma`-function, which even is provided as a
-[entry-point in Rs C-API](https://cran.r-project.org/doc/manuals/r-release/R-exts.html#Distribution-functions).
+[^2]: The *upper incomplete Gamma function* can be indirectly evaluated for
+non-negative $\alpha$ with the `pgamma`-function, which even is provided as a
+[entry-point in R's C-API](https://cran.r-project.org/doc/manuals/r-release/R-exts.html#Distribution-functions).
 In contrast, this is not possible for negative $\alpha$ as of `R 4.2-0`.
 
-[^3]: The package `gsl` provides a function and entry-points for C code to evaluate the
+[^3]: The package `gsl` provides a function and entry-points for C code to
+evaluate the
 *upper incomplete Gamma function* for negative values.
