@@ -14,6 +14,7 @@ Provides a header-only C++11 interface to R's C-API for numerical integration.
 Useful links:
 \itemize{
   \item \url{https://hsloot.github.io/integratecpp/}
+  \item \url{https://github.com/hsloot/integratecpp}
 }
 
 }
