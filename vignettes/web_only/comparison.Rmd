@@ -24,7 +24,7 @@ nocite: |
 <!-- cSpell: words nocite -->
 <!-- cSpell: words -Wvla -->
 <!-- cSpell: words cmath -->
-<!-- cSpell: words nullptr -->
+<!-- cSpell: words nullptr noexcept -->
 <!-- cSpell: words gsl_integration_workspace_alloc,gsl_integration_qags -->
 <!-- cSpell: words abserr,neval,epsrel,epsabs,lenw,iwork -->
 <!-- cSpell: words Numer,integrate_Cish -->
@@ -37,9 +37,14 @@ knitr::opts_chunk$set(
 )
 ```
 
+The following compares available options for numerical integration to
+demonstrate the simplicity of `integratecpp`'s C++11 wrapper for R's C API to
+its numerical integration routines.
+
 # The Problem
 
-We are using the following simple integral to compare various numerical integration options:
+We are using the following simple integral to compare various numerical
+integration options:
 
 $$
     \int_{0}^{1} 1 / x^{0.7} \mathrm{d}x .
@@ -48,19 +53,22 @@ $$
 
 # Using base R
 
-First, we calculate the integral using base-R.
+We begin by calculating the integral using base-R.
 
-- Finite-interval integration uses a 21-point *Gauss-Kronrod* rule on equally-spaced subintervals.
-- Infinite-interval integration uses a 15-point *Gauss-Kronrod* rule on equally-spaced subintervals after transforming the integrand to the interval $[0, 1]$.
+- Finite-interval integration uses a 21-point *Gauss-Kronrod* rule on
+  equally-spaced subintervals.
+- Infinite-interval integration uses a 15-point *Gauss-Kronrod* rule on
+  equally-spaced subintervals after transforming the integrand to the interval
+  $[0, 1]$.
 - Both use *Wynn's $\epsilon$ algorithm* for limit-extrapolation.
 
-It is possible to configure the integration algorithms by changing the requested relative and absolute accuracies and the maximum number of subintervals.
-All of these features are shared by the following approaches.
-However, some have additional features.
+It is possible to configure the integration algorithms by changing the requested
+relative and absolute accuracies and the maximum number of subintervals. All of
+these features are shared by the following approaches. However, some have
+additional features.
 
 ```{r base-R}
 # R
-
 integrate_R <- function() { # nolint
     integrate(
         function(x) 1 / x^0.7,
@@ -81,11 +89,10 @@ integrate_R()
 
 # Using R's C-API
 
-We can calculate the same integral using R's C-API
+We can also calculate the same integral using R's C-API:
 
 ```{Rcpp C-API}
 // C++11 
-
 #include <math.h>
 
 #include <R_ext/Applic.h>
@@ -121,6 +128,8 @@ Rcpp::List integrate_Cish() {
 
     int ier = 0;
 
+    // NOTE: we skip guarding against exceptions thrown from integrand since
+    // it will not throw exceptions when workspace is configured properly
     Rdqags(&fn, nullptr, &lower, &upper, &epsabs, &epsrel, &result,
            &abserr, &neval, &ier, &limit, &lenw, &last, iwork, work
     );
@@ -135,18 +144,16 @@ Rcpp::List integrate_Cish() {
 
 ```{r C-API-eval}
 # R
-
 integrate_Cish()
 ```
 
 
-# Using `integratecpp`
+# Using integratecpp
 
-Using our C++11 wrapper, numerical integration can be done seamlessly in `Rcpp`:
+Using our C++11 wrapper, numerical integration can be done seamlessly in Rcpp:
 
 ```{Rcpp integratecpp}
 // C++11 
-
 // [[Rcpp::plugins(cpp11)]]
 // [[Rcpp::depends(integratecpp)]]
 
@@ -173,18 +180,16 @@ Rcpp::List integrate_integratecpp() {
 
 ```{r integratecpp-eval}
 # R
-
 integrate_integratecpp()
 ```
 
 
-# Using `RcppGSL`
+# Using RcppGSL
 
-With `RcppGSL`, we can use `gsl` in a similar way as Rs C-API:
+With `RcppGSL`, we can use `gsl` in a similar way as R's C-API:
 
 ```{Rcpp RcppGSL}
 // C++11 
-
 // [[Rcpp::depends(RcppGSL)]]
 
 #include <math.h>
@@ -233,18 +238,16 @@ Rcpp::List integrate_RcppGSL() {
 
 ```{r RcppGSL-eval}
 # R
-
 integrate_RcppGSL()
 ```
 
 
-# Using `RcppNumerical`
+# Using RcppNumerical
 
 With `RcppNumerical`, we must define the integrator in the `Numer` namespace:
 
 ```{Rcpp RcppNumerical}
 // C++11
-
 // [[Rcpp::depends(RcppEigen)]]
 // [[Rcpp::depends(RcppNumerical)]]
 
@@ -291,18 +294,16 @@ Rcpp::List integrate_RcppNumerical() {
 
 ```{r RcppNumerical-eval}
 # R
-
 integrate_RcppNumerical()
 ```
 
 
 # Benchmark
 
-A benchmarks shows that our wrapper is almost as fast as the native C-API.
+A benchmarks shows that our wrapper is almost as fast as the native C-API:
 
 ```{r bench}
 # R
-
 bench::mark(
     integrate_R(),
     integrate_integratecpp(),
