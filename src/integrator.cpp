@@ -82,7 +82,7 @@ void Rcpp__integrator__throw_if_invalid(
         // NOTE: avoid code duplication using a dummy integration. the
         // integration itself should not fail under any circumstances if
         // configuration parameters are valid.
-        (*ptr)([](const double) { return 0.; }, 0., 1.);
+        (*ptr)([](const double) noexcept { return 0.; }, 0., 1.);
     } catch (::Rcpp::exception &e) {                        // # nocov
         Rcpp::stop("Not initialized");                      // # nocov
     } catch (const integratecpp::invalid_input_error &e) {  // # nocov
