@@ -24,7 +24,7 @@
  *
  * \author      Henrik Sloot
  * \date        2022
- * \copyright   Copyright 2022 Henrik Sloot. All rights reserved.
+ * \copyright   Copyright 2023 Henrik Sloot. All rights reserved.
  *              This file is released under the GNU Lesser Public License,
  *              version 3 or later.
  *
@@ -109,7 +109,8 @@ class integrator {
          *
          * \param value           a `double` with the approximated value.
          * \param absolute_error  a `double` with the estimated absolute error.
-         * \param subdivisions    an `int` with the final number of subdivisions.
+         * \param subdivisions    an `int` with the final number of
+         *                        subdivisions.
          * \param neval           an `int` with the number of neval.
          */
         explicit constexpr return_type(const double value,
@@ -139,8 +140,8 @@ class integrator {
         "`integratecpp::integrator::return_type` not standard layout");
 
     /*!
-     * \brief  Defines a struct for the integration configuration parameters used
-     *         in `integratecpp::integrator::operator()()`. Compare
+     * \brief  Defines a struct for the integration configuration parameters
+     *         used in `integratecpp::integrator::operator()()`. Compare
      *         [`src/appl/integrate.c`](https://github.com/wch/r-source/blob/trunk/src/appl/integrate.c)
      *         in R-source.
      *
@@ -188,10 +189,11 @@ class integrator {
          *
          * \param max_subdivisions   an `int` for the maximum number of
          *                           subdivisions.
-         * \param relative_accuracy  a `double` for the requested relative accuracy.
+         * \param relative_accuracy  a `double` for the requested relative
+         *                           accuracy.
          *
-         * \warning   Preconditions for the configuration parameters are unchecked
-         *            upon construction.
+         * \warning   Preconditions for the configuration parameters are
+         *            unchecked upon construction.
          */
         explicit constexpr config_type(const int max_subdivisions,
                                        const double relative_accuracy) noexcept;
@@ -202,11 +204,13 @@ class integrator {
          *
          * \param max_subdivisions   an `int` for the maximum number of
          *                           subdivisions.
-         * \param relative_accuracy  a `double` for the requested relative accuracy.
-         * \param absolute_accuracy  a `double` for the requested absolute accuracy.
+         * \param relative_accuracy  a `double` for the requested relative
+         *                           accuracy.
+         * \param absolute_accuracy  a `double` for the requested absolute
+         *                           accuracy.
          *
-         * \warning   Preconditions for the configuration parameters are unchecked
-         *            upon construction.
+         * \warning   Preconditions for the configuration parameters are
+         *            unchecked upon construction.
          */
         explicit constexpr config_type(const int max_subdivisions,
                                        const double relative_accuracy,
@@ -217,12 +221,14 @@ class integrator {
          *
          * \param max_subdivisions   an `int` for the maximum number of
          *                           subdivisions.
-         * \param relative_accuracy  a `double` for the requested relative accuracy.
-         * \param absolute_accuracy  a `double` for the requested absolute accuracy.
+         * \param relative_accuracy  a `double` for the requested relative
+         *                           accuracy.
+         * \param absolute_accuracy  a `double` for the requested absolute
+         *                           accuracy.
          * \param work_size          an `int` for the size of the working array.
          *
-         * \warning   Preconditions for the configuration parameters are unchecked
-         *            upon construction.
+         * \warning   Preconditions for the configuration parameters are
+         *            unchecked upon construction.
          */
         explicit constexpr config_type(const int max_subdivisions,
                                        const double relative_accuracy,
@@ -273,7 +279,8 @@ class integrator {
      * \brief  A partial constructor using `max_subdivisions` and
      *         `relative_accuracy`.
      *
-     * \param max_subdivisions   an `int` for the maximum number of subdivisions.
+     * \param max_subdivisions   an `int` for the maximum number of
+     *                           subdivisions.
      * \param relative_accuracy  a `double` for the requested relative accuracy.
      *
      * \warning   Preconditions for the configuration parameters are unchecked
@@ -286,7 +293,8 @@ class integrator {
      * \brief  A partial constructor using `max_subdivisions`,
      *         `relative_accuracy`, and `absolute_accuracy`.
      *
-     * \param max_subdivisions   an `int` for the maximum number of subdivisions.
+     * \param max_subdivisions   an `int` for the maximum number of
+     *                           subdivisions.
      * \param relative_accuracy  a `double` for the requested relative accuracy.
      * \param absolute_accuracy  a `double` for the requested absolute accuracy.
      *
@@ -301,7 +309,8 @@ class integrator {
      * \brief  A full constructor using `max_subdivisions`, `relative_accuracy`,
      *         `absolute_accuracy`, and `work_size`.
      *
-     * \param max_subdivisions   an `int` for the maximum number of subdivisions.
+     * \param max_subdivisions   an `int` for the maximum number of
+     *                           subdivisions.
      * \param relative_accuracy  a `double` for the requested relative accuracy.
      * \param absolute_accuracy  a `double` for the requested absolute accuracy.
      * \param work_size          an `int` for the size of the working array.
@@ -368,8 +377,8 @@ class integrator {
      *         upper bound, using `Rdqags` if both bounds are are finite and
      *         `Rdqagi` of at least one of the bounds is infinite.
      *
-     * \tparam UnaryRealFunction_  A `Callable` type invocable with `const double`
-     *                             and returning `double`.
+     * \tparam UnaryRealFunction_  A `Callable` type invocable with
+     *                             `const double` and returning `double`.
      *
      * \param fn     a `UnaryRealFunction_` functor compatible with a
      *               `const double` signature.
@@ -492,7 +501,7 @@ class integration_runtime_error : public std::runtime_error {
      * \brief  A full constructor, specifying the error message with
      *         `const char *`.
      *
-     * \param  what     a `const char *` containing a pointer a a const char array
+     * \param  what     a `const char *` containing a pointer a `const char[]`
      *                  with the error message.
      * \param  result   a `integratecpp::integrator::return_type` with
      *                  the integration results at the time of error.
@@ -533,7 +542,7 @@ class integration_logic_error : public std::logic_error {
      * \brief  A full constructor, specifying the error message with
      *         `const char *`.
      *
-     * \param  what     a `const char *` containing a pointer a a const char array
+     * \param  what     a `const char *` containing a pointer a `const char[]`
      *                  with the error message.
      * \param  result   a `integratecpp::integrator::return_type` with
      *                  the integration results at the time of error.
@@ -634,9 +643,9 @@ class invalid_input_error : public integration_logic_error {
     using integration_logic_error::integration_logic_error;
 };
 
-// -------------------------------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 // Implementations of internal type_traits in integratecpp::type_traits
-// -------------------------------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 //! \cond INTERNAL
 namespace type_traits {
@@ -687,9 +696,9 @@ struct is_invocable_r
 
 //! \endcond
 
-// -------------------------------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 // Implementations of integratecpp::integrator::operator()(...)
-// -------------------------------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 template <typename UnaryRealFunction_>
 inline integrator::return_type integrator::operator()(UnaryRealFunction_ &&fn,
@@ -893,9 +902,9 @@ inline integrator::return_type integrator::operator()(UnaryRealFunction_ &&fn,
     return out;
 };
 
-// -------------------------------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 // Implementations of integratecpp::integrate::(...)
-// -------------------------------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 template <typename UnaryRealFunction_>
 inline integrator::return_type integrate(UnaryRealFunction_ &&fn,
@@ -905,9 +914,9 @@ inline integrator::return_type integrate(UnaryRealFunction_ &&fn,
                               upper);
 }
 
-// -------------------------------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 // Implementations of integratecpp::integrator::return_type
-// -------------------------------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 inline constexpr integrator::return_type::return_type(
     const double value, const double absolute_error, const int subdivisions,
@@ -917,9 +926,9 @@ inline constexpr integrator::return_type::return_type(
       subdivisions{subdivisions},
       neval{neval} {}
 
-// -------------------------------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 // Implementations of integratecpp::integrator::config_type
-// -------------------------------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 inline constexpr integrator::config_type::config_type(
     const int max_subdivisions, const double relative_accuracy) noexcept
@@ -940,9 +949,9 @@ inline constexpr integrator::config_type::config_type(
       absolute_accuracy{absolute_accuracy},
       work_size{work_size} {}
 
-// -------------------------------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 // Implementations of integratecpp::integrator
-// -------------------------------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 inline constexpr integrator::integrator(const config_type &config) noexcept
     : config_{config} {}
@@ -1001,9 +1010,9 @@ inline void integrator::work_size(const int work_size) noexcept {
     config_.work_size = work_size;
 }
 
-// -------------------------------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 // Implementations of exception classes
-// -------------------------------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 inline integration_runtime_error::integration_runtime_error(
     const char *what, const integrator::return_type &result)
