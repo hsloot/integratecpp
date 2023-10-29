@@ -1,4 +1,4 @@
-// Copyright (C) 2022 Henrik Sloot
+// Copyright (C) 2023 Henrik Sloot
 //
 // This file is part of integratecpp
 //
