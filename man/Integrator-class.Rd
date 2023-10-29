@@ -31,7 +31,7 @@ A class for numerical integration
 \item \code{$}: Either access configuration parameters
 \code{max_subdivisions}, \code{relative_accuracy}, \code{absolute_accuracy}, or
 \code{work_size} or get the integration routine with signature
-\verb{function(f, lower, upper, ..., stop.on.error = TRUE)}.
+\verb{function(f, lower, upper, ..., stop_on_error = TRUE)}.
 
 \item \code{`$`(Integrator) <- value}: Set any of the configuration parameters
 \code{max_subdivisions}, \code{relative_accuracy}, \code{absolute_accuracy},

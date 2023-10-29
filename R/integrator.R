@@ -62,7 +62,7 @@ setMethod("initialize", "Integrator", function(.Object, max_subdivisions = 100, 
 #'   Either access configuration parameters
 #'   `max_subdivisions`, `relative_accuracy`, `absolute_accuracy`, or
 #'   `work_size` or get the integration routine with signature
-#'   `function(f, lower, upper, ..., stop.on.error = TRUE)`.
+#'   `function(f, lower, upper, ..., stop_on_error = TRUE)`.
 #'
 #' @include RcppExports.R
 #' @importFrom methods setMethod
