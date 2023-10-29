@@ -29,12 +29,11 @@
 #'
 #' @include RcppExports.R
 #' @keywords internal
-integrate <- function(
-        f, lower, upper, ..., max_subdivisions = 100L,
-        relative_accuracy = .Machine$double.eps^0.25,
-        absolute_accuracy = relative_accuracy,
-        work_size = 4 * max_subdivisions,
-        stop.on.error = TRUE) { # nolint: object_name_linter
+integrate <- function(f, lower, upper, ..., max_subdivisions = 100L,
+                      relative_accuracy = .Machine$double.eps^0.25,
+                      absolute_accuracy = relative_accuracy,
+                      work_size = 4 * max_subdivisions,
+                      stop.on.error = TRUE) { # nolint: object_name_linter
     out <- Rcpp__integrate(
         function(x) {
             f(x, ...)
